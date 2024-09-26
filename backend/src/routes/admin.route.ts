@@ -3,9 +3,8 @@ import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import sgMail from "@sendgrid/mail";
 let app = Router();
-
-let emailAPIKey =
-	"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";
+//enter your api key below
+let emailAPIKey = "";
 sgMail.setApiKey(emailAPIKey);
 
 //Dummy data below

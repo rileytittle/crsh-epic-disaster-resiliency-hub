@@ -19,7 +19,8 @@ const volunteer_model_1 = require("../models/volunteer.model");
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 let app = (0, express_1.Router)();
 exports.app = app;
-let emailAPIKey = "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";
+//enter your api key below
+let emailAPIKey = "";
 mail_1.default.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
