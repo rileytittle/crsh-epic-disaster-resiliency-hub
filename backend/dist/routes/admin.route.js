@@ -20,7 +20,7 @@ const mail_1 = __importDefault(require("@sendgrid/mail"));
 let app = (0, express_1.Router)();
 exports.app = app;
 //enter your api key below
-let emailAPIKey = "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";
+let emailAPIKey = "";
 mail_1.default.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
