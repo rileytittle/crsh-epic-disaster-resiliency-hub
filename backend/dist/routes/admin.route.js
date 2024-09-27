@@ -20,13 +20,13 @@ const mail_1 = __importDefault(require("@sendgrid/mail"));
 let app = (0, express_1.Router)();
 exports.app = app;
 //enter your api key below
-let emailAPIKey = "";
+let emailAPIKey = "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";
 mail_1.default.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
 let volunteerApplications = [];
-let firstApplication = new volunteerApplication_model_1.VolunteerApplication("Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]);
-let secondApplication = new volunteerApplication_model_1.VolunteerApplication("Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"]);
+let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]);
+let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"]);
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
 let volunteers = [];
@@ -46,7 +46,7 @@ app.post("/create-volunteer/accept", (req, res) => __awaiter(void 0, void 0, voi
             req.body.zipCode &&
             req.body.areasOfHelp &&
             req.body.teamLeader) {
-            let newVolunteer = new volunteer_model_1.Volunteer(req.body.firstName, req.body.lastName, parseInt(req.body.phoneNumber), req.body.email, req.body.streetAddress, req.body.city, req.body.state, parseInt(req.body.zipCode), req.body.areasOfHelp, req.body.teamLeader, password);
+            let newVolunteer = new volunteer_model_1.Volunteer(req.body.id, req.body.firstName, req.body.lastName, parseInt(req.body.phoneNumber), req.body.email, req.body.streetAddress, req.body.city, req.body.state, parseInt(req.body.zipCode), req.body.areasOfHelp, req.body.teamLeader, password);
             //push it onto the list
             volunteers.push(newVolunteer);
             let msg = {
@@ -98,4 +98,7 @@ app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, voi
     catch (e) {
         res.status(400).send("Problem rejected application");
     }
+}));
+app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).send(volunteerApplications);
 }));

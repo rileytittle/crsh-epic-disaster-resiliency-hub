@@ -1,4 +1,5 @@
 export class VolunteerApplication {
+	id: number;
 	firstName: string;
 	lastName: string;
 	phoneNumber: number;
@@ -11,6 +12,7 @@ export class VolunteerApplication {
 	approved: boolean | undefined = undefined; //set this to true when admin creates volunteer; false if rejects
 	reasonRejected: string | undefined = undefined;
 	constructor(
+		id: number,
 		firstName: string,
 		lastName: string,
 		phoneNumber: number,
@@ -21,6 +23,7 @@ export class VolunteerApplication {
 		zipCode: number,
 		areasOfHelp: string[]
 	) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;

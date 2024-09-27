@@ -3,6 +3,7 @@ export class Volunteer extends VolunteerApplication {
 	teamLeader: boolean;
 	password: string;
 	constructor(
+		id: number,
 		firstName: string,
 		lastName: string,
 		phoneNumber: number,
@@ -16,6 +17,7 @@ export class Volunteer extends VolunteerApplication {
 		password: string
 	) {
 		super(
+			id,
 			firstName,
 			lastName,
 			phoneNumber,

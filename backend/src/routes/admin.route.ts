@@ -4,13 +4,15 @@ import { Volunteer } from "../models/volunteer.model";
 import sgMail from "@sendgrid/mail";
 let app = Router();
 //enter your api key below
-let emailAPIKey = "";
+let emailAPIKey =
+	"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";
 sgMail.setApiKey(emailAPIKey);
 
 //Dummy data below
 //*******************************
 let volunteerApplications: VolunteerApplication[] = [];
 let firstApplication = new VolunteerApplication(
+	0,
 	"Riley",
 	"Tittle",
 	9047352653,
@@ -22,6 +24,7 @@ let firstApplication = new VolunteerApplication(
 	["Logistic Tracking"]
 );
 let secondApplication = new VolunteerApplication(
+	1,
 	"Coleman",
 	"George",
 	9047352653,
@@ -56,6 +59,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			req.body.teamLeader
 		) {
 			let newVolunteer = new Volunteer(
+				req.body.id,
 				req.body.firstName,
 				req.body.lastName,
 				parseInt(req.body.phoneNumber),
@@ -118,4 +122,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 	}
 });
 
+app.get("/create-volunteer/applications", async (req, res) => {
+	res.status(200).send(volunteerApplications);
+});
 export { app };
