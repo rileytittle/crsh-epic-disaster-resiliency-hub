@@ -100,12 +100,13 @@ app.post("/create-volunteer/accept", async (req, res) => {
 app.post("/create-volunteer/reject", async (req, res) => {
 	try {
 		//find application that we're rejecting
-		let foundApplication: VolunteerApplication | undefined = undefined;
+		let foundApplication: boolean = false;
 		for (let application of volunteerApplications) {
-			if ((application.email = req.body.email)) {
+			if (application.email === req.body.email) {
 				//set approved to false
 				//set reasonRejected to body, if it exists
-				application.approved = false;
+				foundApplication = true;
+				application.rejected = true;
 				if (req.body.reasonRejected) {
 					application.reasonRejected = req.body.reasonRejected;
 				}
@@ -122,6 +123,9 @@ app.post("/create-volunteer/reject", async (req, res) => {
 });
 
 app.get("/create-volunteer/applications", async (req, res) => {
-	res.status(200).send(volunteerApplications);
+	let filteredApplications = volunteerApplications.filter(
+		(application) => application.rejected !== true
+	);
+	res.status(200).send(filteredApplications);
 });
 export { app };

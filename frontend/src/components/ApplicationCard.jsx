@@ -1,6 +1,7 @@
 import React from "react";
 
 const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
+	function createVolunteer(id) {}
 	return (
 		<div className="card" style={{ width: 20 + "rem" }}>
 			<div className="card-body">

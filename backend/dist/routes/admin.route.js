@@ -77,12 +77,13 @@ app.post("/create-volunteer/accept", (req, res) => __awaiter(void 0, void 0, voi
 app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //find application that we're rejecting
-        let foundApplication = undefined;
+        let foundApplication = false;
         for (let application of volunteerApplications) {
-            if ((application.email = req.body.email)) {
+            if (application.email === req.body.email) {
                 //set approved to false
                 //set reasonRejected to body, if it exists
-                application.approved = false;
+                foundApplication = true;
+                application.rejected = true;
                 if (req.body.reasonRejected) {
                     application.reasonRejected = req.body.reasonRejected;
                 }
@@ -100,5 +101,6 @@ app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).send(volunteerApplications);
+    let filteredApplications = volunteerApplications.filter((application) => application.rejected !== true);
+    res.status(200).send(filteredApplications);
 }));
