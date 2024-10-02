@@ -7,14 +7,24 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
+import Homepage from "./pages/Homepage";
 import CreateVolunteer from "./pages/CreateVolunteer";
+import HomeownerApplication from "./pages/HomeownerApplication";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
 			<Route
+				path="/home"
+				element={<Homepage />}
+			></Route>
+			<Route
 				path="/create-volunteer"
 				element={<CreateVolunteer />}
+			></Route>
+			<Route
+				path="/request-help"
+				element={<HomeownerApplication />}
 			></Route>
 		</Route>
 	)
