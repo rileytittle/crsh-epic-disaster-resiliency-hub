@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VolunteerApplication = void 0;
 class VolunteerApplication {
     constructor(id, firstName, lastName, phoneNumber, email, streetAddress, city, state, zipCode, areasOfHelp) {
-        this.rejected = false; //set this to true when admin creates volunteer; false if rejects
+        this.evaluated = false;
+        this.rejected = false;
         this.reasonRejected = "";
         this.id = id;
         this.firstName = firstName;

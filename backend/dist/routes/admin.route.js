@@ -8,20 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = require("express");
 const volunteerApplication_model_1 = require("../models/volunteerApplication.model");
 const volunteer_model_1 = require("../models/volunteer.model");
-const mail_1 = __importDefault(require("@sendgrid/mail"));
-let app = (0, express_1.Router)();
-exports.app = app;
-//enter your api key below
-let emailAPIKey = "";
-mail_1.default.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
 let volunteerApplications = [];
@@ -35,38 +26,39 @@ app.post("/create-volunteer/accept", (req, res) => __awaiter(void 0, void 0, voi
     //get areas of help and team lead variables from body
     //create volunteer object and give it these variables
     try {
-        let password = "myPassword";
-        if (req.body.firstName &&
-            req.body.lastName &&
-            req.body.phoneNumber &&
-            req.body.email &&
-            req.body.streetAddress &&
-            req.body.city &&
-            req.body.state &&
-            req.body.zipCode &&
-            req.body.areasOfHelp &&
-            req.body.teamLeader) {
-            let newVolunteer = new volunteer_model_1.Volunteer(req.body.id, req.body.firstName, req.body.lastName, parseInt(req.body.phoneNumber), req.body.email, req.body.streetAddress, req.body.city, req.body.state, parseInt(req.body.zipCode), req.body.areasOfHelp, req.body.teamLeader, password);
+        let foundApplication = undefined;
+        for (let application of volunteerApplications) {
+            if (application.email === req.body.email) {
+                foundApplication = application;
+            }
+        }
+        if (foundApplication &&
+            !foundApplication.evaluated &&
+            typeof req.body.teamLeader === "boolean") {
+            let myPassword = "password";
+            foundApplication.evaluated = true;
+            let newVolunteer = new volunteer_model_1.Volunteer(0, foundApplication.firstName, foundApplication.lastName, foundApplication.phoneNumber, foundApplication.email, foundApplication.streetAddress, foundApplication.city, foundApplication.state, foundApplication.zipCode, foundApplication.areasOfHelp, req.body.teamLeader, myPassword);
+            newVolunteer.evaluated = true;
             //push it onto the list
             volunteers.push(newVolunteer);
-            let msg = {
-                to: newVolunteer.email,
-                from: "coletittle@ymail.com",
-                subject: "Your Volunteer Account",
-                text: "email was sent correctly",
-            };
-            mail_1.default
-                .send(msg)
-                .then(() => {
-                console.log("Email sent");
-            })
-                .catch((error) => {
-                console.error(error);
-            });
+            // let msg = {
+            // 	to: newVolunteer.email,
+            // 	from: "coletittle@ymail.com",
+            // 	subject: "Your Volunteer Account",
+            // 	text: "email was sent correctly",
+            // };
+            // sgMail
+            // 	.send(msg)
+            // 	.then(() => {
+            // 		console.log("Email sent");
+            // 	})
+            // 	.catch((error) => {
+            // 		console.error(error);
+            // 	});
             res.status(201).send(volunteers);
         }
         else {
-            res.status(400).send("Couldn't create new volunteer object");
+            res.status(404).send("Could not find application");
         }
     }
     catch (e) {
@@ -101,6 +93,6 @@ app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let filteredApplications = volunteerApplications.filter((application) => application.rejected !== true);
+    let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
 }));
