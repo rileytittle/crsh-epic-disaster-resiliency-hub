@@ -17,9 +17,9 @@
 
 ### If you want to commit your work:
 
-1. First add it
+First add it
     - git add .
-2. Commit it and give it a message
+Then, commit it and give it a message
     - git commit -m "Your message here"
 
 ### If you want to push:
@@ -32,11 +32,12 @@
 
 ### If you want to create a new branch:
 
-1. Switch to the branch you want to make your new branch off of.
+Switch to the branch you want to make your new branch off of.
     - git checkout branch-name
-2. IMPORTANT! BEFORE YOU CREATE A NEW BRANCH, MAKE SURE YOU PULL ALL NEW CHANGES
-   ON THE BRANCH YOU ARE BRANCHING FROM - git pull
-3. Create your branch
+THEN, IMPORTANT! BEFORE YOU CREATE A NEW BRANCH, MAKE SURE YOU PULL ALL NEW CHANGES 
+ON THE BRANCH YOU ARE BRANCHING FROM 
+    - git pull
+Finally, create your branch
     - git checkout -b new-branch-name
 
 ---
