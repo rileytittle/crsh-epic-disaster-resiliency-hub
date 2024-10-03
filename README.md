@@ -18,8 +18,11 @@
 ### If you want to commit your work:
 
 First add it
+
     - git add .
+    
 Then, commit it and give it a message
+
     - git commit -m "Your message here"
 
 ### If you want to push:
@@ -33,11 +36,14 @@ Then, commit it and give it a message
 ### If you want to create a new branch:
 
 Switch to the branch you want to make your new branch off of:
+
     - git checkout branch-name
 THEN, IMPORTANT! BEFORE YOU CREATE A NEW BRANCH, MAKE SURE YOU PULL ALL NEW CHANGES 
 ON THE BRANCH YOU ARE BRANCHING FROM:
+
     - git pull
 Finally, create your branch:
+
     - git checkout -b new-branch-name
 
 ---
