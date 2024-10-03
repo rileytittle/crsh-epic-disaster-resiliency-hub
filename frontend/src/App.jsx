@@ -9,6 +9,7 @@ import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
+import Login from './pages/login/Login';
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -21,6 +22,10 @@ const router = createBrowserRouter(
 				path="/create-volunteer/confirm"
 				element={<ConfirmVolunteer />}
 			></Route>
+      <Route
+        path="/login"
+        element={<Login />}
+      ></Route>
 		</Route>
 	)
 );
