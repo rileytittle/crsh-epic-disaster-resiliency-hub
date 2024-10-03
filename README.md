@@ -32,12 +32,12 @@ Then, commit it and give it a message
 
 ### If you want to create a new branch:
 
-Switch to the branch you want to make your new branch off of.
+Switch to the branch you want to make your new branch off of:
     - git checkout branch-name
 THEN, IMPORTANT! BEFORE YOU CREATE A NEW BRANCH, MAKE SURE YOU PULL ALL NEW CHANGES 
-ON THE BRANCH YOU ARE BRANCHING FROM 
+ON THE BRANCH YOU ARE BRANCHING FROM:
     - git pull
-Finally, create your branch
+Finally, create your branch:
     - git checkout -b new-branch-name
 
 ---
