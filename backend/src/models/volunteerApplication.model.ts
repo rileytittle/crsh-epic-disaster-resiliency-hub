@@ -9,7 +9,8 @@ export class VolunteerApplication {
 	state: string;
 	zipCode: number;
 	areasOfHelp: string[];
-	rejected: boolean = false; //set this to true when admin creates volunteer; false if rejects
+	evaluated: boolean = false;
+	rejected: boolean = false;
 	reasonRejected: string = "";
 	constructor(
 		id: number,

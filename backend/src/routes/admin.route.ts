@@ -4,8 +4,8 @@ import { Volunteer } from "../models/volunteer.model";
 import sgMail from "@sendgrid/mail";
 let app = Router();
 //enter your api key below
-let emailAPIKey = "";
-sgMail.setApiKey(emailAPIKey);
+// let emailAPIKey = "";
+// sgMail.setApiKey(emailAPIKey);
 
 //Dummy data below
 //*******************************
@@ -44,52 +44,53 @@ app.post("/create-volunteer/accept", async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
-		let password = "myPassword";
+		let foundApplication: VolunteerApplication | undefined = undefined;
+		for (let application of volunteerApplications) {
+			if (application.email === req.body.email) {
+				foundApplication = application;
+			}
+		}
 		if (
-			req.body.firstName &&
-			req.body.lastName &&
-			req.body.phoneNumber &&
-			req.body.email &&
-			req.body.streetAddress &&
-			req.body.city &&
-			req.body.state &&
-			req.body.zipCode &&
-			req.body.areasOfHelp &&
-			req.body.teamLeader
+			foundApplication &&
+			!foundApplication.evaluated &&
+			typeof req.body.teamLeader === "boolean"
 		) {
+			let myPassword = "password";
+			foundApplication.evaluated = true;
 			let newVolunteer = new Volunteer(
-				req.body.id,
-				req.body.firstName,
-				req.body.lastName,
-				parseInt(req.body.phoneNumber),
-				req.body.email,
-				req.body.streetAddress,
-				req.body.city,
-				req.body.state,
-				parseInt(req.body.zipCode),
-				req.body.areasOfHelp,
+				0,
+				foundApplication.firstName,
+				foundApplication.lastName,
+				foundApplication.phoneNumber,
+				foundApplication.email,
+				foundApplication.streetAddress,
+				foundApplication.city,
+				foundApplication.state,
+				foundApplication.zipCode,
+				foundApplication.areasOfHelp,
 				req.body.teamLeader,
-				password
+				myPassword
 			);
+			newVolunteer.evaluated = true;
 			//push it onto the list
 			volunteers.push(newVolunteer);
-			let msg = {
-				to: newVolunteer.email,
-				from: "coletittle@ymail.com",
-				subject: "Your Volunteer Account",
-				text: "email was sent correctly",
-			};
-			sgMail
-				.send(msg)
-				.then(() => {
-					console.log("Email sent");
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+			// let msg = {
+			// 	to: newVolunteer.email,
+			// 	from: "coletittle@ymail.com",
+			// 	subject: "Your Volunteer Account",
+			// 	text: "email was sent correctly",
+			// };
+			// sgMail
+			// 	.send(msg)
+			// 	.then(() => {
+			// 		console.log("Email sent");
+			// 	})
+			// 	.catch((error) => {
+			// 		console.error(error);
+			// 	});
 			res.status(201).send(volunteers);
 		} else {
-			res.status(400).send("Couldn't create new volunteer object");
+			res.status(404).send("Could not find application");
 		}
 	} catch (e) {
 		console.log(e);
@@ -124,7 +125,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 
 app.get("/create-volunteer/applications", async (req, res) => {
 	let filteredApplications = volunteerApplications.filter(
-		(application) => application.rejected !== true
+		(application) => !application.rejected && !application.evaluated
 	);
 	res.status(200).send(filteredApplications);
 });

@@ -1,7 +1,19 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
-	function createVolunteer(id) {}
+	function rejectVolunteer() {
+		axios
+			.post("http://localhost:3000/admin/create-volunteer/reject", {
+				email: email,
+			})
+			.then((res) => {
+				navigate("/create-volunteer");
+			})
+			.catch((error) => {
+				console.error("Error fetching applications:", error);
+			});
+	}
 	return (
 		<div className="card" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
@@ -14,12 +26,22 @@ const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 						<li key={index}>{area}</li>
 					))}
 				</p>
-				<a href="#" className="card-link">
+				<Link
+					onClick={(e) => {
+						rejectVolunteer();
+						window.location.reload();
+					}}
+					className="card-link"
+				>
 					Reject Applicant
-				</a>
-				<a href="#" className="card-link">
+				</Link>
+				<Link
+					to="/create-volunteer/confirm"
+					className="card-link"
+					state={{ id, firstName, lastName, email, areasOfHelp }}
+				>
 					Create Volunteer
-				</a>
+				</Link>
 			</div>
 		</div>
 	);
