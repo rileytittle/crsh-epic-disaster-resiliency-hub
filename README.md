@@ -19,7 +19,7 @@
 
 First add it
 
-    - `git add .`
+    - git add .
     
 Then, commit it and give it a message
 
