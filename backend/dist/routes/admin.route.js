@@ -13,11 +13,6 @@ exports.app = void 0;
 const express_1 = require("express");
 const volunteerApplication_model_1 = require("../models/volunteerApplication.model");
 const volunteer_model_1 = require("../models/volunteer.model");
-let app = (0, express_1.Router)();
-exports.app = app;
-//enter your api key below
-// let emailAPIKey = "";
-// sgMail.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
 let volunteerApplications = [];
