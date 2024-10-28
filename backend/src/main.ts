@@ -1,14 +1,17 @@
 import express from "express";
-import cors from "cors";
-import volunteerRoutes from "./Routes/pVolunteer.route";
+import volunteerRoutes from "./Routes/Volunteer.route";
 
-const app = express();
-app.use(cors());
-
+let cors = require("cors");
+let app = express();
 app.use(express.json());
 
+app.use(
+	cors({
+		origin: "http://localhost:5173", // Allow only this origin
+	})
+);
 
-app.use("/pVolunteer", volunteerRoutes);
+app.use("/Volunteer", volunteerRoutes);
 
 app.get("/", (req, res) => {
     res.send("Hello mom!");
