@@ -5,7 +5,7 @@ import {
 	Route,
 	RouterProvider,
 } from "react-router-dom";
-import "./App.css";
+import "./App.module.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
 import HomeownerApplication from "./pages/HomeownerApplication";
