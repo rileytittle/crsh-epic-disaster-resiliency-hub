@@ -31,7 +31,7 @@ function Login(){
     return (
         <>
             <div style={{ textAlign: "center" }}>
-                
+
                 {!isLoggedin ? (
                     <>
                         <h1>Use 'guest' and 'pass' to log in</h1>
