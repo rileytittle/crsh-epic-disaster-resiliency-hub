@@ -12,6 +12,7 @@ import HomeownerApplication from "./pages/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import Login from "./pages/login/Login";
+import Volunteers from "./pages/Volunteers";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
 				path="/create-volunteer/confirm"
 				element={<ConfirmVolunteer />}
 			></Route>
+			<Route path="/volunteers" element={<Volunteers />}></Route>
 			<Route path="/login" element={<Login />}></Route>
 		</Route>
 	)

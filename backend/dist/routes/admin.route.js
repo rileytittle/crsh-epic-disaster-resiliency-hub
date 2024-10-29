@@ -42,7 +42,7 @@ app.post("/create-volunteer/accept", (req, res) => __awaiter(void 0, void 0, voi
             typeof req.body.teamLeader === "boolean") {
             let myPassword = "password";
             foundApplication.evaluated = true;
-            let newVolunteer = new volunteer_model_1.Volunteer(0, foundApplication.firstName, foundApplication.lastName, foundApplication.phoneNumber, foundApplication.email, foundApplication.streetAddress, foundApplication.city, foundApplication.state, foundApplication.zipCode, foundApplication.areasOfHelp, req.body.teamLeader, myPassword);
+            let newVolunteer = new volunteer_model_1.Volunteer(foundApplication.id, foundApplication.firstName, foundApplication.lastName, foundApplication.phoneNumber, foundApplication.email, foundApplication.streetAddress, foundApplication.city, foundApplication.state, foundApplication.zipCode, foundApplication.areasOfHelp, req.body.teamLeader, myPassword);
             newVolunteer.evaluated = true;
             //push it onto the list
             volunteers.push(newVolunteer);
@@ -101,3 +101,12 @@ app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0
     let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
 }));
+app.get("/volunteers", (req, res) => {
+    try {
+        //write some logic here
+        res.status(200).send(volunteers);
+    }
+    catch (e) {
+        res.status(500).send(e);
+    }
+});

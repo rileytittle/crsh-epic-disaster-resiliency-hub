@@ -58,7 +58,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			let myPassword = "password";
 			foundApplication.evaluated = true;
 			let newVolunteer = new Volunteer(
-				0,
+				foundApplication.id,
 				foundApplication.firstName,
 				foundApplication.lastName,
 				foundApplication.phoneNumber,
@@ -128,5 +128,14 @@ app.get("/create-volunteer/applications", async (req, res) => {
 		(application) => !application.rejected && !application.evaluated
 	);
 	res.status(200).send(filteredApplications);
+});
+
+app.get("/volunteers", (req, res) => {
+	try {
+		//write some logic here
+		res.status(200).send(volunteers);
+	} catch (e) {
+		res.status(500).send(e);
+	}
 });
 export { app };
