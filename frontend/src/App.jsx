@@ -9,9 +9,11 @@ import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
 import HomeownerApplication from "./pages/HomeownerApplication";
+import HomeownerRequests from "./pages/HomeownerRequests";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import Login from "./pages/login/Login";
+import RequestDetails from "./pages/RequestDetails";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -28,6 +30,14 @@ const router = createBrowserRouter(
 			<Route
 				path="/create-volunteer/confirm"
 				element={<ConfirmVolunteer />}
+			></Route>
+			<Route
+				path="/homeowner-requests"
+				element={<HomeownerRequests />}
+			></Route>
+			<Route
+				path="/homeowner-requests/request-details"
+				element={<RequestDetails />}
 			></Route>
 			<Route path="/login" element={<Login />}></Route>
 		</Route>
