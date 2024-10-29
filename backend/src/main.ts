@@ -1,7 +1,9 @@
 import express from "express";
 import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
-import volunteerRoutes from "./Routes/Volunteer.route";
+
+import {app as volunteerRouter} from "./routes/Volunteer.route";
+
 
 let cors = require("cors");
 let app = express();
@@ -15,5 +17,6 @@ app.use(
 
 app.use("/admin", AdminRouter);
 app.use("/homeowner", helpRouter);
+app.use("/volunteer", volunteerRouter);
 
 app.listen(3000);

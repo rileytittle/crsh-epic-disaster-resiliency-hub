@@ -41,7 +41,9 @@ const VolunteerForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/Volunteer/create', {
+
+      const response = await fetch('http://localhost:3000/volunteer/create', {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
