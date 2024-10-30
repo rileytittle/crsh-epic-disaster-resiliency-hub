@@ -20,7 +20,7 @@ const MainLayout = () => {
 								</a>
 								<ul className="dropdown-menu">
 									<li><a className="dropdown-item disabled" href="#">Action</a></li>
-									<li><a className="dropdown-item disabled" href="#">Another action</a></li>
+									<li><a className="dropdown-item" href="/volunteer/resetPassword">Reset Password</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
 									<li><hr className="dropdown-divider" /></li>
@@ -41,7 +41,7 @@ const MainLayout = () => {
 								<a className="nav-link disabled" aria-disabled="true" href="/login">Login</a>
 							</li>
 						</ul>
-							<a className="nav-link" href="/request-help">Request Help</a>
+						<a className="nav-link" href="/request-help">Request Help</a>
 					</div>
 				</div>
 			</nav>

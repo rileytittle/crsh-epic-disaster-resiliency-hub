@@ -13,6 +13,7 @@ import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import Login from "./pages/Login/Login";
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
+import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -35,6 +36,10 @@ const router = createBrowserRouter(
 				path="/applyVolunteer" 
 				element={<VolunteerForm />}>
 			</Route>
+			<Route
+				path="/volunteer/resetPassword"
+				element={<VolunteerPasswordReset />}
+			></Route>
 		</Route>
 	)
 );
