@@ -63,6 +63,7 @@ const VolunteerForm = () => {
 
   return (
 
+
     <form className={styles.volunteerForm} onSubmit={handleSubmit}>
 
       <input className={styles.volunteerInput} type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
@@ -91,6 +92,7 @@ const VolunteerForm = () => {
           <span className={styles.infoTooltip}>Collaborate with Sarasota Government contact to acquire volunteers from other areas if required. Assure volunteer applications and waivers are completed. Data Entry to CRM software. Train volunteers with basic and expected roles. Manage and collect volunteer hours for reporting to the county. Make phone calls to clients requesting work, or volunteers. Answer phone calls.</span>
         </label>
         <label className={styles.volunteerLabel}>
+
           <input 
             className={styles.checkboxInput}
             type="checkbox" 
@@ -102,7 +104,9 @@ const VolunteerForm = () => {
           Hospitality Team
           <span className={styles.infoTooltip}>Makes sure volunteers are fed and rested. Keeps the food management systems in order and items needed for delivery. Collects donations such as clothes, shoes, towels and hygiene items for delivery.</span>
         </label>
+
         <label  className={styles.volunteerLabel}>
+
           <input 
             className={styles.checkboxInput}
             type="checkbox" 
@@ -114,7 +118,9 @@ const VolunteerForm = () => {
           Logistic Tracking Team
           <span className={styles.infoTooltip}>Identifies where things are located, keeps track of all materials signed out, and tracks the return. Organize, manage incoming supplies of food, water, tarps, equipment, etc.</span>
         </label>
+
         <label className={styles.volunteerLabel}>
+
           <input 
             className={styles.checkboxInput}
             type="checkbox" 
