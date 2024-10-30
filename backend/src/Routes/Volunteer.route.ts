@@ -83,4 +83,20 @@ app.post("/changePassword", (req, res) => {
   }
 });
 
+app.post("/resetPassword", (req, res) => {
+  const { username } = req.body;
+
+  // Create a new instance of VolunteerApplication
+  const index = dummyVolunteers.findIndex(volunteer => volunteer.id == username)
+  const newPassword = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
+
+  if (index != -1) {
+      dummyVolunteers[index].password = newPassword.toString()
+      res.status(200).json({ message: `Password Reset; new password is ${newPassword}` });
+      console.log(dummyVolunteers[index])
+  } else {
+    res.status(401).json({ message: 'Username Not Found' });
+  }
+});
+
 export { app }; 

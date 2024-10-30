@@ -13,6 +13,7 @@ import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import Login from "./pages/Login/Login";
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
+import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 
 const router = createBrowserRouter(
@@ -36,6 +37,10 @@ const router = createBrowserRouter(
 				path="/applyVolunteer" 
 				element={<VolunteerForm />}>
 			</Route>
+			<Route
+				path="/volunteer/changePassword"
+				element={<VolunteerPasswordChange />}
+			></Route>
 			<Route
 				path="/volunteer/resetPassword"
 				element={<VolunteerPasswordReset />}
