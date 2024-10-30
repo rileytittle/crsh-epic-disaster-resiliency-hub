@@ -2,7 +2,6 @@ import { VolunteerApplication } from "./volunteerApplication.model";
 export class Volunteer extends VolunteerApplication {
 	teamLeader: boolean;
 	password: string;
-	teams: string[] | undefined = undefined;
 	constructor(
 		id: number,
 		firstName: string,

@@ -130,6 +130,27 @@ app.get("/create-volunteer/applications", async (req, res) => {
 	res.status(200).send(filteredApplications);
 });
 
+app.get("/volunteers/:id", (req, res) => {
+	try {
+		//write some logic here
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.params.id)) {
+				foundVolunteer = volunteer;
+			}
+		}
+		if (foundVolunteer) {
+			res.status(200).send(foundVolunteer);
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+		res.status(200).send("Success");
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+
 app.get("/volunteers", (req, res) => {
 	try {
 		//write some logic here

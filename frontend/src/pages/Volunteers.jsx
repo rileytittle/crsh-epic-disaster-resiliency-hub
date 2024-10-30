@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
@@ -48,14 +49,12 @@ function Volunteers() {
 							{volunteers.map((volunteer) => (
 								<tr>
 									<td>
-										<th>
-											<button
-												type="button"
-												class="btn btn-secondary"
-											>
-												Edit
-											</button>
-										</th>
+										<Link
+											to="/volunteers/volunteer-details"
+											state={{ volunteer }}
+										>
+											Edit
+										</Link>
 									</td>
 									<th scope="row">{volunteer.id}</th>
 									<td>{volunteer.firstName}</td>
