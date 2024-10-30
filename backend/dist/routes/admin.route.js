@@ -21,8 +21,8 @@ exports.app = app;
 //Dummy data below
 //*******************************
 let volunteerApplications = [];
-let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]);
-let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"]);
+let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team"]);
+let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team", "Community Outreach Team"]);
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
 let volunteers = [];
@@ -101,13 +101,62 @@ app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0
     let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
 }));
-app.get("/volunteers/:id", (req, res) => {
+app.patch("/volunteers/volunteer-details", (req, res) => {
+    try {
+        let foundVolunteer = undefined;
+        for (let volunteer of volunteers) {
+            if (volunteer.id == parseInt(req.body.id)) {
+                foundVolunteer = volunteer;
+                break;
+            }
+        }
+        if (foundVolunteer) {
+            if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
+                foundVolunteer.areasOfHelp.push(req.body.selectedArea);
+                res.status(200).send(foundVolunteer);
+            }
+            else {
+                res.status(400).send("Area is already in volunteer's account");
+            }
+        }
+        else {
+            res.status(404).send("Could not find volunteer");
+        }
+    }
+    catch (e) {
+        res.status(500).send(e);
+    }
+});
+app.delete("/volunteers/volunteer-details", (req, res) => {
+    try {
+        let foundVolunteer = undefined;
+        for (let volunteer of volunteers) {
+            if (volunteer.id == parseInt(req.body.id)) {
+                foundVolunteer = volunteer;
+                break;
+            }
+        }
+        if (foundVolunteer) {
+            let newAreas = foundVolunteer.areasOfHelp.filter((area) => area !== req.body.selectedArea);
+            foundVolunteer.areasOfHelp = newAreas;
+            res.status(200).send(foundVolunteer);
+        }
+        else {
+            res.status(404).send("Could not find volunteer");
+        }
+    }
+    catch (e) {
+        res.status(500).send(e);
+    }
+});
+app.get("/volunteers/volunteer-details/:id", (req, res) => {
     try {
         //write some logic here
         let foundVolunteer = undefined;
         for (let volunteer of volunteers) {
-            if (volunteer.id == parseInt(req.params.id)) {
+            if (volunteer.id == parseFloat(req.params.id)) {
                 foundVolunteer = volunteer;
+                break;
             }
         }
         if (foundVolunteer) {
@@ -116,7 +165,6 @@ app.get("/volunteers/:id", (req, res) => {
         else {
             res.status(404).send("Could not find volunteer");
         }
-        res.status(200).send("Success");
     }
     catch (e) {
         res.status(500).send(e);

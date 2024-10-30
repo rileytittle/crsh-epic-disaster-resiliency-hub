@@ -51,7 +51,7 @@ function Volunteers() {
 									<td>
 										<Link
 											to="/volunteers/volunteer-details"
-											state={{ volunteer }}
+											state={volunteer}
 										>
 											Edit
 										</Link>

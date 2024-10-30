@@ -20,7 +20,7 @@ let firstApplication = new VolunteerApplication(
 	"Jacksonville",
 	"FL",
 	32256,
-	["Logistic Tracking"]
+	["Logistic Tracking Team"]
 );
 let secondApplication = new VolunteerApplication(
 	1,
@@ -32,7 +32,7 @@ let secondApplication = new VolunteerApplication(
 	"Jacksonville",
 	"FL",
 	32256,
-	["Logistic Tracking", "Community Outreach"]
+	["Logistic Tracking Team", "Community Outreach Team"]
 );
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
@@ -130,14 +130,62 @@ app.get("/create-volunteer/applications", async (req, res) => {
 	res.status(200).send(filteredApplications);
 });
 
-app.get("/volunteers/:id", (req, res) => {
+app.patch("/volunteers/volunteer-details", (req, res) => {
+	try {
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
+				foundVolunteer.areasOfHelp.push(req.body.selectedArea);
+				res.status(200).send(foundVolunteer);
+			} else {
+				res.status(400).send("Area is already in volunteer's account");
+			}
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+app.delete("/volunteers/volunteer-details", (req, res) => {
+	try {
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			let newAreas = foundVolunteer.areasOfHelp.filter(
+				(area) => area !== req.body.selectedArea
+			);
+			foundVolunteer.areasOfHelp = newAreas;
+			res.status(200).send(foundVolunteer);
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+app.get("/volunteers/volunteer-details/:id", (req, res) => {
 	try {
 		//write some logic here
 		let foundVolunteer: Volunteer | undefined = undefined;
 
 		for (let volunteer of volunteers) {
-			if (volunteer.id == parseInt(req.params.id)) {
+			if (volunteer.id == parseFloat(req.params.id)) {
 				foundVolunteer = volunteer;
+				break;
 			}
 		}
 		if (foundVolunteer) {
@@ -145,7 +193,6 @@ app.get("/volunteers/:id", (req, res) => {
 		} else {
 			res.status(404).send("Could not find volunteer");
 		}
-		res.status(200).send("Success");
 	} catch (e) {
 		res.status(500).send(e);
 	}
