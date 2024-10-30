@@ -12,6 +12,8 @@ const MainLayout = () => {
 					<div className="navbar-nav">
 						<a className="nav-item nav-link active" href="/create-volunteer">Create Volunteer</a>
 						<a className="nav-item nav-link" href="/request-help">Request Help</a>
+						<a className="nav-item nav-link" href="/applyVolunteer">Apply to Volunteer</a>
+						<a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a>
 						<a className="nav-item nav-link disabled" href="#">Disabled</a>
 					</div>
 				</div>

@@ -20,7 +20,7 @@ let firstApplication = new VolunteerApplication(
 	"Jacksonville",
 	"FL",
 	32256,
-	["Logistic Tracking"]
+	["Logistic Tracking Team"]
 );
 let secondApplication = new VolunteerApplication(
 	1,
@@ -32,7 +32,7 @@ let secondApplication = new VolunteerApplication(
 	"Jacksonville",
 	"FL",
 	32256,
-	["Logistic Tracking", "Community Outreach"]
+	["Logistic Tracking Team", "Community Outreach Team"]
 );
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
@@ -129,4 +129,18 @@ app.get("/create-volunteer/applications", async (req, res) => {
 	);
 	res.status(200).send(filteredApplications);
 });
+app.post("/assign-volunteer/list", async (req, res) => {
+	const { team } = req.body;
+  
+	
+	const filteredVolunteers = volunteers.filter(volunteer => volunteer.areasOfHelp.includes(team));
+  
+	
+	res.status(200).json({
+	  volunteers: filteredVolunteers,
+	  message: filteredVolunteers.length > 0 
+		? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.` 
+		: 'No volunteers found for this team.'
+	});
+  });
 export { app };

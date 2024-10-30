@@ -21,8 +21,8 @@ exports.app = app;
 //Dummy data below
 //*******************************
 let volunteerApplications = [];
-let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]);
-let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"]);
+let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team"]);
+let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team", "Community Outreach Team"]);
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
 let volunteers = [];
@@ -100,4 +100,14 @@ app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, voi
 app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
+}));
+app.post("/assign-volunteer/list", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { team } = req.body;
+    const filteredVolunteers = volunteers.filter(volunteer => volunteer.areasOfHelp.includes(team));
+    res.status(200).json({
+        volunteers: filteredVolunteers,
+        message: filteredVolunteers.length > 0
+            ? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.`
+            : 'No volunteers found for this team.'
+    });
 }));

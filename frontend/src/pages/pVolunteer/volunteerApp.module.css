@@ -1,0 +1,120 @@
+.volunteerForm {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9; 
+}
+
+.volunteerInput {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px; 
+}
+
+.areasOfHelpContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+button {
+  padding: 10px;
+  background-color: #007BFF; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px; 
+  margin-top: 10px; 
+}
+
+.checkboxInput {
+  position: bottom;  
+  cursor: pointer; 
+  z-index: 1;
+}
+
+
+button:hover {
+  background-color: #0056b3; 
+}
+
+.volunteerLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1 1 45%; 
+  min-width: 150px; 
+  transition: background-color 0.3s, color 0.3s;
+  position: relative;
+}
+
+.volunteerLabel:hover {
+  background-color: #eaeaea;
+}
+
+.infoTooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  padding: 8px;
+  width: 250px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  z-index: 10;
+  white-space: normal;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.volunteerLabel:hover .infoTooltip {
+  visibility: visible;
+  opacity: 1;
+  bottom: 100%; 
+  top: auto;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+
+
+@media (max-width: 600px) {
+  .infoTooltip {
+    left: 100%; 
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+    margin-left: 8px;
+  }
+
+  
+  
+}
+.checkboxInput:checked + .volunteerLabel {
+  background-color: #007bff; 
+  color: white; 
+  border-color: #007bff;
+}
