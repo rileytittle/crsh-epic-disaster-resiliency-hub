@@ -8,11 +8,15 @@ import {
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
-import HomeownerApplication from "./pages/HomeownerApplication";
+import HomeownerForm from "./pages/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import Login from "./pages/Login/Login";
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
+import ApplicationStatus from "./pages/pVolunteer/applicationStatus";
+import VolunteerPasswordChange from "./pages/volunteer/changePassword";
+import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
@@ -23,7 +27,7 @@ const router = createBrowserRouter(
 			></Route>
 			<Route
 				path="/request-help"
-				element={<HomeownerApplication />}
+				element={<HomeownerForm />}
 			></Route>
 			<Route
 				path="/create-volunteer/confirm"
@@ -34,6 +38,18 @@ const router = createBrowserRouter(
 				path="/applyVolunteer" 
 				element={<VolunteerForm />}>
 			</Route>
+			<Route
+				path="/applyVolunteer/status"
+				element={<ApplicationStatus />}
+			></Route>
+			<Route
+				path="/volunteer/changePassword"
+				element={<VolunteerPasswordChange />}
+			></Route>
+			<Route
+				path="/volunteer/resetPassword"
+				element={<VolunteerPasswordReset />}
+			></Route>
 		</Route>
 	)
 );

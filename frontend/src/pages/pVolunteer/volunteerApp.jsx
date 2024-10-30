@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './volunteerApp.css';
+import styles from './volunteerApp.module.css';
 
 const VolunteerForm = () => {
   const [formData, setFormData] = useState({
@@ -59,20 +59,20 @@ const VolunteerForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form class={styles.volunteerForm} onSubmit={handleSubmit}>
 
-      <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-      <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-      <input type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
-      <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-      <input type="text" name="streetAddress" placeholder="Street Address" value={formData.streetAddress} onChange={handleChange} required />
-      <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
-      <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
-      <input type="text" name="zipCode" placeholder="Zip Code" value={formData.zipCode} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="streetAddress" placeholder="Street Address" value={formData.streetAddress} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
+      <input class={styles.volunteerInput} type="text" name="zipCode" placeholder="Zip Code" value={formData.zipCode} onChange={handleChange} required />
       
       <label>Areas of Help:</label>
       <div>
-        <label>
+        <label class={styles.volunteerLabel}>
           <input 
             type="checkbox" 
             name="areasOfHelp" 
@@ -82,7 +82,7 @@ const VolunteerForm = () => {
           />
           Teaching
         </label>
-        <label>
+        <label class={styles.volunteerLabel}>
           <input 
             type="checkbox" 
             name="areasOfHelp" 
@@ -92,7 +92,7 @@ const VolunteerForm = () => {
           />
           First Aid
         </label>
-        <label>
+        <label class={styles.volunteerLabel}>
           <input 
             type="checkbox" 
             name="areasOfHelp" 
