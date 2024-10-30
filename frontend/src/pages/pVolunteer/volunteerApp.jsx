@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
 import styles from './volunteerApp.module.css';
+
 
 const VolunteerForm = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +43,10 @@ const VolunteerForm = () => {
     e.preventDefault();
 
     try {
+
       const response = await fetch('http://localhost:3000/volunteer/create', {
+
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,6 +62,7 @@ const VolunteerForm = () => {
   };
 
   return (
+
     <form className={styles.volunteerForm} onSubmit={handleSubmit}>
 
       <input className={styles.volunteerInput} type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
@@ -131,6 +137,7 @@ const VolunteerForm = () => {
           />
           Community Helpers Team
           <span className={styles.infoTooltip}>Physically helping in the affected areas for indoor or outdoor debris removal, general</span>
+
         </label>
       </div>
 

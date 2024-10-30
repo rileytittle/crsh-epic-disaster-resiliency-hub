@@ -3,6 +3,9 @@ import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
 import {app as volunteerRouter} from "./routes/Volunteer.route";
 
+import {app as volunteerRouter} from "./routes/Volunteer.route";
+
+
 let cors = require("cors");
 let app = express();
 app.use(express.json());
