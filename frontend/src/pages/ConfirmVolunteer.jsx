@@ -42,7 +42,7 @@ function ConfirmVolunteer() {
 					<br></br>
 					<button
 						type="button"
-						class="btn btn-primary"
+						className="btn btn-primary"
 						onClick={createVolunteer}
 					>
 						Create Volunteer Account

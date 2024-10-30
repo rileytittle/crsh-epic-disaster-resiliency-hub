@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 const MainLayout = () => {
 	return (
 		<>
+
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">EPIC</a>
@@ -25,6 +26,7 @@ const MainLayout = () => {
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
 									<li><a className="dropdown-item" href="/applyVolunteer/status">Check Status of Application</a></li>
+                  <li><a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
@@ -44,6 +46,7 @@ const MainLayout = () => {
 							</li>
 						</ul>
 						<a className="nav-link" href="/request-help">Request Help</a>
+
 					</div>
 				</div>
 			</nav>
