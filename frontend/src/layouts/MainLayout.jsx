@@ -24,6 +24,7 @@ const MainLayout = () => {
 									<li><a className="dropdown-item" href="/volunteer/resetPassword">Reset Password</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
+									<li><a className="dropdown-item" href="/applyVolunteer/status">Check Status of Application</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
