@@ -4,6 +4,7 @@ import {
 	createRoutesFromElements,
 	Route,
 	RouterProvider,
+	Navigate,
 } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
@@ -25,7 +26,12 @@ import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
-			<Route path="/home" element={<Homepage />}></Route>
+			<Route index element={<Navigate to="/home" replace />} />
+			<Route
+				path="/home"
+				element={<Homepage />}>
+			</Route>
+
 			<Route
 				path="/create-volunteer"
 				element={<CreateVolunteer />}
@@ -39,18 +45,20 @@ const router = createBrowserRouter(
 				element={<ConfirmVolunteer />}
 			></Route>
 
-			<Route path="/login" element={<Login />}>
+			<Route
+				path="/login"
+				element={<Login />}>
 			</Route>
 
-			<Route 
-				path="/applyVolunteer" 
+			<Route
+				path="/applyVolunteer"
 				element={<VolunteerForm />}>
 			</Route>
 
-			<Route 
+			<Route
 				path="/assignVolunteers"
 				element={<AssignVolunteer />}>
-  	</Route>
+			</Route>
 			<Route
 				path="/applyVolunteer/status"
 				element={<ApplicationStatus />}

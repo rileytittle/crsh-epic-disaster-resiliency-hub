@@ -20,13 +20,11 @@ const MainLayout = () => {
 									Volunteer
 								</a>
 								<ul className="dropdown-menu">
-									<li><a className="dropdown-item disabled" href="#">Action</a></li>
 									<li><a className="dropdown-item" href="/volunteer/changePassword">Change Password</a></li>
 									<li><a className="dropdown-item" href="/volunteer/resetPassword">Reset Password</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
 									<li><a className="dropdown-item" href="/applyVolunteer/status">Check Status of Application</a></li>
-                  <li><a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
@@ -37,12 +35,13 @@ const MainLayout = () => {
 								</a>
 								<ul className="dropdown-menu">
 									<li><a className="dropdown-item" href="/create-volunteer">Create Volunteer</a></li>
+									<li><a className="dropdown-item" href="/assignVolunteers">Assign Volunteers to a Job</a></li>
 									<li><hr className="dropdown-divider" /></li>
-									<li><a className="dropdown-item disabled" href="#">Something else here</a></li>
+									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link disabled" aria-disabled="true" href="/login">Login</a>
+								<a className="nav-link" href="/login">Login</a>
 							</li>
 						</ul>
 						<a className="nav-link" href="/request-help">Request Help</a>
