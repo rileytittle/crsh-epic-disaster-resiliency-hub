@@ -1,6 +1,7 @@
 import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
+import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
 let app = Router();
 //enter your api key below
@@ -123,7 +124,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 	}
 });
 
-app.get("/create-volunteer/applications", async (req, res) => {
+app.get("/create-volunteer/applications", Authchecker, async (req, res) => {
 	let filteredApplications = volunteerApplications.filter(
 		(application) => !application.rejected && !application.evaluated
 	);
@@ -131,16 +132,17 @@ app.get("/create-volunteer/applications", async (req, res) => {
 });
 app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
-  
-	
-	const filteredVolunteers = volunteers.filter(volunteer => volunteer.areasOfHelp.includes(team));
-  
-	
+
+	const filteredVolunteers = volunteers.filter((volunteer) =>
+		volunteer.areasOfHelp.includes(team)
+	);
+
 	res.status(200).json({
-	  volunteers: filteredVolunteers,
-	  message: filteredVolunteers.length > 0 
-		? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.` 
-		: 'No volunteers found for this team.'
+		volunteers: filteredVolunteers,
+		message:
+			filteredVolunteers.length > 0
+				? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.`
+				: "No volunteers found for this team.",
 	});
-  });
+});
 export { app };
