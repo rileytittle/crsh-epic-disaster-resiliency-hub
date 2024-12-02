@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HomeownerRequest = void 0;
 class HomeownerRequest {
     constructor(id, firstName, lastName, email, address, city, state, zip, helpType) {
-        this.evaluation = undefined;
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,6 +12,7 @@ class HomeownerRequest {
         this.state = state;
         this.zip = zip;
         this.helpType = helpType;
+        this.evaluation = undefined;
     }
 }
 exports.HomeownerRequest = HomeownerRequest;
