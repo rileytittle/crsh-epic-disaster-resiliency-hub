@@ -26,7 +26,7 @@ const MainLayout = () => {
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
 									<li><a className="dropdown-item" href="/applyVolunteer/status">Check Status of Application</a></li>
-                  <li><a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a></li>
+                  				    <li><a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
@@ -42,7 +42,10 @@ const MainLayout = () => {
 								</ul>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link disabled" aria-disabled="true" href="/login">Login</a>
+								<a className="nav-link" aria-disabled="true" href="/admin-login">Admin Login</a>
+							</li>
+							<li className="nav-item">
+								<a className="nav-link" aria-disabled="true" href="/vol-login">Volunteer Login</a>
 							</li>
 						</ul>
 						<a className="nav-link" href="/request-help">Request Help</a>
@@ -56,10 +59,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-
-/*
-<form className="d-flex" role="search">
-	<input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-		<button className="btn btn-outline-success" type="submit">Search</button>
-</form>
-*/

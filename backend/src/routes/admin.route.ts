@@ -3,6 +3,20 @@ import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
+import { Pool } from "pg";
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+let saltRounds = 10;
+const SECRET_KEY =
+	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
+
+const pool = new Pool({
+	user: "postgres",
+	host: "localhost",
+	database: "Senior-Project",
+	password: "garnetisGold!1820",
+	port: 5432,
+});
 let app = Router();
 //enter your api key below
 // let emailAPIKey = "";
@@ -10,6 +24,10 @@ let app = Router();
 
 //Dummy data below
 //*******************************
+
+
+
+
 let volunteerApplications: VolunteerApplication[] = [];
 let firstApplication = new VolunteerApplication(
 	0,
@@ -39,8 +57,67 @@ volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
 
 let volunteers: Volunteer[] = [];
-//*******************************
 
+
+
+
+//*******************************
+app.post("/create-account", async (req, res) => {
+	try {
+		//write some logic here
+		let queryResult = await pool.query(
+			'SELECT * FROM AdminAccount WHERE email = $1',
+			[req.body.email]
+		);
+		if(queryResult.rows.length == 0){
+			
+		}
+		else{
+			res.status(400).send({message:'Email already in use'});
+		}
+		res.status(200).send("Success");
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+app.post("/login", async (req, res) => {
+	try {
+		//write some logic here
+		if(req.headers["authorization"]){
+			let userInfo = req.headers['authorization'].split(' ')[1]; //Base 64 Encoded
+			let decodedUserInfo = atob(userInfo);
+			let email= decodedUserInfo.split(':')[0];
+			let password= decodedUserInfo.split(':')[1];
+			console.log(email, password, decodedUserInfo, userInfo)
+			let queryResult = await pool.query(
+				'SELECT * FROM AdminAccount WHERE email = $1', 
+				[email]
+			);
+			if(queryResult.rows.length > 0){
+				let user = queryResult.rows[0]
+				console.log(user.password)
+				bcrypt.compare(password, user.password.trim(), (err, result)=>{
+					console.log({ password, storedHash: user.password.trim(), err, result });
+					if(result){
+						let token = jwt.sign({email:user.email, isAdmin:true}, SECRET_KEY);
+						res.status(200).send({token:token});
+					}
+					else{
+						res.status(401).send({status:401, message:'Incorrect password'});
+					}
+				})
+			}
+			else{
+				res.status(401).send({message:'No account with that email found'})
+			}
+		}
+		else{
+			res.status(401).send({message: 'missing required login details'})
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
 app.post("/create-volunteer/accept", async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
