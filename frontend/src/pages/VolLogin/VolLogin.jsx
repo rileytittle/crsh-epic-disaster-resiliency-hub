@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../../App.css";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-function AdminLogin() {
+function VolLogin() {
 	const location = useLocation();
 
 	const [email, setEmail] = useState("");
@@ -20,12 +20,12 @@ function AdminLogin() {
 			let headers = {
 				Authorization: `Basic ${basicAuthHeader}`
 			}
-			await axios.post('http://localhost:3000/admin/login', userData, { headers })
+			await axios.post('http://localhost:3000/volunteer/login', userData, { headers })
 				.then(response => {
 					sessionStorage.setItem('isLoggedIn', true)
-					sessionStorage.setItem('userType', 'admin')
+					sessionStorage.setItem('userType', 'volunteer')
 					sessionStorage.setItem('userToken', response.data.token)
-					navigate('/admin-dashboard')
+					navigate('/volunteer-dashboard')
 				})
 				.catch(error => {
 					console.log('error logging in')
@@ -38,7 +38,7 @@ function AdminLogin() {
 	return (
 		<>
 			<div style={{ textAlign: "center" }}>
-				<h1>Admin Login Portal</h1>
+				<h1>Volunteer Login Portal</h1>
 				<form>
 					<input
 						type="text"
@@ -61,4 +61,4 @@ function AdminLogin() {
 	);
 }
 
-export default AdminLogin;
+export default VolLogin;
