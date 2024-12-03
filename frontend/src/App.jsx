@@ -12,7 +12,7 @@ import HomeownerForm from "./pages/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
-import VolLogin from "./VolLogin/VolLogin";
+import VolLogin from './pages/VolLogin/VolLogin'
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
 
 import AssignVolunteer from "./pages/Admin/assignVolunteer";
@@ -20,7 +20,8 @@ import AssignVolunteer from "./pages/Admin/assignVolunteer";
 import ApplicationStatus from "./pages/pVolunteer/applicationStatus";
 import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
-
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
@@ -36,7 +37,10 @@ const router = createBrowserRouter(
 			></Route>
 
 			<Route path="/admin-login" element={<AdminLogin />}></Route>
+			<Route path="/admin-dashboard" element={<AdminDashboard/>}></Route>
+			
 			<Route path="/vol-login" element={<VolLogin />}></Route>
+			<Route path='/volunteer-dashboard' element={<VolunteerDashboard/>}></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
 
 			<Route

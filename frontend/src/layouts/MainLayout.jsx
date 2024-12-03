@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 const MainLayout = () => {
 	return (
 		<>
-
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">EPIC</a>
@@ -15,7 +14,8 @@ const MainLayout = () => {
 							<li className="nav-item">
 								<a className="nav-link active" href="/home">Home</a>
 							</li>
-							<li className="nav-item dropdown">
+							{sessionStorage.getItem('isLoggedIn') && sessionStorage.getItem('userType') == 'volunteer' ? 
+							(<li className="nav-item dropdown">
 								<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 									Volunteer
 								</a>
@@ -30,8 +30,9 @@ const MainLayout = () => {
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
-							</li>
-							<li className="nav-item dropdown">
+							</li>) : 
+							(<></>)}
+							{sessionStorage.getItem('isLoggedIn') && sessionStorage.getItem('userType') == 'admin' ? (<li className="nav-item dropdown">
 								<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 									Admin
 								</a>
@@ -40,7 +41,7 @@ const MainLayout = () => {
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Something else here</a></li>
 								</ul>
-							</li>
+							</li>) : (<></>)}
 							<li className="nav-item">
 								<a className="nav-link" aria-disabled="true" href="/admin-login">Admin Login</a>
 							</li>
