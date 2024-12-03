@@ -21,6 +21,7 @@ const MainLayout = () => {
 								</a>
 								<ul className="dropdown-menu">
 									<li><a className="dropdown-item disabled" href="#">Action</a></li>
+									<li><a className="dropdown-item" href="/volunteer/dashboard">Dashboard</a></li>
 									<li><a className="dropdown-item" href="/volunteer/changePassword">Change Password</a></li>
 									<li><a className="dropdown-item" href="/volunteer/resetPassword">Reset Password</a></li>
 									<li><hr className="dropdown-divider" /></li>

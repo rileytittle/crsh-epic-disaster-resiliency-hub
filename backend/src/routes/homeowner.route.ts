@@ -1,7 +1,7 @@
 import express from "express";
 
-import { helpRequest } from "../models/helpRequest.model";
-import { HomeownerApplication } from "../models/homeownerApplication.model";
+import { helpRequest } from "../Models/helpRequest.model";
+import { HomeownerApplication } from "../Models/homeownerApplication.model";
 
 
 let app = express.Router();

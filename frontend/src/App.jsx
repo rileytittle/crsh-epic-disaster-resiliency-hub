@@ -21,6 +21,8 @@ import ApplicationStatus from "./pages/pVolunteer/applicationStatus";
 import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 
+import VolunteerDashboard from "./pages/volunteer/Dashboard";
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
@@ -55,6 +57,7 @@ const router = createBrowserRouter(
 				path="/volunteer/resetPassword"
 				element={<VolunteerPasswordReset />}
 			></Route>
+			<Route path="/volunteer/dashboard" element={<VolunteerDashboard />}></Route>
 		</Route>
 	)
 );
