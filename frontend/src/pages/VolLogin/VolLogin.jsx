@@ -25,6 +25,7 @@ function VolLogin() {
 					sessionStorage.setItem('isLoggedIn', true)
 					sessionStorage.setItem('userType', 'volunteer')
 					sessionStorage.setItem('userToken', response.data.token)
+					sessionStorage.setItem('justLoggedIn', true)
 					navigate('/volunteer-dashboard')
 				})
 				.catch(error => {

@@ -25,6 +25,7 @@ function AdminLogin() {
 					sessionStorage.setItem('isLoggedIn', true)
 					sessionStorage.setItem('userType', 'admin')
 					sessionStorage.setItem('userToken', response.data.token)
+					sessionStorage.setItem('justLoggedIn', true)
 					navigate('/admin-dashboard')
 				})
 				.catch(error => {
