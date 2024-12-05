@@ -222,4 +222,80 @@ app.post("/assign-volunteer/list", async (req, res) => {
 				: "No volunteers found for this team.",
 	});
 });
+app.patch("/volunteers/volunteer-details", (req, res) => {
+	try {
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
+				foundVolunteer.areasOfHelp.push(req.body.selectedArea);
+				res.status(200).send(foundVolunteer);
+			} else {
+				res.status(400).send("Area is already in volunteer's account");
+			}
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+app.delete("/volunteers/volunteer-details", (req, res) => {
+	try {
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			let newAreas = foundVolunteer.areasOfHelp.filter(
+				(area) => area !== req.body.selectedArea
+			);
+			foundVolunteer.areasOfHelp = newAreas;
+			res.status(200).send(foundVolunteer);
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+app.get("/volunteers/volunteer-details/:id", (req, res) => {
+	try {
+		//write some logic here
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseFloat(req.params.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			res.status(200).send(foundVolunteer);
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+
+app.get("/volunteers", (req, res) => {
+	try {
+		//write some logic here
+		res.status(200).send(volunteers);
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
 export { app };
