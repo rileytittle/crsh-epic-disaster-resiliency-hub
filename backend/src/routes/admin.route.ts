@@ -252,7 +252,11 @@ app.post("/homeowner-requests/accept", (req, res) => {
 			} else {
 				res.status(404).send("Could not find request");
 			}
-
+		}
+	}catch(e){
+		res.send("bad")
+	}
+})
 app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
 
@@ -314,6 +318,10 @@ app.post("/homeowner-requests/reject", (req, res) => {
 			res.status(400).send("Must supply id");
 		}
 		res.status(200).send("Success");
+	}catch(e){
+		res.send("Bad")
+	}
+})
 
 app.delete("/volunteers/volunteer-details", (req, res) => {
 	try {
@@ -366,7 +374,10 @@ app.get("/homeowner-requests", (req, res) => {
 			(request) => request.evaluation === undefined
 		);
 		res.status(200).send(filteredRequests);
-
+	}catch(e){
+		res.send("Bad")
+	}
+})
 
 app.get("/volunteers", (req, res) => {
 	try {
