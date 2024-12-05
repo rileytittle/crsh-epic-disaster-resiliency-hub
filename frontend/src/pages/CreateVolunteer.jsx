@@ -6,8 +6,15 @@ import { useState, useEffect } from "react";
 function CreateVolunteer() {
 	const [applications, setApplications] = useState([]);
 	useEffect(() => {
+		let token = sessionStorage.getItem('userToken');
+
 		axios
-			.get("http://localhost:3000/admin/create-volunteer/applications")
+			.get("http://localhost:3000/admin/create-volunteer/applications",{
+				headers: {
+					Authorization: `Bearer ${token}`
+				},
+			})
+
 			.then((res) => {
 				setApplications(res.data);
 				console.log(res.data);

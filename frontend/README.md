@@ -5,7 +5,9 @@
 - and then another `npm run` command; either `dev` or `preview`
 ## backend
 - `npm i`
-- run `nodemon`
+- `tsc -w`
+- run `nodemon` in a different terminal
+
 
 # React + Vite
 
