@@ -16,6 +16,7 @@ exports.app = void 0;
 const express_1 = require("express");
 const volunteerApplication_model_1 = require("../models/volunteerApplication.model");
 const volunteer_model_1 = require("../models/volunteer.model");
+const job_model_1 = require("../models/job.model");
 const auth_utils_1 = require("../utils/auth.utils");
 const pg_1 = require("pg");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -36,6 +37,21 @@ exports.app = app;
 // sgMail.setApiKey(emailAPIKey);
 //Dummy data below
 //*******************************
+let jobs = [];
+let requests = [
+    {
+        id: 1,
+        firstName: "Riley",
+        lastName: "Tittle",
+        email: "fakeemail@email.com",
+        address: "1234 Main Street",
+        city: "Jacksonville",
+        state: "FL",
+        zip: 32256,
+        helpType: ["Yard cleanup"],
+        evaluation: undefined,
+    },
+];
 let volunteerApplications = [];
 let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team"]);
 let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team", "Community Outreach Team"]);
@@ -168,6 +184,32 @@ app.get("/create-volunteer/applications", auth_utils_1.Authchecker, (req, res) =
     let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
 }));
+app.post("/homeowner-requests/accept", (req, res) => {
+    try {
+        //write some logic here
+        let foundRequest = undefined;
+        if (req.body.id) {
+            for (let request of requests) {
+                if (request.id == parseInt(req.body.id)) {
+                    foundRequest = request;
+                    break;
+                }
+            }
+            if (foundRequest) {
+                let newJob = new job_model_1.Job(foundRequest.id, foundRequest.firstName, foundRequest.lastName, foundRequest.email, foundRequest.address, foundRequest.city, foundRequest.state, foundRequest.zip, foundRequest.helpType, "Test Team");
+                foundRequest.evaluation = "accepted";
+                jobs.push(newJob);
+                res.status(200).send("Success");
+            }
+            else {
+                res.status(404).send("Could not find request");
+            }
+        }
+    }
+    catch (e) {
+        res.send("bad");
+    }
+});
 app.post("/assign-volunteer/list", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { team } = req.body;
     const filteredVolunteers = volunteers.filter((volunteer) => volunteer.areasOfHelp.includes(team));
@@ -202,6 +244,32 @@ app.patch("/volunteers/volunteer-details", (req, res) => {
     }
     catch (e) {
         res.status(500).send(e);
+    }
+});
+app.post("/homeowner-requests/reject", (req, res) => {
+    try {
+        let foundRequest = undefined;
+        if (req.body.id) {
+            for (let request of requests) {
+                if (request.id == parseInt(req.body.id)) {
+                    foundRequest = request;
+                    break;
+                }
+            }
+            if (foundRequest) {
+                foundRequest.evaluation = "rejected";
+            }
+            else {
+                res.status(404).send("Could not find request");
+            }
+        }
+        else {
+            res.status(400).send("Must supply id");
+        }
+        res.status(200).send("Success");
+    }
+    catch (e) {
+        res.send("Bad");
     }
 });
 app.delete("/volunteers/volunteer-details", (req, res) => {
@@ -245,6 +313,15 @@ app.get("/volunteers/volunteer-details/:id", (req, res) => {
     }
     catch (e) {
         res.status(500).send(e);
+    }
+});
+app.get("/homeowner-requests", (req, res) => {
+    try {
+        let filteredRequests = requests.filter((request) => request.evaluation === undefined);
+        res.status(200).send(filteredRequests);
+    }
+    catch (e) {
+        res.send("Bad");
     }
 });
 app.get("/volunteers", (req, res) => {

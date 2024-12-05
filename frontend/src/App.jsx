@@ -8,6 +8,11 @@ import {
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
+import HomeownerApplication from "./pages/HomeownerApplication";
+import HomeownerRequests from "./pages/HomeownerRequests";
+import RequestDetails from "./pages/RequestDetails";
+
+
 import HomeownerForm from "./pages/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
@@ -23,6 +28,7 @@ import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
@@ -36,7 +42,14 @@ const router = createBrowserRouter(
 				path="/create-volunteer/confirm"
 				element={<ConfirmVolunteer />}
 			></Route>
-
+			<Route
+				path="/homeowner-requests"
+				element={<HomeownerRequests />}
+			></Route>
+			<Route
+				path="/homeowner-requests/request-details"
+				element={<RequestDetails />}
+			></Route>
 			<Route path="/admin-login" element={<AdminLogin />}></Route>
 			<Route path="/admin-dashboard" element={<AdminDashboard/>}></Route>
 			

@@ -14,6 +14,7 @@ function CreateVolunteer() {
 					Authorization: `Bearer ${token}`
 				},
 			})
+
 			.then((res) => {
 				setApplications(res.data);
 				console.log(res.data);
