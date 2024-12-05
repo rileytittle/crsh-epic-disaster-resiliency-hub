@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const admin_route_1 = require("./routes/admin.route");
-const homeowner_route_1 = require("./routes/homeowner.route");
-const Volunteer_route_1 = require("./routes/Volunteer.route");
+const admin_route_1 = require("./Routes/admin.route");
+const homeowner_route_1 = require("./Routes/homeowner.route");
+const Volunteer_route_1 = require("./Routes/Volunteer.route");
 let cors = require("cors");
 let app = (0, express_1.default)();
 app.use(express_1.default.json());

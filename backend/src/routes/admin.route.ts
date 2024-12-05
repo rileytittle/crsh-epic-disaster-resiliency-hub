@@ -1,6 +1,6 @@
 import { Router, application } from "express";
-import { VolunteerApplication } from "../models/volunteerApplication.model";
-import { Volunteer } from "../models/volunteer.model";
+import { VolunteerApplication } from "../Models/volunteerApplication.model";
+import { Volunteer } from "../Models/volunteer.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";

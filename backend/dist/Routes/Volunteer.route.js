@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = require("express");
-const volunteerApplication_model_1 = require("../models/volunteerApplication.model");
-const volunteer_model_1 = require("../models/volunteer.model");
+const volunteerApplication_model_1 = require("../Models/volunteerApplication.model");
+const volunteer_model_1 = require("../Models/volunteer.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const pg_1 = require("pg");

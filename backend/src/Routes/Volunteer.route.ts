@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { VolunteerApplication } from "../models/volunteerApplication.model";
-import { Volunteer } from "../models/volunteer.model";
+import { VolunteerApplication } from "../Models/volunteerApplication.model";
+import { Volunteer } from "../Models/volunteer.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { Pool } from "pg";

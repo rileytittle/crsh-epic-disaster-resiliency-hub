@@ -40,7 +40,7 @@ const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 					className="card-link"
 					state={{ id, firstName, lastName, email, areasOfHelp }}
 				>
-					Create Volunteer
+					More info
 				</Link>
 			</div>
 		</div>
