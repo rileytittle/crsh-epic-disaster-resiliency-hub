@@ -14,7 +14,8 @@ import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
 import VolLogin from './pages/VolLogin/VolLogin'
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
-
+import Volunteers from "./pages/volunteer/Volunteers";
+import VolunteerDetails from "./pages/volunteer/VolunteerDetails";
 import AssignVolunteer from "./pages/Admin/assignVolunteer";
 
 import ApplicationStatus from "./pages/pVolunteer/applicationStatus";
@@ -58,6 +59,11 @@ const router = createBrowserRouter(
 			<Route
 				path="/volunteer/resetPassword"
 				element={<VolunteerPasswordReset />}
+			></Route>
+			<Route path="/volunteers" element={<Volunteers />}></Route>
+			<Route
+				path="/volunteers/volunteer-details"
+				element={<VolunteerDetails />}
 			></Route>
 		</Route>
 	)

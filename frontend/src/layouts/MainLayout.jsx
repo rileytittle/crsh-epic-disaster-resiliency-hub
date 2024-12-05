@@ -39,7 +39,7 @@ const MainLayout = () => {
 								<ul className="dropdown-menu">
 									<li><a className="dropdown-item" href="/create-volunteer">Create Volunteer</a></li>
 									<li><hr className="dropdown-divider" /></li>
-									<li><a className="dropdown-item disabled" href="#">Something else here</a></li>
+									<li><a className="dropdown-item" href="/volunteers">Volunteers</a></li>
 								</ul>
 							</li>) : (<></>)}
 							<li className="nav-item">

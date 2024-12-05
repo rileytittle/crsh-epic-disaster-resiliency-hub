@@ -15,5 +15,5 @@ app.use(cors({
 }));
 app.use("/admin", admin_route_1.app);
 app.use("/homeowner", homeowner_route_1.app);
-app.use("/volunteer", Volunteer_route_1.app);
+app.use("/volunteer", homeowner_route_2.app);
 app.listen(3000);
