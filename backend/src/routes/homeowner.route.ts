@@ -1,5 +1,4 @@
 import express from "express";
-
 import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 

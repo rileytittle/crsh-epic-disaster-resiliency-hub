@@ -40,6 +40,7 @@ const MainLayout = () => {
 									<li><a className="dropdown-item" href="/create-volunteer">Create Volunteer</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item" href="/volunteers">Volunteers</a></li>
+                  <li><a className="dropdown-item" href="/homeowner-requests">Requests</a></li>
 								</ul>
 							</li>) : (<></>)}
 							<li className="nav-item">
@@ -50,7 +51,6 @@ const MainLayout = () => {
 							</li>
 						</ul>
 						<a className="nav-link" href="/request-help">Request Help</a>
-
 					</div>
 				</div>
 			</nav>

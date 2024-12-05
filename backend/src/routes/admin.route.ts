@@ -1,6 +1,8 @@
 import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
+import { HomeownerRequest } from "../models/homeownerRequest.model";
+import { Job } from "../models/job.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
@@ -25,9 +27,21 @@ let app = Router();
 //Dummy data below
 //*******************************
 
-
-
-
+let jobs: Job[] = [];
+let requests: HomeownerRequest[] = [
+	{
+		id: 1,
+		firstName: "Riley",
+		lastName: "Tittle",
+		email: "fakeemail@email.com",
+		address: "1234 Main Street",
+		city: "Jacksonville",
+		state: "FL",
+		zip: 32256,
+		helpType: ["Yard cleanup"],
+		evaluation: undefined,
+	},
+];
 let volunteerApplications: VolunteerApplication[] = [];
 let firstApplication = new VolunteerApplication(
 	0,
@@ -207,6 +221,38 @@ app.get("/create-volunteer/applications", Authchecker, async (req, res) => {
 	);
 	res.status(200).send(filteredApplications);
 });
+
+app.post("/homeowner-requests/accept", (req, res) => {
+	try {
+		//write some logic here
+		let foundRequest: HomeownerRequest | undefined = undefined;
+		if (req.body.id) {
+			for (let request of requests) {
+				if (request.id == parseInt(req.body.id)) {
+					foundRequest = request;
+					break;
+				}
+			}
+			if (foundRequest) {
+				let newJob = new Job(
+					foundRequest.id,
+					foundRequest.firstName,
+					foundRequest.lastName,
+					foundRequest.email,
+					foundRequest.address,
+					foundRequest.city,
+					foundRequest.state,
+					foundRequest.zip,
+					foundRequest.helpType,
+					"Test Team"
+				);
+				foundRequest.evaluation = "accepted";
+				jobs.push(newJob);
+				res.status(200).send("Success");
+			} else {
+				res.status(404).send("Could not find request");
+			}
+
 app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
 
@@ -241,11 +287,34 @@ app.patch("/volunteers/volunteer-details", (req, res) => {
 			}
 		} else {
 			res.status(404).send("Could not find volunteer");
+
 		}
 	} catch (e) {
 		res.status(500).send(e);
 	}
 });
+
+
+app.post("/homeowner-requests/reject", (req, res) => {
+	try {
+		let foundRequest: HomeownerRequest | undefined = undefined;
+		if (req.body.id) {
+			for (let request of requests) {
+				if (request.id == parseInt(req.body.id)) {
+					foundRequest = request;
+					break;
+				}
+			}
+			if (foundRequest) {
+				foundRequest.evaluation = "rejected";
+			} else {
+				res.status(404).send("Could not find request");
+			}
+		} else {
+			res.status(400).send("Must supply id");
+		}
+		res.status(200).send("Success");
+
 app.delete("/volunteers/volunteer-details", (req, res) => {
 	try {
 		let foundVolunteer: Volunteer | undefined = undefined;
@@ -285,10 +354,19 @@ app.get("/volunteers/volunteer-details/:id", (req, res) => {
 		} else {
 			res.status(404).send("Could not find volunteer");
 		}
+
 	} catch (e) {
 		res.status(500).send(e);
 	}
 });
+
+app.get("/homeowner-requests", (req, res) => {
+	try {
+		let filteredRequests = requests.filter(
+			(request) => request.evaluation === undefined
+		);
+		res.status(200).send(filteredRequests);
+
 
 app.get("/volunteers", (req, res) => {
 	try {
