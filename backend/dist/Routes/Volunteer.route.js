@@ -19,6 +19,7 @@ const volunteer_model_1 = require("../models/volunteer.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const pg_1 = require("pg");
+const job_model_1 = require("../models/job.model");
 const pool = new pg_1.Pool({
     user: "postgres",
     host: "localhost",
@@ -144,4 +145,69 @@ app.post("/status", (req, res) => {
     else {
         res.status(401).json({ message: 'Name Not Found' });
     }
+});
+//added by Corey
+let jobs = new Set();
+let schedule = new Set();
+//temporary jobs meant to simulate an admin offering new jobs to the volunteer
+const hardcodedJobs = [
+    new job_model_1.Job(1, "John", "Smith", "JSmith@email.com", 1234567890, "123 Florida Street", "Apt 101", "Orlando", "Fl", 12345, ["cleanup"], "cleanup", "cleanup"),
+    new job_model_1.Job(2, "Jack", "Johnson", "JJohnson@email.com", 2345678901, "456 Dunn Creek Road", "Suite 202", "Tampa", "Fl", 12345, ["tree removal"], "tree removal", "tree removal"),
+    new job_model_1.Job(3, "Jenny", "Garfunkle", "JGarfunkle@email.com", 3456789012, "789 Grover Court", "None", "Yulee", "Fl", 12345, ["roofing"], "roofing", "roofing"),
+    new job_model_1.Job(4, "Trevor", "Moore", "TMoore@email.com", 4567890123, "135 Chemtrail Street", "None", "Orlando", "Fl", 12345, ["water damage"], "water damage", "water damage"),
+    new job_model_1.Job(5, "Harriet", "Truman", "HTruman@email.com", 5678901234, "675 Joemama Road", "Apt 303", "Jacksonville", "Fl", 12345, ["food delivery"], "food delivery", "food delivery")
+];
+app.post("/job/accept", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (jobs.size > 0) {
+            // Get the first job from the jobs set
+            const jobIterator = jobs.values();
+            const jobToSchedule = jobIterator.next().value; // Extract the first job from the iterator
+            if (jobToSchedule) {
+                schedule.add(jobToSchedule);
+                jobs.delete(jobToSchedule);
+                console.log(`Job '${jobToSchedule.id} - ${jobToSchedule.firstName} ${jobToSchedule.lastName}' has been scheduled.`); // For debugging
+            }
+        }
+        res.status(200).send("Job accepted");
+    }
+    catch (e) {
+        res.status(400).send("Problem rejected job choice");
+    }
+}));
+app.post("/job/reject", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (jobs.size > 0) {
+            // Get the first job from the jobs set
+            const jobIterator = jobs.values();
+            const jobToSchedule = jobIterator.next().value; // Extract the first job from the iterator
+            if (jobToSchedule) {
+                jobs.delete(jobToSchedule);
+                console.log(`Job '${jobToSchedule.id} - ${jobToSchedule.firstName} ${jobToSchedule.lastName}' has been rejected.`); // For debugging
+            }
+        }
+        res.status(200).send("Job rejected");
+    }
+    catch (e) {
+        res.status(400).send("Problem rejected job choice");
+    }
+}));
+app.get("/job/schedule", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(Array.from(schedule)); // Convert the Set to an array to send it as JSON
+}));
+app.get("/job/offered", (req, res) => {
+    // Initialize the jobs set if not already initialized
+    if (!jobs) {
+        jobs = new Set();
+    }
+    // If no jobs are in the set, add one
+    if (jobs.size === 0) {
+        const randomJobNumber = Math.floor(Math.random() * 5);
+        const jobToAdd = hardcodedJobs[randomJobNumber];
+        jobs.add(jobToAdd);
+        console.log(`Assigned job: ${jobToAdd}`);
+        console.log(`Schedule size: ${schedule.size}`);
+    }
+    // Return the jobs as an array
+    res.json(Array.from(jobs));
 });

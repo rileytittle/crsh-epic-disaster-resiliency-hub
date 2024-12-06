@@ -29,6 +29,8 @@ import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 
+import VolunteerJobs from "./pages/volunteer/jobsOffered";
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
@@ -72,6 +74,10 @@ const router = createBrowserRouter(
 			<Route
 				path="/volunteer/resetPassword"
 				element={<VolunteerPasswordReset />}
+			></Route>
+			<Route
+				path="/volunteer/jobs"
+				element={<VolunteerJobs />}
 			></Route>
 			<Route path="/volunteers" element={<Volunteers />}></Route>
 			<Route
