@@ -215,7 +215,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 	}
 });
 
-app.get("/create-volunteer/applications", Authchecker, async (req, res) => {
+app.get("/create-volunteer/applications", async (req, res) => {
 	let filteredApplications = volunteerApplications.filter(
 		(application) => !application.rejected && !application.evaluated
 	);
