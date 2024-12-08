@@ -68,42 +68,46 @@ const jobsOffered = () => {
   };
 
   return (
-    <div>
-      <h1>Volunteer Dashboard</h1>
-      
-      {/* Render the jobs */}
-      <div>
-        <h2>Available Jobs</h2>
-        {jobs.length === 0 ? (
-          <p>No jobs available</p>
-        ) : (
-          <ul>
-            {jobs.map((job, index) => (
-              <li key={index}>{job.helpTypes} {job.address_1} {job.city} {job.state}</li>  
-            ))}
-          </ul>
-        )}
-      </div>
+    <div style={{ textAlign: 'center' }}>
+  <h1>Volunteer Dashboard</h1>
 
-      <div>
-        <button onClick={acceptJob}>Accept</button>
-        <button onClick={rejectJob}>Reject</button>
-      </div>
-      
-      {/* Render the schedule */}
-      <div>
-        <h2>Scheduled Jobs</h2>
-        {schedule.length === 0 ? (
-          <p>No jobs scheduled</p>
-        ) : (
-          <ul>
-            {schedule.map((job, index) => (
-              <li key={index}>{job.helpTypes} {job.address_1} {job.city} {job.state}</li>  
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+  {/* Render the jobs */}
+  <div>
+    <h2>Available Jobs</h2>
+    {jobs.length === 0 ? (
+      <p>No jobs available</p>
+    ) : (
+      <ul>
+        {jobs.map((job, index) => (
+          <li key={index}>
+            {job.helpTypes} {job.address_1} {job.city} {job.state}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+
+  <div>
+    <button onClick={acceptJob} style={{ margin: '10px' }}>Accept</button>
+    <button onClick={rejectJob} style={{ margin: '10px' }}>Reject</button>
+  </div>
+
+  {/* Render the schedule */}
+  <div>
+    <h2>Scheduled Jobs</h2>
+    {schedule.length === 0 ? (
+      <p>No jobs scheduled</p>
+    ) : (
+      <ul>
+        {schedule.map((job, index) => (
+          <li key={index}>
+            {job.helpTypes} {job.address_1} {job.city} {job.state}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</div>
   );
 };
 

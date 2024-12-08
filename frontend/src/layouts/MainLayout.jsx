@@ -27,6 +27,7 @@ const MainLayout = () => {
 									<li><a className="dropdown-item" href="/applyVolunteer">Apply to Volunteer</a></li>
 									<li><a className="dropdown-item" href="/applyVolunteer/status">Check Status of Application</a></li>
                   				    <li><a className="nav-item nav-link" href="/assignVolunteers">Assign volunteers to job</a></li>
+									<li><a className="nav-item nav-link" href="/volunteer/jobs">Check Job Offer</a></li>
 									<li><hr className="dropdown-divider" /></li>
 									<li><a className="dropdown-item disabled" href="#">Disabled</a></li>
 								</ul>
