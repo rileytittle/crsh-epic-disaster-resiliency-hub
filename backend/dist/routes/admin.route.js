@@ -17,7 +17,6 @@ const express_1 = require("express");
 const volunteerApplication_model_1 = require("../models/volunteerApplication.model");
 const volunteer_model_1 = require("../models/volunteer.model");
 const job_model_1 = require("../models/job.model");
-const auth_utils_1 = require("../utils/auth.utils");
 const pg_1 = require("pg");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -180,7 +179,7 @@ app.post("/create-volunteer/reject", (req, res) => __awaiter(void 0, void 0, voi
         res.status(400).send("Problem rejected application");
     }
 }));
-app.get("/create-volunteer/applications", auth_utils_1.Authchecker, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/create-volunteer/applications", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let filteredApplications = volunteerApplications.filter((application) => !application.rejected && !application.evaluated);
     res.status(200).send(filteredApplications);
 }));
