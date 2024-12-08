@@ -192,6 +192,30 @@ app.post("/job/reject", (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(400).send("Problem rejected job choice");
     }
 }));
+app.post("/job/job-completed", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const details = req.body.details;
+        if (details) {
+            console.log("Details received:", details); // Log the details to the console
+        }
+        else {
+            console.log("No details provided.");
+        }
+        if (jobs.size > 0) {
+            // Get the first job from the jobs set
+            const jobIterator = schedule.values();
+            const jobToDelete = jobIterator.next().value; // Extract the first job from the iterator
+            if (jobToDelete) {
+                schedule.delete(jobToDelete);
+                console.log(`Job '${jobToDelete.id} - ${jobToDelete.firstName} ${jobToDelete.lastName}' has been reported as completed.`); // For debugging
+            }
+        }
+        res.status(200).send("Job rejected");
+    }
+    catch (e) {
+        res.status(400).send("Problem rejected job choice");
+    }
+}));
 app.get("/job/schedule", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(Array.from(schedule)); // Convert the Set to an array to send it as JSON
 }));

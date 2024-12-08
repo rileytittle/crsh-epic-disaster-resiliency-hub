@@ -222,6 +222,36 @@ app.post("/job/reject", async (req, res) => {
   }
 });
 
+app.post("/job/job-completed", async (req, res) => {
+  try {
+
+    const details = req.body.details;
+
+    if (details) {
+      console.log("Details received:", details); // Log the details to the console
+    } else {
+      console.log("No details provided.");
+    }
+    
+	  if (jobs.size > 0) {
+      // Get the first job from the jobs set
+      const jobIterator = schedule.values();
+      const jobToDelete = jobIterator.next().value;  // Extract the first job from the iterator
+	
+      if (jobToDelete) {
+        
+        schedule.delete(jobToDelete);
+    
+        console.log(`Job '${jobToDelete.id} - ${jobToDelete.firstName} ${jobToDelete.lastName}' has been reported as completed.`);  // For debugging
+      }
+	  }
+    
+    res.status(200).send("Job rejected"); 
+  } catch (e) {
+    res.status(400).send("Problem rejected job choice");
+  }
+});
+
 app.get("/job/schedule", async (req, res) => {
 
   res.json(Array.from(schedule));  // Convert the Set to an array to send it as JSON

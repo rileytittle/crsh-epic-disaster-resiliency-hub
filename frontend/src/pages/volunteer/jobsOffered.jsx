@@ -4,6 +4,7 @@ import axios from "axios";
 const jobsOffered = () => {
   const [jobs, setJobs] = useState([]);
   const [schedule, setSchedule] = useState([]);
+  const [details, setDetails] = useState('');
 
   
   useEffect(() => {
@@ -67,6 +68,24 @@ const jobsOffered = () => {
     }
   };
 
+  const completeJob = async () => {
+    try {
+      // Sending the details in the API request
+      const response = await axios.post(
+        "http://localhost:3000/volunteer/job/job-completed",
+        {
+          details: details,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Job completed!");
+      }
+    } catch (error) {
+      console.error("Error completing job", error);
+    }
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
   <h1>Volunteer Dashboard</h1>
@@ -107,6 +126,22 @@ const jobsOffered = () => {
       </ul>
     )}
   </div>
+
+  <div style={{ marginTop: '20px' }}>
+        <label htmlFor="details">Details: </label>
+        <input
+          type="text"
+          id="details"
+          value={details}
+          onChange={(e) => setDetails(e.target.value)} 
+          placeholder="Enter job completion details"
+          style={{ marginRight: '10px' }}
+        />
+        <button onClick={completeJob} style={{ margin: '10px' }}>
+          Job Completed
+        </button>
+    </div>
+
 </div>
   );
 };
