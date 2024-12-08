@@ -2,8 +2,8 @@
 	"version": 2,
 	"rewrites": [
 		{
-			"src": "/(.*)",
-			"dest": "src/main.ts"
+			"source": "/(.*)",
+			"destination": "/src"
 		}
 	]
 }
