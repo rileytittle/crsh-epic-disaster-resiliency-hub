@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "./dist/main.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "npx nodemon src/main.ts"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
 	"license": "ISC",
