@@ -6,7 +6,11 @@ const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();
 app.use(express.json());
-
+app.use(
+	cors({
+		origin: "https://crsh-epic-disaster-resiliency-hub-client.vercel.app",
+	})
+);
 app.get("/", (req, res) => {
 	try {
 		//write some logic here

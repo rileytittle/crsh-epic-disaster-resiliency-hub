@@ -6,14 +6,17 @@ import { useState, useEffect } from "react";
 function CreateVolunteer() {
 	const [applications, setApplications] = useState([]);
 	useEffect(() => {
-		let token = sessionStorage.getItem('userToken');
+		let token = sessionStorage.getItem("userToken");
 
 		axios
-			.get("http://localhost:3000/admin/create-volunteer/applications",{
-				headers: {
-					Authorization: `Bearer ${token}`
-				},
-			})
+			.get(
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/applications",
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 
 			.then((res) => {
 				setApplications(res.data);

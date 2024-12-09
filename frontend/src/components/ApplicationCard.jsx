@@ -4,9 +4,12 @@ import axios from "axios";
 const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 	function rejectVolunteer() {
 		axios
-			.post("http://localhost:3000/admin/create-volunteer/reject", {
-				email: email,
-			})
+			.post(
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/reject",
+				{
+					email: email,
+				}
+			)
 			.then((res) => {
 				navigate("/create-volunteer");
 			})
