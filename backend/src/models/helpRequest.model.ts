@@ -1,6 +1,7 @@
 import e from "express";
 
 export class helpRequest {
+    id:number;
     firstName:string;
     lastName:string;
     email:string;
@@ -11,6 +12,7 @@ export class helpRequest {
     helpType:string;
     assignedVolunteers:string[]=[];
     constructor( 
+        id:number,
         firstName:string,
         lastName:string,
         email:string,
@@ -19,6 +21,7 @@ export class helpRequest {
         state:string,
         zip:number,
         helpType:string){
+            this.id = id;
             this.firstName=firstName;
             this.lastName=lastName;
             this.email=email;

@@ -1,7 +1,15 @@
 import express from "express";
 import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
+import { Pool } from "pg";
 
+const pool = new Pool({
+	user: "postgres",
+	host: "localhost",
+	database: "Senior-Project",
+	password: "garnetisGold!1820",
+	port: 5432,
+});
 
 let app = express.Router();
 
@@ -12,6 +20,7 @@ app.get("/", (req, res) => {
 });
 let requests:helpRequest[] = [];
 let dummy1 = new helpRequest(
+  1,
   'Hayden',
   "O'Neill",
   "haydeno221@outlook.com",
@@ -24,11 +33,30 @@ let dummy1 = new helpRequest(
 )
 requests.push(dummy1);
 
-app.get("/viewRequests", (req, res) => {
-  if (requests.length > 0) {
-    res.status(200).json(requests); 
-  } else {
-    res.status(404).json({ message: 'No requests found.' }); 
+app.get("/viewRequests", async (req, res) => {
+  try {
+    // Make sure status is checked correctly in SQL
+    const result = await pool.query(
+      'SELECT * FROM "Request" WHERE "status" = $1', // Using parameterized query
+      ['Active']
+    );
+
+    if (result.rowCount && result.rowCount > 0) {
+      res.status(200).json(
+        result.rows.map((request) => ({
+          id: request.id,
+          firstname: request.first_name,
+          lastname: request.last_name,
+          email: request.email,
+          address: request.street_address_1
+        }))
+      );
+    } else {
+      res.status(404).json({ message: 'No requests found.' });
+    }
+  } catch (error) {
+    console.error('Error fetching requests:', error);
+    res.status(500).json({ message: 'Server error while fetching requests.' });
   }
 });
 

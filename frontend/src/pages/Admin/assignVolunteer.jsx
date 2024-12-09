@@ -6,19 +6,23 @@ const AssignVolunteer = () => {
   const [selectedRequest, setSelectedRequest] = useState(null); // State to hold the selected request
   const [showAssignMenu, setShowAssignMenu] = useState(false); // State to toggle the assign menu
   const [volunteers, setVolunteers] = useState([]); // State to hold the volunteers returned from the API
-  const [selectedVolunteers, setSelectedVolunteers] = useState([]); // State to hold selected volunteers
+  const [selectedVolunteer, setSelectedVolunteer] = useState(null); // State to hold the selected volunteer
 
   // Function to fetch requests from the backend
   const fetchRequests = async () => {
     try {
       const response = await fetch('http://localhost:3000/homeowner/viewRequests');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
       const data = await response.json();
-      setRequests(data);
+  
+      // Check if data is an array before calling .map()
+      if (Array.isArray(data)) {
+        setRequests(data); // Set requests directly if it's an array
+      } else {
+        console.error("Unexpected response format:", data);
+        alert("Failed to load requests. Please try again.");
+      }
     } catch (error) {
-      console.error('Error fetching requests:', error);
+      console.error("Error fetching requests:", error);
     }
   };
 
@@ -36,7 +40,7 @@ const AssignVolunteer = () => {
     setSelectedRequest(null);
     setShowAssignMenu(false); // Hide the assign menu when deselecting
     setVolunteers([]); // Clear volunteers when deselecting
-    setSelectedVolunteers([]); // Clear selected volunteers
+    setSelectedVolunteer(null); // Clear selected volunteer
   };
 
   // Handle showing the assign menu
@@ -52,7 +56,7 @@ const AssignVolunteer = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ team }), // Sending the selected team in the request body
+        body: JSON.stringify({ team }),
       });
 
       if (!response.ok) {
@@ -60,41 +64,38 @@ const AssignVolunteer = () => {
       }
 
       const data = await response.json();
-      if (data.volunteers && data.volunteers.length > 0) {
+      if (Array.isArray(data.volunteers) && data.volunteers.length > 0) {
         setVolunteers(data.volunteers); // Set the volunteers returned from the API
       } else {
         setVolunteers([]);
-        alert(data.message);
+        alert(data.message); // Notify if no volunteers found
       }
     } catch (error) {
       console.error('Error fetching volunteers:', error);
     }
   };
 
-  // Function to handle checkbox change
+  // Function to handle radio button change
   const handleVolunteerSelect = (volunteer) => {
-    setSelectedVolunteers((prevSelected) => {
-      if (prevSelected.includes(volunteer)) {
-        // If already selected, remove from the array
-        return prevSelected.filter((v) => v !== volunteer);
-      } else {
-        // If not selected, add to the array
-        return [...prevSelected, volunteer];
-      }
-    });
+    setSelectedVolunteer(volunteer); // Set the selected volunteer
   };
 
   // Function to handle volunteer assignments
-  const handleAssignVolunteers = async () => {
+  const handleAssignVolunteer = async () => {
+    if (!selectedRequest?.id || !selectedVolunteer) {
+      alert('Please select a request and a volunteer.');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3000/homeowner/update-assignment', {
+      const response = await fetch('http://localhost:3000/Volunteer/updateAssignment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          requestName: selectedRequest.firstName + selectedRequest.lastName, 
-          volunteers: selectedVolunteers,
+          assignment: selectedRequest.id, // Send the request ID
+          id: selectedVolunteer.id, // Send the ID of the selected volunteer
         }),
       });
 
@@ -106,8 +107,8 @@ const AssignVolunteer = () => {
       alert(data.message); // Notify the user of success or failure
       handleDeselectRequest(); // Reset the selection after assignment
     } catch (error) {
-      console.error('Error assigning volunteers:', error);
-      alert('Failed to assign volunteers.'); // Notify the user of the error
+      console.error('Error assigning volunteer:', error);
+      alert('Failed to assign volunteer.');
     }
   };
 
@@ -123,7 +124,7 @@ const AssignVolunteer = () => {
                 onClick={() => handleSelectRequest(request)}
                 style={{ cursor: 'pointer', margin: '10px 0', padding: '10px', border: '1px solid #ccc' }}
               >
-                {request.firstName} {request.lastName} - {request.helpType}
+                {request.firstname} {request.lastname} - {request.helpType}
               </li>
             ))}
           </ul>
@@ -134,53 +135,54 @@ const AssignVolunteer = () => {
       {selectedRequest && (
         <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #007bff', borderRadius: '5px' }}>
           <h2>Request Details</h2>
-          <p><strong>Name:</strong> {selectedRequest.firstName} {selectedRequest.lastName}</p>
+          <p>
+            <strong>Name:</strong> {selectedRequest.firstname} {selectedRequest.lastname}
+          </p>
           <p><strong>Email:</strong> {selectedRequest.email}</p>
           <p><strong>Address:</strong> {selectedRequest.address}, {selectedRequest.city}, {selectedRequest.state} {selectedRequest.zip}</p>
           <p><strong>Support Type:</strong> {selectedRequest.helpType}</p>
           <button onClick={handleDeselectRequest}>Back to Requests</button>
-          <button onClick={handleShowAssignMenu} style={{ marginLeft: '10px' }}>Assign Volunteers</button>
+          <button onClick={handleShowAssignMenu} style={{ marginLeft: '10px' }}>Assign Volunteer</button>
         </div>
       )}
       {showAssignMenu && selectedRequest && (
         <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #28a745', borderRadius: '5px' }}>
-          <h3>Choose a team to assign volunteers from for {selectedRequest.firstName} {selectedRequest.lastName}</h3>
-          <button onClick={() => handleTeamButtonClick('Volunteer Management and Administration')} style={{ margin: '5px' }}>
+          <h3>Choose a team to assign a volunteer from for {selectedRequest.firstName} {selectedRequest.lastName}</h3>
+          <button onClick={() => handleTeamButtonClick('admin_team')} style={{ margin: '5px' }}>
             Volunteer Management and Administration
           </button>
-          <button onClick={() => handleTeamButtonClick('Hospitality Team')} style={{ margin: '5px' }}>
+          <button onClick={() => handleTeamButtonClick('hospitality')} style={{ margin: '5px' }}>
             Hospitality Team
           </button>
-          <button onClick={() => handleTeamButtonClick('Logistic Tracking Team')} style={{ margin: '5px' }}>
+          <button onClick={() => handleTeamButtonClick('logistic_tracking')} style={{ margin: '5px' }}>
             Logistic Tracking Team
           </button>
-          <button onClick={() => handleTeamButtonClick('Community Outreach Team')} style={{ margin: '5px' }}>
+          <button onClick={() => handleTeamButtonClick('community_outreach')} style={{ margin: '5px' }}>
             Community Outreach Team
           </button>
-          <button onClick={() => handleTeamButtonClick('Community Helpers Team')} style={{ margin: '5px' }}>
+          <button onClick={() => handleTeamButtonClick('community_helpers')} style={{ margin: '5px' }}>
             Community Helpers Team
           </button>
-
           <button onClick={() => setShowAssignMenu(false)} style={{ marginTop: '10px' }}>Close</button>
-
           {volunteers.length > 0 && (
             <div style={{ marginTop: '20px' }}>
-              <h4>Select Volunteers:</h4>
+              <h4>Select a Volunteer:</h4>
               <ul>
                 {volunteers.map((volunteer, index) => (
                   <li key={index}>
                     <label>
                       <input
-                        type="checkbox"
-                        checked={selectedVolunteers.includes(volunteer)}
+                        type="radio"
+                        name="volunteer"
+                        checked={selectedVolunteer?.id === volunteer.id}
                         onChange={() => handleVolunteerSelect(volunteer)}
                       />
-                      {volunteer.firstName} {volunteer.lastName} {/* Adjust this according to your volunteer object structure */}
+                      {volunteer.id} {volunteer.email} {volunteer.first_name} {volunteer.last_name} {volunteer.phone_number}
                     </label>
                   </li>
                 ))}
               </ul>
-              <button onClick={handleAssignVolunteers} style={{ marginTop: '10px', color: 'white', backgroundColor: '#007bff', border: 'none', padding: '10px 15px', borderRadius: '5px' }}>
+              <button onClick={handleAssignVolunteer} style={{ marginTop: '10px', color: 'white', backgroundColor: '#007bff', border: 'none', padding: '10px 15px', borderRadius: '5px' }}>
                 Assign
               </button>
             </div>

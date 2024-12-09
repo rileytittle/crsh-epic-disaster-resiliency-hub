@@ -48,7 +48,7 @@ app.post("/login", async (req, res) => {
 			let password= decodedUserInfo.split(':')[1];
 			console.log(email, password, decodedUserInfo, userInfo)
 			let queryResult = await pool.query(
-				'SELECT * FROM VolunteerAccount WHERE email = $1', 
+				'SELECT * FROM "VolunteerAccount" WHERE email = $1', 
 				[email]
 			);
 			if(queryResult.rows.length > 0){
@@ -161,6 +161,23 @@ app.post("/status", (req, res) => {
   } else {
     res.status(401).json({ message: 'Name Not Found' });
   }
+});
+app.post("/updateAssignment", async (req, res) => {
+  let assignment = req.body.assignment
+  let volId = req.body.id;
+  console.log(assignment, volId)
+ try{
+  await pool.query(
+  'UPDATE "VolunteerAccount" SET "assignment" = $1 WHERE "id" = $2',
+  [assignment, volId]
+)
+res.status(200).send({message:"Volunteer Assigned"})
+}
+catch(e){
+  res.status(500).send(e);
+}
+
+ 
 });
 
 

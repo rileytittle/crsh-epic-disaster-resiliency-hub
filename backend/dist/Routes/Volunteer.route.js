@@ -52,7 +52,7 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             let email = decodedUserInfo.split(':')[0];
             let password = decodedUserInfo.split(':')[1];
             console.log(email, password, decodedUserInfo, userInfo);
-            let queryResult = yield pool.query('SELECT * FROM VolunteerAccount WHERE email = $1', [email]);
+            let queryResult = yield pool.query('SELECT * FROM "VolunteerAccount" WHERE email = $1', [email]);
             if (queryResult.rows.length > 0) {
                 let user = queryResult.rows[0];
                 console.log(user.password);
@@ -145,3 +145,15 @@ app.post("/status", (req, res) => {
         res.status(401).json({ message: 'Name Not Found' });
     }
 });
+app.post("/updateAssignment", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let assignment = req.body.assignment;
+    let volId = req.body.id;
+    console.log(assignment, volId);
+    try {
+        yield pool.query('UPDATE "VolunteerAccount" SET "assignment" = $1 WHERE "id" = $2', [assignment, volId]);
+        res.status(200).send({ message: "Volunteer Assigned" });
+    }
+    catch (e) {
+        res.status(500).send(e);
+    }
+}));

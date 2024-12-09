@@ -104,7 +104,7 @@ app.post("/login", async (req, res) => {
 			let password= decodedUserInfo.split(':')[1];
 			console.log(email, password, decodedUserInfo, userInfo)
 			let queryResult = await pool.query(
-				'SELECT * FROM AdminAccount WHERE email = $1', 
+				'SELECT * FROM "AdminAccount" WHERE email = $1', 
 				[email]
 			);
 			if(queryResult.rows.length > 0){
@@ -204,7 +204,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 					application.reasonRejected = req.body.reasonRejected;
 				}
 			}
-		}
+		} 
 		if (foundApplication) {
 			res.status(200).send("Application rejected");
 		} else {
@@ -231,7 +231,7 @@ app.post("/homeowner-requests/accept", (req, res) => {
 				if (request.id == parseInt(req.body.id)) {
 					foundRequest = request;
 					break;
-				}
+				} 
 			}
 			if (foundRequest) {
 				let newJob = new Job(
@@ -260,15 +260,21 @@ app.post("/homeowner-requests/accept", (req, res) => {
 app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
 
-	const filteredVolunteers = volunteers.filter((volunteer) =>
-		volunteer.areasOfHelp.includes(team)
+	let filteredVolunteers = await pool.query(
+		`SELECT id, first_name, last_name, email, phone_number FROM "VolunteerAccount" WHERE "${team}" = TRUE`
 	);
 
 	res.status(200).json({
-		volunteers: filteredVolunteers,
+		volunteers: filteredVolunteers.rows.map((volunteer) => ({
+			id: volunteer.id,
+			first_name: volunteer.first_name,
+			last_name: volunteer.last_name,
+			email: volunteer.email,
+			phone_number: volunteer.phone_number,
+		  })),
 		message:
-			filteredVolunteers.length > 0
-				? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.`
+			filteredVolunteers.rowCount
+				? `${filteredVolunteers.rowCount} volunteer(s) found for the ${team} team.`
 				: "No volunteers found for this team.",
 	});
 });
@@ -365,7 +371,7 @@ app.get("/volunteers/volunteer-details/:id", (req, res) => {
 
 	} catch (e) {
 		res.status(500).send(e);
-	}
+	} 
 });
 
 app.get("/homeowner-requests", (req, res) => {
@@ -381,7 +387,7 @@ app.get("/homeowner-requests", (req, res) => {
 
 app.get("/volunteers", (req, res) => {
 	try {
-		//write some logic here
+		
 		res.status(200).send(volunteers);
 	} catch (e) {
 		res.status(500).send(e);

@@ -83,7 +83,7 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             let email = decodedUserInfo.split(':')[0];
             let password = decodedUserInfo.split(':')[1];
             console.log(email, password, decodedUserInfo, userInfo);
-            let queryResult = yield pool.query('SELECT * FROM AdminAccount WHERE email = $1', [email]);
+            let queryResult = yield pool.query('SELECT * FROM "AdminAccount" WHERE email = $1', [email]);
             if (queryResult.rows.length > 0) {
                 let user = queryResult.rows[0];
                 console.log(user.password);
@@ -212,11 +212,17 @@ app.post("/homeowner-requests/accept", (req, res) => {
 });
 app.post("/assign-volunteer/list", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { team } = req.body;
-    const filteredVolunteers = volunteers.filter((volunteer) => volunteer.areasOfHelp.includes(team));
+    let filteredVolunteers = yield pool.query(`SELECT id, first_name, last_name, email, phone_number FROM "VolunteerAccount" WHERE "${team}" = TRUE`);
     res.status(200).json({
-        volunteers: filteredVolunteers,
-        message: filteredVolunteers.length > 0
-            ? `${filteredVolunteers.length} volunteer(s) found for the ${team} team.`
+        volunteers: filteredVolunteers.rows.map((volunteer) => ({
+            id: volunteer.id,
+            first_name: volunteer.first_name,
+            last_name: volunteer.last_name,
+            email: volunteer.email,
+            phone_number: volunteer.phone_number,
+        })),
+        message: filteredVolunteers.rowCount
+            ? `${filteredVolunteers.rowCount} volunteer(s) found for the ${team} team.`
             : "No volunteers found for this team.",
     });
 }));
@@ -326,7 +332,6 @@ app.get("/homeowner-requests", (req, res) => {
 });
 app.get("/volunteers", (req, res) => {
     try {
-        //write some logic here
         res.status(200).send(volunteers);
     }
     catch (e) {
