@@ -2,7 +2,7 @@ import express from "express";
 import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
 import { app as volunteerRouter } from "./routes/Volunteer.route";
-
+const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();
 app.use(express.json());
@@ -19,4 +19,6 @@ app.use("/admin", AdminRouter);
 app.use("/homeowner", helpRouter);
 app.use("/volunteer", volunteerRouter);
 
-app.listen(3000);
+app.listen(port, () => {
+	console.log(`Server running on port ${port}`);
+});
