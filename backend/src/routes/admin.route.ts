@@ -200,24 +200,17 @@ app.post("/create-volunteer/accept", async (req, res) => {
 
 app.post("/create-volunteer/reject", async (req, res) => {
 	try {
-		//find application that we're rejecting
-		let foundApplication: boolean = false;
-		for (let application of volunteerApplications) {
-			if (application.email === req.body.email) {
-				//set approved to false
-				//set reasonRejected to body, if it exists
-				foundApplication = true;
-				application.rejected = true;
-				if (req.body.reasonRejected) {
-					application.reasonRejected = req.body.reasonRejected;
-				}
-			}
+		let result = pool.query(
+			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
+			[req.body.email]
+		);
+		if (req.body.reasonRejected) {
+			pool.query(
+				"UPDATE volunteerapplications SET reason_rejected = $1 WHERE email = $2",
+				[req.body.reasonRejected, req.body.email]
+			);
 		}
-		if (foundApplication) {
-			res.status(200).send("Application rejected");
-		} else {
-			res.status(404).send("Application not found");
-		}
+		res.status(200).send("Applicant rejected");
 	} catch (e) {
 		res.status(400).send("Problem rejected application");
 	}
