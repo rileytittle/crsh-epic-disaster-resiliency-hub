@@ -19,8 +19,8 @@ function CreateVolunteer() {
 			)
 
 			.then((res) => {
-				setApplications(res.data);
-				console.log(res.data);
+				setApplications(res);
+				console.log(res);
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);
