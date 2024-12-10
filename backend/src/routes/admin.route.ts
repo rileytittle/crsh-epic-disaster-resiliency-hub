@@ -204,12 +204,6 @@ app.post("/create-volunteer/reject", async (req, res) => {
 			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
 			[req.body.email]
 		);
-		if (req.body.reasonRejected) {
-			await pool.query(
-				"UPDATE volunteerapplications SET reason_rejected = $1 WHERE email = $2",
-				[req.body.reasonRejected, req.body.email]
-			);
-		}
 		res.status(200).send("Applicant rejected");
 	} catch (e) {
 		res.status(400).send("Problem rejected application");
