@@ -307,17 +307,18 @@ app.post("/homeowner-requests/reject", (req, res) => {
 app.delete("/volunteers/volunteer-details", (req, res) => {
 	try {
 		let areaToChange = "";
-		if (req.body.area == "Hospitality") {
+		if (req.body.selectedArea == "Hospitality") {
 			areaToChange = "hospitality";
-		} else if (req.body.area == "Community Helpers") {
+		} else if (req.body.selectedArea == "Community Helpers") {
 			areaToChange = "community_helpers";
-		} else if (req.body.area == "Community Outreach") {
+		} else if (req.body.selectedArea == "Community Outreach") {
 			areaToChange = "community_outreach";
 		} else if (
-			req.body.area == "Volunteer Management and Administration Team"
+			req.body.selectedArea ==
+			"Volunteer Management and Administration Team"
 		) {
 			areaToChange = "admin_team";
-		} else if (req.body.area == "Logistic Tracking") {
+		} else if (req.body.selectedArea == "Logistic Tracking") {
 			areaToChange = "logistic_tracking";
 		}
 		let result = pool.query(
