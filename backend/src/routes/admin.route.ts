@@ -42,32 +42,32 @@ let requests: HomeownerRequest[] = [
 	},
 ];
 let volunteerApplications: VolunteerApplication[] = [];
-let firstApplication = new VolunteerApplication(
-	0,
-	"Riley",
-	"Tittle",
-	9047352653,
-	"rileytittle02@gmail.com",
-	"7816 Southside Blvd",
-	"Jacksonville",
-	"FL",
-	32256,
-	["Logistic Tracking Team"]
-);
-let secondApplication = new VolunteerApplication(
-	1,
-	"Coleman",
-	"George",
-	9047352653,
-	"fake@email.com",
-	"7816 Southside Blvd",
-	"Jacksonville",
-	"FL",
-	32256,
-	["Logistic Tracking Team", "Community Outreach Team"]
-);
-volunteerApplications.push(firstApplication);
-volunteerApplications.push(secondApplication);
+// let firstApplication = new VolunteerApplication(
+// 	0,
+// 	"Riley",
+// 	"Tittle",
+// 	9047352653,
+// 	"rileytittle02@gmail.com",
+// 	"7816 Southside Blvd",
+// 	"Jacksonville",
+// 	"FL",
+// 	32256,
+// 	["Logistic Tracking Team"]
+// );
+// let secondApplication = new VolunteerApplication(
+// 	1,
+// 	"Coleman",
+// 	"George",
+// 	9047352653,
+// 	"fake@email.com",
+// 	"7816 Southside Blvd",
+// 	"Jacksonville",
+// 	"FL",
+// 	32256,
+// 	["Logistic Tracking Team", "Community Outreach Team"]
+// );
+// volunteerApplications.push(firstApplication);
+// volunteerApplications.push(secondApplication);
 
 let volunteers: Volunteer[] = [];
 
@@ -224,10 +224,15 @@ app.post("/create-volunteer/reject", async (req, res) => {
 });
 
 app.get("/create-volunteer/applications", async (req, res) => {
-	let filteredApplications = volunteerApplications.filter(
-		(application) => !application.rejected && !application.evaluated
-	);
-	res.status(200).send(filteredApplications);
+	try {
+		let result = pool.query(
+			"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
+		);
+		res.status(200).send(result);
+	} catch (e) {
+		res.status(400).send("Something went wrong");
+	}
+	res.status(200).send();
 });
 
 app.post("/homeowner-requests/accept", (req, res) => {
