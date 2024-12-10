@@ -103,7 +103,7 @@ const HomeownerApply = () => {
                 </div>
                 <div className="col-12">
                     <label htmlFor="address_2" className="form-label">Address 2</label>
-                    <input type="text" className="form-control" name="address_2" id="address_2" placeholder="Apartment, studio, or floor" value={formData.address_2} onChange={handleChange} required />
+                    <input type="text" className="form-control" name="address_2" id="address_2" placeholder="Apartment, studio, or floor" value={formData.address_2} onChange={handleChange} />
                 </div>
                 <div className="col-md-6">
                     <label htmlFor="city" className="form-label">City</label>
