@@ -169,7 +169,6 @@ const HomeownerApply = () => {
 						placeholder="Apartment, studio, or floor"
 						value={formData.address_2}
 						onChange={handleChange}
-						required
 					/>
 				</div>
 				<div className="col-md-6">
