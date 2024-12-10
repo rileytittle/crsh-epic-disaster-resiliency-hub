@@ -307,24 +307,37 @@ app.post("/homeowner-requests/reject", (req, res) => {
 app.delete("/volunteers/volunteer-details", async (req, res) => {
 	try {
 		let areaToChange = "";
-		if (req.body.selectedArea == "Hospitality") {
+		if (req.body.selectedArea === "Hospitality") {
 			areaToChange = "hospitality";
-		} else if (req.body.selectedArea == "Community Helpers") {
+		} else if (req.body.selectedArea === "Community Helpers") {
 			areaToChange = "community_helpers";
-		} else if (req.body.selectedArea == "Community Outreach") {
+		} else if (req.body.selectedArea === "Community Outreach") {
 			areaToChange = "community_outreach";
 		} else if (
-			req.body.selectedArea ==
+			req.body.selectedArea ===
 			"Volunteer Management and Administration Team"
 		) {
 			areaToChange = "admin_team";
-		} else if (req.body.selectedArea == "Logistic Tracking") {
+		} else if (req.body.selectedArea === "Logistic Tracking") {
 			areaToChange = "logistic_tracking";
 		}
-		let result = await pool.query(
-			"UPDATE volunteer SET $1 = false WHERE id = $2",
-			[areaToChange, parseInt(req.body.id)]
-		);
+
+		// Ensure `areaToChange` is a valid column name.
+		if (
+			![
+				"hospitality",
+				"community_helpers",
+				"community_outreach",
+				"admin_team",
+				"logistic_tracking",
+			].includes(areaToChange)
+		) {
+			res.status(400).send({ error: "Invalid area name" });
+		}
+
+		// Update the volunteer record
+		const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
+		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
 		let result2 = await pool.query(
 			"SELECT * FROM volunteer WHERE id = $1",
 			[parseInt(req.body.id)]
