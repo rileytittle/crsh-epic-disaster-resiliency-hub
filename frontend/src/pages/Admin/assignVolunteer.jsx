@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 // Define the AssignVolunteer component
 const AssignVolunteer = () => {
@@ -26,14 +26,14 @@ const AssignVolunteer = () => {
     }
   };
 
-	useEffect(() => {
-		fetchRequests();
-	}, []);
+  useEffect(() => {
+    fetchRequests();
+  }, []);
 
-	// Handle request selection
-	const handleSelectRequest = (request) => {
-		setSelectedRequest(request);
-	};
+  // Handle request selection
+  const handleSelectRequest = (request) => {
+    setSelectedRequest(request);
+  };
 
   // Handle deselecting the request
   const handleDeselectRequest = () => {
@@ -43,10 +43,10 @@ const AssignVolunteer = () => {
     setSelectedVolunteer(null); // Clear selected volunteer
   };
 
-	// Handle showing the assign menu
-	const handleShowAssignMenu = () => {
-		setShowAssignMenu(true);
-	};
+  // Handle showing the assign menu
+  const handleShowAssignMenu = () => {
+    setShowAssignMenu(true);
+  };
 
   // Function to handle team button click
   const handleTeamButtonClick = async (team) => {
@@ -59,9 +59,9 @@ const AssignVolunteer = () => {
         body: JSON.stringify({ team }),
       });
 
-			if (!response.ok) {
-				throw new Error("Network response was not ok");
-			}
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
       const data = await response.json();
       if (Array.isArray(data.volunteers) && data.volunteers.length > 0) {
@@ -99,9 +99,9 @@ const AssignVolunteer = () => {
         }),
       });
 
-			if (!response.ok) {
-				throw new Error("Network response was not ok");
-			}
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
       const data = await response.json();
       alert(data.message); // Notify the user of success or failure

@@ -1,54 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
-
 	useEffect(() => {
 		axios
-			.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers"
-			)
+			.get("http://localhost:3000/admin/volunteers")
 			.then((res) => {
-				// Transform data to include areas of help
-				const transformedData = res.data.map((volunteer) => ({
-					...volunteer,
-					areasOfHelp: [
-						volunteer.admin_team && "Admin Team",
-						volunteer.hospitality && "Hospitality",
-						volunteer.logistic_tracking && "Logistic Tracking",
-						volunteer.community_outreach && "Community Outreach",
-						volunteer.community_helpers && "Community Helpers",
-					].filter(Boolean), // Remove any `false` values
-				}));
-				setVolunteers(transformedData);
-				console.log(transformedData);
+				setVolunteers(res.data);
+				console.log(res.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching volunteers:", error);
 			});
 	}, []);
-
 	return (
-		<div>
-			<h1>Volunteers</h1>
+		<>
 			<div className="card">
 				<div className="card-body">
-					<table className="table">
+					<div class="mb-3">
+						<label for="" class="form-label">
+							Email address
+						</label>
+						<input
+							class="form-control"
+							id=""
+							placeholder="First Name"
+						/>
+					</div>
+				</div>
+			</div>
+			<div className="card">
+				<div className="card-body">
+					<table class="table">
 						<thead>
 							<tr>
 								<th scope="col">Edit</th>
 								<th scope="col">#</th>
-								<th scope="col">First Name</th>
-								<th scope="col">Last Name</th>
-								<th scope="col">Email</th>
-								<th scope="col">Areas of Help</th>
+								<th scope="col">First</th>
+								<th scope="col">Last</th>
+								<th scope="col">email</th>
+								<th scope="col">Area of Help</th>
 							</tr>
 						</thead>
 						<tbody>
 							{volunteers.map((volunteer) => (
-								<tr key={volunteer.id}>
+								<tr>
 									<td>
 										<Link
 											to="/volunteers/volunteer-details"
@@ -58,20 +57,17 @@ function Volunteers() {
 										</Link>
 									</td>
 									<th scope="row">{volunteer.id}</th>
-									<td>{volunteer.first_name}</td>
-									<td>{volunteer.last_name}</td>
+									<td>{volunteer.firstName}</td>
+									<td>{volunteer.lastName}</td>
 									<td>{volunteer.email}</td>
-									<td>
-										{volunteer.areasOfHelp.join(", ") ||
-											"None"}
-									</td>
+									<td>{volunteer.areasOfHelp.join(", ")}</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 
