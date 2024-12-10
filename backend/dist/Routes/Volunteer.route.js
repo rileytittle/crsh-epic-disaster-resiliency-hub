@@ -24,7 +24,7 @@ const pool = new pg_1.Pool({
     user: "postgres",
     host: "localhost",
     database: "Senior-Project",
-    password: "garnetisGold!1820",
+    password: "A1a2a1234!",
     port: 5432,
 });
 const SECRET_KEY = "0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
@@ -53,7 +53,7 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             let email = decodedUserInfo.split(':')[0];
             let password = decodedUserInfo.split(':')[1];
             console.log(email, password, decodedUserInfo, userInfo);
-            let queryResult = yield pool.query('SELECT * FROM VolunteerAccount WHERE email = $1', [email]);
+            let queryResult = yield pool.query('SELECT * FROM "VolunteerAccount" WHERE email = $1', [email]);
             if (queryResult.rows.length > 0) {
                 let user = queryResult.rows[0];
                 console.log(user.password);

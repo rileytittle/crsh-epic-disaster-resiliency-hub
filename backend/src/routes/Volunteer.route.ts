@@ -11,7 +11,7 @@ const pool = new Pool({
 	user: "postgres",
 	host: "localhost",
 	database: "Senior-Project",
-	password: "garnetisGold!1820",
+	password: "A1a2a1234!",
 	port: 5432,
 });
 const SECRET_KEY =
@@ -49,7 +49,7 @@ app.post("/login", async (req, res) => {
 			let password= decodedUserInfo.split(':')[1];
 			console.log(email, password, decodedUserInfo, userInfo)
 			let queryResult = await pool.query(
-				'SELECT * FROM VolunteerAccount WHERE email = $1', 
+				'SELECT * FROM "VolunteerAccount" WHERE email = $1', 
 				[email]
 			);
 			if(queryResult.rows.length > 0){
