@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 	function rejectVolunteer() {
+		console.log(email);
 		axios
 			.post(
 				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/reject",
