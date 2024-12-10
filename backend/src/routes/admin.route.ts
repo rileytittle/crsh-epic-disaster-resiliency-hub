@@ -306,23 +306,24 @@ app.post("/homeowner-requests/reject", (req, res) => {
 
 app.delete("/volunteers/volunteer-details", (req, res) => {
 	try {
-		let foundVolunteer: Volunteer | undefined = undefined;
-
-		for (let volunteer of volunteers) {
-			if (volunteer.id == parseInt(req.body.id)) {
-				foundVolunteer = volunteer;
-				break;
-			}
+		let areaToChange = "";
+		if (req.body.area == "Hospitality") {
+			areaToChange = "hospitality";
+		} else if (req.body.area == "Community Helpers") {
+			areaToChange = "community_helpers";
+		} else if (req.body.area == "Community Outreach") {
+			areaToChange = "community_outreach";
+		} else if (
+			req.body.area == "Volunteer Management and Administration Team"
+		) {
+			areaToChange = "admin_team";
+		} else if (req.body.area == "Logistic Tracking") {
+			areaToChange = "logistic_tracking";
 		}
-		if (foundVolunteer) {
-			let newAreas = foundVolunteer.areasOfHelp.filter(
-				(area) => area !== req.body.selectedArea
-			);
-			foundVolunteer.areasOfHelp = newAreas;
-			res.status(200).send(foundVolunteer);
-		} else {
-			res.status(404).send("Could not find volunteer");
-		}
+		let result = pool.query(
+			"UPDATE volunteer SET $1 = false WHERE id = $2",
+			[areaToChange, parseInt(req.body.id)]
+		);
 	} catch (e) {
 		res.status(500).send(e);
 	}

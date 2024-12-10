@@ -34,6 +34,21 @@ function VolunteerDetails() {
 				}
 			)
 			.then((res) => {
+				const activeAreas = [];
+
+				// Check each area and add it to the array if true
+				if (res.data.hospitality) activeAreas.push("Hospitality");
+				if (res.data.community_helpers)
+					activeAreas.push("Community Helpers");
+				if (res.data.community_outreach)
+					activeAreas.push("Community Outreach");
+				if (res.data.admin_team)
+					activeAreas.push(
+						"Volunteer Management and Administration Team"
+					);
+				if (res.data.logistic_tracking)
+					activeAreas.push("Logistic Tracking");
+				setAreasOfHelp(activeAreas);
 				setVolunteer(res.data);
 				setSelectedArea("");
 			})
@@ -59,6 +74,8 @@ function VolunteerDetails() {
 				if (res.data.hospitality) activeAreas.push("Hospitality");
 				if (res.data.community_helpers)
 					activeAreas.push("Community Helpers");
+				if (res.data.community_outreach)
+					activeAreas.push("Community Outreach");
 				if (res.data.admin_team)
 					activeAreas.push(
 						"Volunteer Management and Administration Team"
@@ -81,17 +98,17 @@ function VolunteerDetails() {
 	return (
 		<div className="card">
 			<div className="card-body">
-				<h1>{volunteer.firstName + " " + volunteer.lastName}</h1>
+				<h1>{volunteer.first_name + " " + volunteer.last_name}</h1>
 				<p>{volunteer.email}</p>
-				<p>{volunteer.phoneNumber}</p>
+				<p>{volunteer.phone_number}</p>
 				<p>
-					{volunteer.streetAddress +
+					{volunteer.street_address +
 						", " +
 						volunteer.city +
 						", " +
 						volunteer.state +
 						" " +
-						volunteer.zipCode}
+						volunteer.zip_code}
 				</p>
 				<p>
 					{/* Check if areasOfHelp is defined before mapping */}
