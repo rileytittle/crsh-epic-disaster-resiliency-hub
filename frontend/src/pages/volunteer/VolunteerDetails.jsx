@@ -161,7 +161,7 @@ function VolunteerDetails() {
 							onChange={(e) => setSelectedArea(e.target.value)} // Update the state when an option is selected
 						>
 							<option selected>Choose...</option>
-							<option value="Volunteer Management and Administration Team">
+							<option value="admin_team">
 								Volunteer Management and Administration Team
 							</option>
 							<option value="hospitality">

@@ -257,22 +257,6 @@ app.post("/assign-volunteer/list", async (req, res) => {
 });
 app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
-		let areaToChange = "";
-		if (req.body.selectedArea === "Hospitality") {
-			areaToChange = "hospitality";
-		} else if (req.body.selectedArea === "Community Helpers") {
-			areaToChange = "community_helpers";
-		} else if (req.body.selectedArea === "Community Outreach") {
-			areaToChange = "community_outreach";
-		} else if (
-			req.body.selectedArea ===
-			"Volunteer Management and Administration Team"
-		) {
-			areaToChange = "admin_team";
-		} else if (req.body.selectedArea === "Logistic Tracking") {
-			areaToChange = "logistic_tracking";
-		}
-
 		// Ensure `areaToChange` is a valid column name.
 		if (
 			![
@@ -281,13 +265,13 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 				"community_outreach",
 				"admin_team",
 				"logistic_tracking",
-			].includes(areaToChange)
+			].includes(req.body.selectedArea)
 		) {
 			res.status(400).send({ error: "Invalid area name" });
 		}
 
 		// Update the volunteer record
-		const updateQuery = `UPDATE volunteer SET ${areaToChange} = true WHERE id = $1`;
+		const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
 		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
 		let result2 = await pool.query(
 			"SELECT * FROM volunteer WHERE id = $1",
