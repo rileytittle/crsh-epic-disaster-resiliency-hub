@@ -19,8 +19,8 @@ function CreateVolunteer() {
 			)
 
 			.then((res) => {
-				setApplications(res);
-				console.log(res);
+				setApplications(res.data);
+				console.log(res.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);
@@ -35,11 +35,19 @@ function CreateVolunteer() {
 						<ApplicationCard
 							key={application.id}
 							id={application.id}
-							firstName={application.firstName}
-							lastName={application.lastName}
+							firstName={application.first_name} // Updated for snake_case
+							lastName={application.last_name} // Updated for snake_case
 							email={application.email}
-							areasOfHelp={application.areasOfHelp}
-						></ApplicationCard>
+							areasOfHelp={[
+								application.logistic_tracking &&
+									"Logistic Tracking",
+								application.community_helpers &&
+									"Community Helpers",
+								application.hospitality && "Hospitality",
+								application.community_outreach &&
+									"Community Outreach",
+							].filter(Boolean)} // Dynamically compute areas of help
+						/>
 					))}
 				</div>
 			</div>
