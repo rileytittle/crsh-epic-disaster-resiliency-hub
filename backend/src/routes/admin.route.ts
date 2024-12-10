@@ -225,10 +225,10 @@ app.post("/create-volunteer/reject", async (req, res) => {
 
 app.get("/create-volunteer/applications", async (req, res) => {
 	try {
-		let result = pool.query(
+		let result = await pool.query(
 			"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
 		);
-		res.status(200).send(result);
+		res.status(200).send(result.rows);
 	} catch (e) {
 		res.status(400).send("Something went wrong");
 	}
