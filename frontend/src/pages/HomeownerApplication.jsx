@@ -83,6 +83,13 @@ const HomeownerApply = () => {
 	return (
 		// action="https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp" method="POST"
 		<div style={{ margin: "5px" }}>
+			<div style={{ marginBottom: "50px" }}>
+				<center>
+					<a href='/request-help/status' className='text-decoration-none'>
+						<button className="btn btn-primary btn-sm px-5 d-flex justify-content-center" type='button'>Check the Status of your Application</button>
+					</a>
+				</center>
+			</div>
 			<form onSubmit={formSubmitted} className="row g-3">
 				<div className="col-md-6">
 					<label htmlFor="firstName" className="form-label">
@@ -219,23 +226,6 @@ const HomeownerApply = () => {
 				<div className="col-12">
 					I need help with...
 					<div style={{ margin: "0px 0px 0px 20px" }}>
-						<div className="form-check">
-							<input
-								className="form-check-input"
-								id="helpTarping"
-								value="tarping"
-								checked={formData.helpType.includes("tarping")}
-								type="checkbox"
-								name="inputHelpType"
-								onChange={handleChange}
-							/>
-							<label
-								className="form-check-label"
-								htmlFor="helpTarping"
-							>
-								Tarping
-							</label>
-						</div>
 						<div className="form-check">
 							<input
 								className="form-check-input"
@@ -407,14 +397,14 @@ Phone number
 email
 physical address for service requested with state and County
 “I need help with” 
-    ☐ Tarping
-    ☐ Yard cleanup
-    ☐ Interior cleanup
-    ☐ Emotional Support
-    ☐ Cleaning Supplies
-    ☐ Clean Water
-    ☐ Emergency Food
-    ☐ Other ____________
+	☐ Tarping
+	☐ Yard cleanup
+	☐ Interior cleanup
+	☐ Emotional Support
+	☐ Cleaning Supplies
+	☐ Clean Water
+	☐ Emergency Food
+	☐ Other ____________
 Ability to upload photos
 SUBMIT button: “Submit” 
 */

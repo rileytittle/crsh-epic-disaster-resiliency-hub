@@ -8,12 +8,13 @@ import {
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
-import HomeownerApplication from "./pages/HomeownerApplication";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
 
 
 import HomeownerForm from "./pages/HomeownerApplication";
+import HomeownerStatus from "./pages/HomeownerStatus";
+
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
@@ -37,7 +38,14 @@ const router = createBrowserRouter(
 				path="/create-volunteer"
 				element={<CreateVolunteer />}
 			></Route>
-			<Route path="/request-help" element={<HomeownerForm />}></Route>
+			<Route
+				path="/request-help"
+				element={<HomeownerForm />}>
+			</Route>
+			<Route
+				path="/request-help/status"
+				element={<HomeownerStatus />}>
+			</Route>
 			<Route
 				path="/create-volunteer/confirm"
 				element={<ConfirmVolunteer />}
@@ -51,10 +59,10 @@ const router = createBrowserRouter(
 				element={<RequestDetails />}
 			></Route>
 			<Route path="/admin-login" element={<AdminLogin />}></Route>
-			<Route path="/admin-dashboard" element={<AdminDashboard/>}></Route>
-			
+			<Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
+
 			<Route path="/vol-login" element={<VolLogin />}></Route>
-			<Route path='/volunteer-dashboard' element={<VolunteerDashboard/>}></Route>
+			<Route path='/volunteer-dashboard' element={<VolunteerDashboard />}></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
 
 			<Route

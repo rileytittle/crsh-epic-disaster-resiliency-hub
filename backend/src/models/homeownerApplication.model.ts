@@ -11,6 +11,7 @@ export class HomeownerApplication {
     zipCode: number;
     helpTypes: string[];
     other: string;
+    assignedVolunteers:string[]=[];
     evaluated: boolean = false;
     rejected: boolean = false;
     reasonRejected: string = "";
