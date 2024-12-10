@@ -330,7 +330,7 @@ app.delete("/volunteers/volunteer-details", async (req, res) => {
 		]);
 		res.status(200).send(result2.rows[0]);
 	} catch (e) {
-		res.status(500).send(e);
+		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
 app.get("/volunteers/volunteer-details/:id", async (req, res) => {
