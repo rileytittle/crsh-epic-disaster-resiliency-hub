@@ -160,7 +160,7 @@ const MainLayout = () => {
 							) : (
 								<></>
 							)}
-							{sessionStorage.getItem("isLoggedIn") ? (
+							{!sessionStorage.getItem("isLoggedIn") ? (
 								<li className="nav-item">
 									<a
 										className="nav-link"
@@ -173,7 +173,7 @@ const MainLayout = () => {
 							) : (
 								<></>
 							)}
-							{sessionStorage.getItem("isLoggedIn") ? (
+							{!sessionStorage.getItem("isLoggedIn") ? (
 								<li className="nav-item">
 									<a
 										className="nav-link"
@@ -187,7 +187,7 @@ const MainLayout = () => {
 								<></>
 							)}
 						</ul>
-						{sessionStorage.getItem("isLoggedIn") ? (
+						{!sessionStorage.getItem("isLoggedIn") ? (
 							<a className="nav-link" href="/request-help">
 								Request Help
 							</a>
