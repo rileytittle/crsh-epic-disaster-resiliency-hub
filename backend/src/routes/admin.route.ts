@@ -304,7 +304,7 @@ app.post("/homeowner-requests/reject", (req, res) => {
 	}
 });
 
-app.delete("/volunteers/volunteer-details", (req, res) => {
+app.delete("/volunteers/volunteer-details", async (req, res) => {
 	try {
 		let areaToChange = "";
 		if (req.body.selectedArea == "Hospitality") {
@@ -321,11 +321,14 @@ app.delete("/volunteers/volunteer-details", (req, res) => {
 		} else if (req.body.selectedArea == "Logistic Tracking") {
 			areaToChange = "logistic_tracking";
 		}
-		let result = pool.query(
+		let result = await pool.query(
 			"UPDATE volunteer SET $1 = false WHERE id = $2",
 			[areaToChange, parseInt(req.body.id)]
 		);
-		res.status(200).send("Successfully edited");
+		let result2 = await pool.query("SELECT * FROM volunteer WHERE id = ", [
+			parseInt(req.body.id),
+		]);
+		res.status(200).send(result2.rows[0]);
 	} catch (e) {
 		res.status(500).send(e);
 	}

@@ -21,9 +21,9 @@ function VolunteerDetails() {
 				console.error(error);
 			});
 	}
-	function deleteArea(area) {
+	async function deleteArea(area) {
 		console.log("Clicked: ", area);
-		axios
+		await axios
 			.delete(
 				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details",
 				{
