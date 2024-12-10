@@ -255,41 +255,28 @@ app.post("/assign-volunteer/list", async (req, res) => {
 				: "No volunteers found for this team.",
 	});
 });
-app.patch("/volunteers/volunteer-details", async (req, res) => {
-	const { id, selectedArea } = req.body;
-
+app.patch("/volunteers/volunteer-details", (req, res) => {
 	try {
-		// Validate the area
-		const validAreas = [
-			"admin_team",
-			"hospitality",
-			"logistic_tracking",
-			"community_outreach",
-			"community_helpers",
-		];
-		if (!validAreas.includes(selectedArea)) {
-			res.status(400).send("Invalid area of help.");
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
 		}
-
-		// Toggle the boolean field
-		await pool.query(
-			`UPDATE volunteers SET ${selectedArea} = NOT ${selectedArea} WHERE id = $1`,
-			[id]
-		);
-
-		// Fetch the updated volunteer
-		const result = await pool.query(
-			"SELECT * FROM volunteers WHERE id = $1",
-			[id]
-		);
-		if (result.rows.length === 0) {
-			res.status(404).send("Volunteer not found.");
+		if (foundVolunteer) {
+			if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
+				foundVolunteer.areasOfHelp.push(req.body.selectedArea);
+				res.status(200).send(foundVolunteer);
+			} else {
+				res.status(400).send("Area is already in volunteer's account");
+			}
+		} else {
+			res.status(404).send("Could not find volunteer");
 		}
-
-		res.status(200).send(result.rows[0]);
 	} catch (e) {
-		console.error(e);
-		res.status(500).send("Failed to update area of help.");
+		res.status(500).send(e);
 	}
 });
 
@@ -317,23 +304,38 @@ app.post("/homeowner-requests/reject", (req, res) => {
 	}
 });
 
+app.delete("/volunteers/volunteer-details", (req, res) => {
+	try {
+		let foundVolunteer: Volunteer | undefined = undefined;
+
+		for (let volunteer of volunteers) {
+			if (volunteer.id == parseInt(req.body.id)) {
+				foundVolunteer = volunteer;
+				break;
+			}
+		}
+		if (foundVolunteer) {
+			let newAreas = foundVolunteer.areasOfHelp.filter(
+				(area) => area !== req.body.selectedArea
+			);
+			foundVolunteer.areasOfHelp = newAreas;
+			res.status(200).send(foundVolunteer);
+		} else {
+			res.status(404).send("Could not find volunteer");
+		}
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
 app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 	try {
-		const { id } = req.params;
-
-		// Fetch volunteer by ID
-		const result = await pool.query(
-			"SELECT * FROM volunteers WHERE id = $1",
-			[id]
+		let volunteer = await pool.query(
+			"SELECT * FROM volunteer WHERE id = $1",
+			[parseInt(req.params.id)]
 		);
-		if (result.rows.length === 0) {
-			res.status(404).send("Volunteer not found.");
-		}
-
-		res.status(200).send(result.rows[0]);
+		res.status(200).send(volunteer.rows[0]);
 	} catch (e) {
-		console.error(e);
-		res.status(500).send("Failed to retrieve volunteer.");
+		res.status(500).send(e);
 	}
 });
 
