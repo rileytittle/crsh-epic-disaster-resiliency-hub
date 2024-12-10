@@ -200,7 +200,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 
 app.post("/create-volunteer/reject", async (req, res) => {
 	try {
-		let result = pool.query(
+		let result = await pool.query(
 			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
 			[req.body.email]
 		);
