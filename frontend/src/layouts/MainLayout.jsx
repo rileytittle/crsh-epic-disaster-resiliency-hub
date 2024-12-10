@@ -5,6 +5,7 @@ const MainLayout = () => {
 		sessionStorage.removeItem("isLoggedIn");
 		sessionStorage.removeItem("userType");
 		sessionStorage.removeItem("userToken");
+		navigate("/");
 	}
 	return (
 		<>
