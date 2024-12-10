@@ -324,6 +324,7 @@ app.delete("/volunteers/volunteer-details", (req, res) => {
 			"UPDATE volunteer SET $1 = false WHERE id = $2",
 			[areaToChange, parseInt(req.body.id)]
 		);
+		res.status(200).send("Successfully edited");
 	} catch (e) {
 		res.status(500).send(e);
 	}
