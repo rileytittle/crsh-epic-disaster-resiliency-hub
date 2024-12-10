@@ -359,10 +359,10 @@ app.get("/homeowner-requests", (req, res) => {
 	}
 });
 
-app.get("/volunteers", (req, res) => {
+app.get("/volunteers", async (req, res) => {
 	try {
-		//write some logic here
-		res.status(200).send(volunteers);
+		let volunteers = await pool.query("SELECT * FROM volunteer");
+		res.status(200).send(volunteers.rows);
 	} catch (e) {
 		res.status(500).send(e);
 	}
