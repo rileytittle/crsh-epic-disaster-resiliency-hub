@@ -255,28 +255,47 @@ app.post("/assign-volunteer/list", async (req, res) => {
 				: "No volunteers found for this team.",
 	});
 });
-app.patch("/volunteers/volunteer-details", (req, res) => {
+app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
-		let foundVolunteer: Volunteer | undefined = undefined;
+		let areaToChange = "";
+		if (req.body.selectedArea === "Hospitality") {
+			areaToChange = "hospitality";
+		} else if (req.body.selectedArea === "Community Helpers") {
+			areaToChange = "community_helpers";
+		} else if (req.body.selectedArea === "Community Outreach") {
+			areaToChange = "community_outreach";
+		} else if (
+			req.body.selectedArea ===
+			"Volunteer Management and Administration Team"
+		) {
+			areaToChange = "admin_team";
+		} else if (req.body.selectedArea === "Logistic Tracking") {
+			areaToChange = "logistic_tracking";
+		}
 
-		for (let volunteer of volunteers) {
-			if (volunteer.id == parseInt(req.body.id)) {
-				foundVolunteer = volunteer;
-				break;
-			}
+		// Ensure `areaToChange` is a valid column name.
+		if (
+			![
+				"hospitality",
+				"community_helpers",
+				"community_outreach",
+				"admin_team",
+				"logistic_tracking",
+			].includes(areaToChange)
+		) {
+			res.status(400).send({ error: "Invalid area name" });
 		}
-		if (foundVolunteer) {
-			if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
-				foundVolunteer.areasOfHelp.push(req.body.selectedArea);
-				res.status(200).send(foundVolunteer);
-			} else {
-				res.status(400).send("Area is already in volunteer's account");
-			}
-		} else {
-			res.status(404).send("Could not find volunteer");
-		}
+
+		// Update the volunteer record
+		const updateQuery = `UPDATE volunteer SET ${areaToChange} = true WHERE id = $1`;
+		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
+		let result2 = await pool.query(
+			"SELECT * FROM volunteer WHERE id = $1",
+			[parseInt(req.body.id)]
+		);
+		res.status(200).send(result2.rows[0]);
 	} catch (e) {
-		res.status(500).send(e);
+		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
 
