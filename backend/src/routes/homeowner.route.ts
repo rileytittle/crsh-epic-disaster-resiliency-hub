@@ -4,11 +4,10 @@ import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Pool } from "pg";
 
 const pool = new Pool({
-	user: "postgres",
-	host: "localhost",
-	database: "Senior-Project",
-	password: "garnetisGold!1820",
-	port: 5432,
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false,
+	},
 });
 
 let app = express.Router();

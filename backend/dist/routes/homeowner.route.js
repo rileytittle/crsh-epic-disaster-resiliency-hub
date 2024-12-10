@@ -18,11 +18,10 @@ const helpRequest_model_1 = require("../models/helpRequest.model");
 const homeownerApplication_model_1 = require("../models/homeownerApplication.model");
 const pg_1 = require("pg");
 const pool = new pg_1.Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "Senior-Project",
-    password: "garnetisGold!1820",
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
 let app = express_1.default.Router();
 exports.app = app;
