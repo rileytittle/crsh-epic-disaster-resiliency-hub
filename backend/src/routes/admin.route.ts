@@ -144,54 +144,37 @@ app.post("/create-volunteer/accept", async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
-		let foundApplication: VolunteerApplication | undefined = undefined;
-		for (let application of volunteerApplications) {
-			if (application.email === req.body.email) {
-				foundApplication = application;
-			}
-		}
-		if (
-			foundApplication &&
-			!foundApplication.evaluated &&
-			typeof req.body.teamLeader === "boolean"
-		) {
-			let myPassword = "password";
-			foundApplication.evaluated = true;
-			let newVolunteer = new Volunteer(
-				0,
-				foundApplication.firstName,
-				foundApplication.lastName,
-				foundApplication.phoneNumber,
-				foundApplication.email,
-				foundApplication.streetAddress,
-				foundApplication.city,
-				foundApplication.state,
-				foundApplication.zipCode,
-				foundApplication.areasOfHelp,
-				req.body.teamLeader,
-				myPassword
-			);
-			newVolunteer.evaluated = true;
-			//push it onto the list
-			volunteers.push(newVolunteer);
-			// let msg = {
-			// 	to: newVolunteer.email,
-			// 	from: "coletittle@ymail.com",
-			// 	subject: "Your Volunteer Account",
-			// 	text: "email was sent correctly",
-			// };
-			// sgMail
-			// 	.send(msg)
-			// 	.then(() => {
-			// 		console.log("Email sent");
-			// 	})
-			// 	.catch((error) => {
-			// 		console.error(error);
-			// 	});
-			res.status(201).send(volunteers);
-		} else {
-			res.status(404).send("Could not find application");
-		}
+		let application = await pool.query(
+			"SELECT * FROM volunteerapplications WHERE id = $1",
+			[req.body.id]
+		);
+		let result = pool.query(
+			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+			[
+				application.rows[0].email,
+				application.rows[0].first_name[0] +
+					application.rows[0].last_name,
+				null,
+				application.rows[0].first_name,
+				application.rows[0].last_name,
+				application.rows[0].phone_number,
+				application.rows[0].street_address,
+				application.rows[0].city,
+				application.rows[0].state,
+				application.rows[0].zip_code,
+				application.rows[0].admin_team || false,
+				application.rows[0].hospitality || false,
+				application.rows[0].logistic_tracking || false,
+				application.rows[0].community_outreach || false,
+				application.rows[0].community_helpers || false,
+			]
+		);
+		let result2 = await pool.query(
+			"DELETE from volunteerapplications WHERE id = $1",
+			[req.body.id]
+		);
+		res.status(201).send("Volunteer created!");
 	} catch (e) {
 		console.log(e);
 		res.status(400).send(e);

@@ -16,7 +16,7 @@ function ConfirmVolunteer() {
 			.post(
 				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/accept",
 				{
-					email: email,
+					id: id,
 					teamLeader: teamLeader,
 				}
 			)
