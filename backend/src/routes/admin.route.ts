@@ -6,18 +6,18 @@ import { Job } from "../models/job.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 let saltRounds = 10;
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
 
-	const pool = new Pool({
-		connectionString: process.env.DATABASE_URL,
-		ssl: {
-			rejectUnauthorized: false,
-		},
-	});
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false,
+	},
+});
 let app = Router();
 //enter your api key below
 // let emailAPIKey = "";
@@ -42,51 +42,46 @@ let requests: HomeownerRequest[] = [
 	},
 ];
 let volunteerApplications: VolunteerApplication[] = [];
-let firstApplication = new VolunteerApplication(
-	0,
-	"Riley",
-	"Tittle",
-	9047352653,
-	"rileytittle02@gmail.com",
-	"7816 Southside Blvd",
-	"Jacksonville",
-	"FL",
-	32256,
-	["Logistic Tracking Team"]
-);
-let secondApplication = new VolunteerApplication(
-	1,
-	"Coleman",
-	"George",
-	9047352653,
-	"fake@email.com",
-	"7816 Southside Blvd",
-	"Jacksonville",
-	"FL",
-	32256,
-	["Logistic Tracking Team", "Community Outreach Team"]
-);
-volunteerApplications.push(firstApplication);
-volunteerApplications.push(secondApplication);
+// let firstApplication = new VolunteerApplication(
+// 	0,
+// 	"Riley",
+// 	"Tittle",
+// 	9047352653,
+// 	"rileytittle02@gmail.com",
+// 	"7816 Southside Blvd",
+// 	"Jacksonville",
+// 	"FL",
+// 	32256,
+// 	["Logistic Tracking Team"]
+// );
+// let secondApplication = new VolunteerApplication(
+// 	1,
+// 	"Coleman",
+// 	"George",
+// 	9047352653,
+// 	"fake@email.com",
+// 	"7816 Southside Blvd",
+// 	"Jacksonville",
+// 	"FL",
+// 	32256,
+// 	["Logistic Tracking Team", "Community Outreach Team"]
+// );
+// volunteerApplications.push(firstApplication);
+// volunteerApplications.push(secondApplication);
 
 let volunteers: Volunteer[] = [];
-
-
-
 
 //*******************************
 app.post("/create-account", async (req, res) => {
 	try {
 		//write some logic here
 		let queryResult = await pool.query(
-			'SELECT * FROM AdminAccount WHERE email = $1',
+			"SELECT * FROM AdminAccount WHERE email = $1",
 			[req.body.email]
 		);
-		if(queryResult.rows.length == 0){
-			
-		}
-		else{
-			res.status(400).send({message:'Email already in use'});
+		if (queryResult.rows.length == 0) {
+		} else {
+			res.status(400).send({ message: "Email already in use" });
 		}
 		res.status(200).send("Success");
 	} catch (e) {
@@ -96,36 +91,50 @@ app.post("/create-account", async (req, res) => {
 app.post("/login", async (req, res) => {
 	try {
 		//write some logic here
-		if(req.headers["authorization"]){
-			let userInfo = req.headers['authorization'].split(' ')[1]; //Base 64 Encoded
+		if (req.headers["authorization"]) {
+			let userInfo = req.headers["authorization"].split(" ")[1]; //Base 64 Encoded
 			let decodedUserInfo = atob(userInfo);
-			let email= decodedUserInfo.split(':')[0];
-			let password= decodedUserInfo.split(':')[1];
-			console.log(email, password, decodedUserInfo, userInfo)
+			let email = decodedUserInfo.split(":")[0];
+			let password = decodedUserInfo.split(":")[1];
+			console.log(email, password, decodedUserInfo, userInfo);
 			let queryResult = await pool.query(
 				'SELECT * FROM "AdminAccount" WHERE email = $1', 
 				[email]
 			);
-			if(queryResult.rows.length > 0){
-				let user = queryResult.rows[0]
-				console.log(user.password)
-				bcrypt.compare(password, user.password.trim(), (err, result)=>{
-					console.log({ password, storedHash: user.password.trim(), err, result });
-					if(result){
-						let token = jwt.sign({email:user.email, isAdmin:true}, SECRET_KEY);
-						res.status(200).send({token:token});
+			if (queryResult.rows.length > 0) {
+				let user = queryResult.rows[0];
+				console.log(user.password);
+				bcrypt.compare(
+					password,
+					user.password.trim(),
+					(err, result) => {
+						console.log({
+							password,
+							storedHash: user.password.trim(),
+							err,
+							result,
+						});
+						if (result) {
+							let token = jwt.sign(
+								{ email: user.email, isAdmin: true },
+								SECRET_KEY
+							);
+							res.status(200).send({ token: token });
+						} else {
+							res.status(401).send({
+								status: 401,
+								message: "Incorrect password",
+							});
+						}
 					}
-					else{
-						res.status(401).send({status:401, message:'Incorrect password'});
-					}
-				})
+				);
+			} else {
+				res.status(401).send({
+					message: "No account with that email found",
+				});
 			}
-			else{
-				res.status(401).send({message:'No account with that email found'})
-			}
-		}
-		else{
-			res.status(401).send({message: 'missing required login details'})
+		} else {
+			res.status(401).send({ message: "missing required login details" });
 		}
 	} catch (e) {
 		res.status(500).send(e);
@@ -135,54 +144,37 @@ app.post("/create-volunteer/accept", async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
-		let foundApplication: VolunteerApplication | undefined = undefined;
-		for (let application of volunteerApplications) {
-			if (application.email === req.body.email) {
-				foundApplication = application;
-			}
-		}
-		if (
-			foundApplication &&
-			!foundApplication.evaluated &&
-			typeof req.body.teamLeader === "boolean"
-		) {
-			let myPassword = "password";
-			foundApplication.evaluated = true;
-			let newVolunteer = new Volunteer(
-				0,
-				foundApplication.firstName,
-				foundApplication.lastName,
-				foundApplication.phoneNumber,
-				foundApplication.email,
-				foundApplication.streetAddress,
-				foundApplication.city,
-				foundApplication.state,
-				foundApplication.zipCode,
-				foundApplication.areasOfHelp,
-				req.body.teamLeader,
-				myPassword
-			);
-			newVolunteer.evaluated = true;
-			//push it onto the list
-			volunteers.push(newVolunteer);
-			// let msg = {
-			// 	to: newVolunteer.email,
-			// 	from: "coletittle@ymail.com",
-			// 	subject: "Your Volunteer Account",
-			// 	text: "email was sent correctly",
-			// };
-			// sgMail
-			// 	.send(msg)
-			// 	.then(() => {
-			// 		console.log("Email sent");
-			// 	})
-			// 	.catch((error) => {
-			// 		console.error(error);
-			// 	});
-			res.status(201).send(volunteers);
-		} else {
-			res.status(404).send("Could not find application");
-		}
+		let application = await pool.query(
+			"SELECT * FROM volunteerapplications WHERE id = $1",
+			[req.body.id]
+		);
+		let result = pool.query(
+			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+			[
+				application.rows[0].email,
+				application.rows[0].first_name[0] +
+					application.rows[0].last_name,
+				null,
+				application.rows[0].first_name,
+				application.rows[0].last_name,
+				application.rows[0].phone_number,
+				application.rows[0].street_address,
+				application.rows[0].city,
+				application.rows[0].state,
+				application.rows[0].zip_code,
+				application.rows[0].admin_team || false,
+				application.rows[0].hospitality || false,
+				application.rows[0].logistic_tracking || false,
+				application.rows[0].community_outreach || false,
+				application.rows[0].community_helpers || false,
+			]
+		);
+		let result2 = await pool.query(
+			"DELETE from volunteerapplications WHERE id = $1",
+			[req.body.id]
+		);
+		res.status(201).send("Volunteer created!");
 	} catch (e) {
 		console.log(e);
 		res.status(400).send(e);
@@ -191,34 +183,26 @@ app.post("/create-volunteer/accept", async (req, res) => {
 
 app.post("/create-volunteer/reject", async (req, res) => {
 	try {
-		//find application that we're rejecting
-		let foundApplication: boolean = false;
-		for (let application of volunteerApplications) {
-			if (application.email === req.body.email) {
-				//set approved to false
-				//set reasonRejected to body, if it exists
-				foundApplication = true;
-				application.rejected = true;
-				if (req.body.reasonRejected) {
-					application.reasonRejected = req.body.reasonRejected;
-				}
-			}
-		} 
-		if (foundApplication) {
-			res.status(200).send("Application rejected");
-		} else {
-			res.status(404).send("Application not found");
-		}
+		let result = await pool.query(
+			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
+			[req.body.email]
+		);
+		res.status(200).send("Applicant rejected");
 	} catch (e) {
 		res.status(400).send("Problem rejected application");
 	}
 });
 
-app.get("/create-volunteer/applications", Authchecker, async (req, res) => {
-	let filteredApplications = volunteerApplications.filter(
-		(application) => !application.rejected && !application.evaluated
-	);
-	res.status(200).send(filteredApplications);
+app.get("/create-volunteer/applications", async (req, res) => {
+	try {
+		let result = await pool.query(
+			"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
+		);
+		res.status(200).send(result.rows);
+	} catch (e) {
+		res.status(400).send("Something went wrong");
+	}
+	res.status(200).send();
 });
 
 app.post("/homeowner-requests/accept", (req, res) => {
@@ -252,10 +236,10 @@ app.post("/homeowner-requests/accept", (req, res) => {
 				res.status(404).send("Could not find request");
 			}
 		}
-	}catch(e){
-		res.send("bad")
+	} catch (e) {
+		res.send("bad");
 	}
-})
+});
 app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
 
@@ -277,32 +261,33 @@ app.post("/assign-volunteer/list", async (req, res) => {
 				: "No volunteers found for this team.",
 	});
 });
-app.patch("/volunteers/volunteer-details", (req, res) => {
+app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
-		let foundVolunteer: Volunteer | undefined = undefined;
-
-		for (let volunteer of volunteers) {
-			if (volunteer.id == parseInt(req.body.id)) {
-				foundVolunteer = volunteer;
-				break;
-			}
+		// Ensure `areaToChange` is a valid column name.
+		if (
+			![
+				"hospitality",
+				"community_helpers",
+				"community_outreach",
+				"admin_team",
+				"logistic_tracking",
+			].includes(req.body.selectedArea)
+		) {
+			res.status(400).send({ error: "Invalid area name" });
 		}
-		if (foundVolunteer) {
-			if (!foundVolunteer.areasOfHelp.includes(req.body.selectedArea)) {
-				foundVolunteer.areasOfHelp.push(req.body.selectedArea);
-				res.status(200).send(foundVolunteer);
-			} else {
-				res.status(400).send("Area is already in volunteer's account");
-			}
-		} else {
-			res.status(404).send("Could not find volunteer");
 
-		}
+		// Update the volunteer record
+		const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
+		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
+		let result2 = await pool.query(
+			"SELECT * FROM volunteer WHERE id = $1",
+			[parseInt(req.body.id)]
+		);
+		res.status(200).send(result2.rows[0]);
 	} catch (e) {
-		res.status(500).send(e);
+		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
-
 
 app.post("/homeowner-requests/reject", (req, res) => {
 	try {
@@ -323,51 +308,61 @@ app.post("/homeowner-requests/reject", (req, res) => {
 			res.status(400).send("Must supply id");
 		}
 		res.status(200).send("Success");
-	}catch(e){
-		res.send("Bad")
-	}
-})
-
-app.delete("/volunteers/volunteer-details", (req, res) => {
-	try {
-		let foundVolunteer: Volunteer | undefined = undefined;
-
-		for (let volunteer of volunteers) {
-			if (volunteer.id == parseInt(req.body.id)) {
-				foundVolunteer = volunteer;
-				break;
-			}
-		}
-		if (foundVolunteer) {
-			let newAreas = foundVolunteer.areasOfHelp.filter(
-				(area) => area !== req.body.selectedArea
-			);
-			foundVolunteer.areasOfHelp = newAreas;
-			res.status(200).send(foundVolunteer);
-		} else {
-			res.status(404).send("Could not find volunteer");
-		}
 	} catch (e) {
-		res.status(500).send(e);
+		res.send("Bad");
 	}
 });
-app.get("/volunteers/volunteer-details/:id", (req, res) => {
+
+app.delete("/volunteers/volunteer-details", async (req, res) => {
 	try {
-		//write some logic here
-		let foundVolunteer: Volunteer | undefined = undefined;
-
-		for (let volunteer of volunteers) {
-			if (volunteer.id == parseFloat(req.params.id)) {
-				foundVolunteer = volunteer;
-				break;
-			}
+		let areaToChange = "";
+		if (req.body.selectedArea === "Hospitality") {
+			areaToChange = "hospitality";
+		} else if (req.body.selectedArea === "Community Helpers") {
+			areaToChange = "community_helpers";
+		} else if (req.body.selectedArea === "Community Outreach") {
+			areaToChange = "community_outreach";
+		} else if (
+			req.body.selectedArea ===
+			"Volunteer Management and Administration Team"
+		) {
+			areaToChange = "admin_team";
+		} else if (req.body.selectedArea === "Logistic Tracking") {
+			areaToChange = "logistic_tracking";
 		}
-		if (foundVolunteer) {
-			res.status(200).send(foundVolunteer);
-		} else {
-			res.status(404).send("Could not find volunteer");
+
+		// Ensure `areaToChange` is a valid column name.
+		if (
+			![
+				"hospitality",
+				"community_helpers",
+				"community_outreach",
+				"admin_team",
+				"logistic_tracking",
+			].includes(areaToChange)
+		) {
+			res.status(400).send({ error: "Invalid area name" });
 		}
 
+		// Update the volunteer record
+		const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
+		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
+		let result2 = await pool.query(
+			"SELECT * FROM volunteer WHERE id = $1",
+			[parseInt(req.body.id)]
+		);
+		res.status(200).send(result2.rows[0]);
+	} catch (e) {
+		res.status(500).send({ Area: req.body.selectedArea, error: e });
+	}
+});
+app.get("/volunteers/volunteer-details/:id", async (req, res) => {
+	try {
+		let volunteer = await pool.query(
+			"SELECT * FROM volunteer WHERE id = $1",
+			[parseInt(req.params.id)]
+		);
+		res.status(200).send(volunteer.rows[0]);
 	} catch (e) {
 		res.status(500).send(e);
 	} 
@@ -379,15 +374,15 @@ app.get("/homeowner-requests", (req, res) => {
 			(request) => request.evaluation === undefined
 		);
 		res.status(200).send(filteredRequests);
-	}catch(e){
-		res.send("Bad")
+	} catch (e) {
+		res.send("Bad");
 	}
-})
+});
 
-app.get("/volunteers", (req, res) => {
+app.get("/volunteers", async (req, res) => {
 	try {
-		
-		res.status(200).send(volunteers);
+		let volunteers = await pool.query("SELECT * FROM volunteer");
+		res.status(200).send(volunteers.rows);
 	} catch (e) {
 		res.status(500).send(e);
 	}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { act } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -6,11 +6,29 @@ function VolunteerDetails() {
 	function addArea() {
 		console.log("Clicked: ", selectedArea);
 		axios
-			.patch("http://localhost:3000/admin/volunteers/volunteer-details", {
-				id: id,
-				selectedArea: selectedArea,
-			})
+			.patch(
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details",
+				{
+					id: id,
+					selectedArea: selectedArea,
+				}
+			)
 			.then((res) => {
+				const activeAreas = [];
+
+				// Check each area and add it to the array if true
+				if (res.data.hospitality) activeAreas.push("Hospitality");
+				if (res.data.community_helpers)
+					activeAreas.push("Community Helpers");
+				if (res.data.community_outreach)
+					activeAreas.push("Community Outreach");
+				if (res.data.admin_team)
+					activeAreas.push(
+						"Volunteer Management and Administration Team"
+					);
+				if (res.data.logistic_tracking)
+					activeAreas.push("Logistic Tracking");
+				setAreasOfHelp(activeAreas);
 				setVolunteer(res.data);
 				setSelectedArea("");
 			})
@@ -18,11 +36,11 @@ function VolunteerDetails() {
 				console.error(error);
 			});
 	}
-	function deleteArea(area) {
+	async function deleteArea(area) {
 		console.log("Clicked: ", area);
-		axios
+		await axios
 			.delete(
-				"http://localhost:3000/admin/volunteers/volunteer-details",
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details",
 				{
 					data: {
 						id: id,
@@ -31,6 +49,21 @@ function VolunteerDetails() {
 				}
 			)
 			.then((res) => {
+				const activeAreas = [];
+
+				// Check each area and add it to the array if true
+				if (res.data.hospitality) activeAreas.push("Hospitality");
+				if (res.data.community_helpers)
+					activeAreas.push("Community Helpers");
+				if (res.data.community_outreach)
+					activeAreas.push("Community Outreach");
+				if (res.data.admin_team)
+					activeAreas.push(
+						"Volunteer Management and Administration Team"
+					);
+				if (res.data.logistic_tracking)
+					activeAreas.push("Logistic Tracking");
+				setAreasOfHelp(activeAreas);
 				setVolunteer(res.data);
 				setSelectedArea("");
 			})
@@ -39,28 +72,32 @@ function VolunteerDetails() {
 			});
 	}
 	const [volunteer, setVolunteer] = useState({});
+	const [areasOfHelp, setAreasOfHelp] = useState({});
 	const [selectedArea, setSelectedArea] = useState(""); // State to track selected area
 	const location = useLocation();
-	const {
-		id,
-		firstName,
-		lastName,
-		phoneNumber,
-		email,
-		streetAddress,
-		city,
-		state,
-		zipCode,
-		areasOfHelp,
-		teamLeader,
-	} = location.state;
+	const { id } = location.state;
 	//console.log(id);
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:3000/admin/volunteers/volunteer-details/${id}`
+				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details/${id}`
 			)
 			.then((res) => {
+				const activeAreas = [];
+
+				// Check each area and add it to the array if true
+				if (res.data.hospitality) activeAreas.push("Hospitality");
+				if (res.data.community_helpers)
+					activeAreas.push("Community Helpers");
+				if (res.data.community_outreach)
+					activeAreas.push("Community Outreach");
+				if (res.data.admin_team)
+					activeAreas.push(
+						"Volunteer Management and Administration Team"
+					);
+				if (res.data.logistic_tracking)
+					activeAreas.push("Logistic Tracking");
+				setAreasOfHelp(activeAreas);
 				setVolunteer(res.data);
 				//console.log(res.data);
 			})
@@ -76,24 +113,23 @@ function VolunteerDetails() {
 	return (
 		<div className="card">
 			<div className="card-body">
-				<h1>{volunteer.firstName + " " + volunteer.lastName}</h1>
+				<h1>{volunteer.first_name + " " + volunteer.last_name}</h1>
 				<p>{volunteer.email}</p>
-				<p>{volunteer.phoneNumber}</p>
+				<p>{volunteer.phone_number}</p>
 				<p>
-					{volunteer.streetAddress +
+					{volunteer.street_address +
 						", " +
 						volunteer.city +
 						", " +
 						volunteer.state +
 						" " +
-						volunteer.zipCode}
+						volunteer.zip_code}
 				</p>
 				<p>
 					{/* Check if areasOfHelp is defined before mapping */}
-					{volunteer.areasOfHelp &&
-					volunteer.areasOfHelp.length > 0 ? (
+					{areasOfHelp && areasOfHelp.length > 0 ? (
 						<ul>
-							{volunteer.areasOfHelp.map((area, index) => (
+							{areasOfHelp.map((area, index) => (
 								<li key={index}>
 									{area}
 									<button
@@ -125,28 +161,24 @@ function VolunteerDetails() {
 							onChange={(e) => setSelectedArea(e.target.value)} // Update the state when an option is selected
 						>
 							<option selected>Choose...</option>
-							<option value="Volunteer Management and Administration Team">
+							<option value="admin_team">
 								Volunteer Management and Administration Team
 							</option>
-							<option value="Hospitality Team">
+							<option value="hospitality">
 								Hospitality Team
 							</option>
-							<option value="Logistic Tracking Team">
+							<option value="logistic_tracking">
 								Logistic Tracking Team
 							</option>
-							<option value="Community Outreach">
+							<option value="community_outreach">
 								Community Outreach
 							</option>
-							<option value="Community Helpers Team">
+							<option value="community_helpers">
 								Community Helpers Team
-							</option>
-							<option value="Logistic Tracking Team">
-								Logistic Tracking Team
 							</option>
 						</select>
 					</div>
 				</p>
-				<p>Team Leader: {volunteer.teamLeader ? "true" : "false"}</p>
 			</div>
 		</div>
 	);

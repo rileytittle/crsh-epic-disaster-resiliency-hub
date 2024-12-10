@@ -6,14 +6,17 @@ import { useState, useEffect } from "react";
 function CreateVolunteer() {
 	const [applications, setApplications] = useState([]);
 	useEffect(() => {
-		let token = sessionStorage.getItem('userToken');
+		let token = sessionStorage.getItem("userToken");
 
 		axios
-			.get("http://localhost:3000/admin/create-volunteer/applications",{
-				headers: {
-					Authorization: `Bearer ${token}`
-				},
-			})
+			.get(
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/applications",
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 
 			.then((res) => {
 				setApplications(res.data);
@@ -32,11 +35,19 @@ function CreateVolunteer() {
 						<ApplicationCard
 							key={application.id}
 							id={application.id}
-							firstName={application.firstName}
-							lastName={application.lastName}
+							firstName={application.first_name} // Updated for snake_case
+							lastName={application.last_name} // Updated for snake_case
 							email={application.email}
-							areasOfHelp={application.areasOfHelp}
-						></ApplicationCard>
+							areasOfHelp={[
+								application.logistic_tracking &&
+									"Logistic Tracking",
+								application.community_helpers &&
+									"Community Helpers",
+								application.hospitality && "Hospitality",
+								application.community_outreach &&
+									"Community Outreach",
+							].filter(Boolean)} // Dynamically compute areas of help
+						/>
 					))}
 				</div>
 			</div>

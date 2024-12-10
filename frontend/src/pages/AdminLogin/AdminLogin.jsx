@@ -9,31 +9,35 @@ function AdminLogin() {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 
-	async function login(e){
+	async function login(e) {
 		e.preventDefault();
 		let userData = {
 			email: email,
-			password: password
-		}
-		let basicAuthHeader = btoa(`${email}:${password}`)
-		try{
+			password: password,
+		};
+		let basicAuthHeader = btoa(`${email}:${password}`);
+		try {
 			let headers = {
-				Authorization: `Basic ${basicAuthHeader}`
-			}
-			await axios.post('http://localhost:3000/admin/login', userData, { headers })
-				.then(response => {
-					sessionStorage.setItem('isLoggedIn', true)
-					sessionStorage.setItem('userType', 'admin')
-					sessionStorage.setItem('userToken', response.data.token)
-					sessionStorage.setItem('justLoggedIn', true)
-					navigate('/admin-dashboard')
+				Authorization: `Basic ${basicAuthHeader}`,
+			};
+			await axios
+				.post(
+					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login",
+					userData,
+					{ headers }
+				)
+				.then((response) => {
+					sessionStorage.setItem("isLoggedIn", true);
+					sessionStorage.setItem("userType", "admin");
+					sessionStorage.setItem("userToken", response.data.token);
+					sessionStorage.setItem("justLoggedIn", true);
+					navigate("/admin-dashboard");
 				})
-				.catch(error => {
-					console.log('error logging in')
-				})
-		}
-		catch(err){
-			console.log('If checks for status codes here')
+				.catch((error) => {
+					console.log("error logging in");
+				});
+		} catch (err) {
+			console.log("If checks for status codes here");
 		}
 	}
 	return (
@@ -53,9 +57,7 @@ function AdminLogin() {
 						value={password}
 						placeholder="Password"
 					/>
-					<button onClick={login}>
-						GO
-					</button>
+					<button onClick={login}>GO</button>
 				</form>
 			</div>
 		</>
