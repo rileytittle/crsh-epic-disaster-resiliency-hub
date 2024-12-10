@@ -45,6 +45,7 @@ function VolunteerDetails() {
 	const [areasOfHelp, setAreasOfHelp] = useState({});
 	const [selectedArea, setSelectedArea] = useState(""); // State to track selected area
 	const location = useLocation();
+	const { id } = location.state;
 	//console.log(id);
 	useEffect(() => {
 		axios
