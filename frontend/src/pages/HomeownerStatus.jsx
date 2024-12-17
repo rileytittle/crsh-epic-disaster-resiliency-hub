@@ -34,13 +34,14 @@ const HomeownerStatus = () => {
 
             const result = await response.json();
             console.log(result);
+            alert(result.message);
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
     return (
-        // action="https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp" method="POST"
+        // action="https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp/status" method="POST"
         <div style={{ margin: "5px" }}>
             <form onSubmit={formSubmitted} className="row g-3">
                 <div className="col-md-6">

@@ -75,6 +75,7 @@ const HomeownerApply = () => {
 
 			const result = await response.json();
 			console.log(result);
+			alert(result);
 		} catch (error) {
 			console.error("Error:", error);
 		}
