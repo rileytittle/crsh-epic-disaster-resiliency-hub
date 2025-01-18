@@ -5,10 +5,14 @@ import { app as volunteerRouter } from "./routes/Volunteer.route";
 const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();
+
+let vercelURL = "https://crsh-epic-disaster-resiliency-hub-client.vercel.app";
+let localURL = "http://localhost:5173";
+
 app.use(express.json());
 app.use(
 	cors({
-		origin: "https://crsh-epic-disaster-resiliency-hub-client.vercel.app",
+		origin: localURL, 
 	})
 );
 app.get("/", (req, res) => {
