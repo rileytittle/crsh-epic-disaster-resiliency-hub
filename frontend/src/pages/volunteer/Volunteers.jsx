@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import DataTable from "datatables.net-dt";
 
+let table = new DataTable("#myTable");
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
 
@@ -35,7 +37,7 @@ function Volunteers() {
 			<h1>Volunteers</h1>
 			<div className="card">
 				<div className="card-body">
-					<table className="table">
+					<table className="table" id="myTable">
 						<thead>
 							<tr>
 								<th scope="col">Edit</th>
