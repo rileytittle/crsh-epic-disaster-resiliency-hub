@@ -94,7 +94,7 @@ app.post("/login", async (req, res) => {
 			let password = decodedUserInfo.split(":")[1];
 			console.log(email, password, decodedUserInfo, userInfo);
 			let queryResult = await pool.query(
-				"SELECT * FROM VolunteerAccount WHERE email = $1",
+				"SELECT * FROM Volunteer WHERE email = $1",
 				[email]
 			);
 
@@ -262,17 +262,17 @@ app.post("/status", (req, res) => {
 
 app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	try {
-	  const { assignment, action, id } = req.body;  // Use req.body to retrieve parameters
-  
+	  const { assignment: assignment, action, id } = req.body;  
+
 	  // Validate inputs
 	  if (!assignment || !action || !id) {
-		return res.status(400).send("Missing required parameters: 'assignment', 'action', or 'id'.");
+		return res.status(400).send("Missing required parameters: 'fk_request', 'action', or 'id'.");
 	  }
   
 	  if (action === 'reject') {
 		// Reject the job for a specific volunteer
 		await pool.query(
-			"UPDATE VolunteerAccount SET assignment = NULL WHERE assignment = $1 AND id = $2",
+			"UPDATE Volunteer SET assignment = NULL WHERE assignment = $1 AND id = $2",
 			[assignment, id]
 		  );
 		  
@@ -293,11 +293,12 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 
   app.get("/job", async (req: Request, res: Response) => {
 	try {
-		const { assignment } = req.query;
+		const { assignment: assignment } = req.query;
+		console.log(" we are here");
 	  
 		  	// Query database for matching assignment
-		  	const queryResult = await pool.query("SELECT * FROM Request WHERE id = $1", [assignment]);
-			console.log(queryResult);
+		  	const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [assignment]);
+			console.log("query result for /job" + queryResult);
 		  	res.status(200).send(queryResult.rows);
 		
 	  } catch (error) {
