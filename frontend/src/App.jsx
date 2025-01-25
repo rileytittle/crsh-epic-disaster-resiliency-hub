@@ -11,6 +11,7 @@ import Homepage from "./pages/Homepage";
 import HomeownerApplication from "./pages/HomeownerApplication";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
+import EmailTest from './pages/SendEmailPage';
 
 
 import HomeownerForm from "./pages/HomeownerApplication";
@@ -28,6 +29,7 @@ import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import SendEmailPage from "./pages/SendEmailPage";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -56,6 +58,7 @@ const router = createBrowserRouter(
 			<Route path="/vol-login" element={<VolLogin />}></Route>
 			<Route path='/volunteer-dashboard' element={<VolunteerDashboard/>}></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
+			<Route path='/test-email' element={<SendEmailPage/>}></Route>
 
 			<Route
 				path="/assignVolunteers"
