@@ -8,9 +8,10 @@ let app = express();
 app.use(express.json());
 app.use(
 	cors({
-		origin: "https://crsh-epic-disaster-resiliency-hub-client.vercel.app",
+		origin: "http://localhost:5173", // Allow only requests from this origin
 	})
 );
+
 app.get("/", (req, res) => {
 	try {
 		//write some logic here

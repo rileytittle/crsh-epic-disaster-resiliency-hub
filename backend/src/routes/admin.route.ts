@@ -8,15 +8,22 @@ import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+
+// Load environment variables from the .env file
+dotenv.config();
 let saltRounds = 10;
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
 
+require("dotenv").config();
+
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	host: process.env.LOCAL_DB_HOST || "localhost",
+	port: parseInt(process.env.LOCAL_DB_PORT || "5432", 10), // Default to 5432 if undefined
+	user: process.env.LOCAL_DB_USER || "your_default_user",
+	password: process.env.LOCAL_DB_PASSWORD || "your_default_password",
+	database: process.env.LOCAL_DB_NAME || "your_default_database",
 });
 let app = Router();
 //enter your api key below
@@ -375,7 +382,7 @@ app.get("/homeowner-requests", (req, res) => {
 
 app.get("/volunteers", async (req, res) => {
 	try {
-		let volunteers = await pool.query("SELECT * FROM volunteer");
+		let volunteers = await pool.query("SELECT * FROM volunteeraccount");
 		res.status(200).send(volunteers.rows);
 	} catch (e) {
 		res.status(500).send(e);

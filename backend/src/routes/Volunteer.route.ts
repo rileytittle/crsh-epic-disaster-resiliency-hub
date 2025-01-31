@@ -5,12 +5,15 @@ import { Volunteer } from "../models/volunteer.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Pool } from "pg";
+import dotenv from "dotenv";
+require("dotenv").config();
 
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	host: process.env.LOCAL_DB_HOST || "localhost",
+	port: parseInt(process.env.LOCAL_DB_PORT || "5432", 10), // Default to 5432 if undefined
+	user: process.env.LOCAL_DB_USER || "your_default_user",
+	password: process.env.LOCAL_DB_PASSWORD || "your_default_password",
+	database: process.env.LOCAL_DB_NAME || "your_default_database",
 });
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
