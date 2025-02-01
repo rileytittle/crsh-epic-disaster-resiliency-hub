@@ -112,13 +112,14 @@ app.post("/login", async (req, res) => {
 						});
 						if (result) {
 							let token = jwt.sign(
-								{ email: user.email, isVolunteer: true,assignment: user.assignment },
+								{ email: user.email, isVolunteer: true, assignment: user.assignment },
 								SECRET_KEY
 							);
 							res.status(200).send({ token: token, 
 								firstName: user.first_name, // Send first name separately
               					lastName: user.last_name, // Send last name separately
 								assignment: user.assignment,
+								offered: user.offered,
 								id: user.id,
 								
 							});
@@ -262,24 +263,29 @@ app.post("/status", (req, res) => {
 
 app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	try {
-	  const { assignment: assignment, action, id } = req.body;  
-
+	  const { offered, action, id } = req.body;  
+  
 	  // Validate inputs
-	  if (!assignment || !action || !id) {
-		return res.status(400).send("Missing required parameters: 'fk_request', 'action', or 'id'.");
+	  if (!offered || !action || !id) {
+		return res.status(400).send("Missing required parameters: 'offered', 'action', or 'id'.");
 	  }
   
 	  if (action === 'reject') {
 		// Reject the job for a specific volunteer
 		await pool.query(
-			"UPDATE Volunteer SET assignment = NULL WHERE assignment = $1 AND id = $2",
-			[assignment, id]
-		  );
-		  
+		  "UPDATE Volunteer SET offered = NULL WHERE offered = $1 AND id = $2",
+		  [offered, id]
+		);
+		
 		res.status(200).send("Job rejected successfully");
 	  } else if (action === 'accept') {
-		// Placeholder for accepting the job
-		res.status(200).send("Job accepted logic not implemented yet.");
+		// Accept the job: set assignment to offered and clear offered
+		await pool.query(
+		  "UPDATE Volunteer SET assignment = $1, offered = NULL WHERE id = $2",
+		  [offered, id]
+		);
+		
+		res.status(200).send("Job accepted successfully");
 	  } else {
 		return res.status(400).send("Invalid action. Must be 'accept' or 'reject'.");
 	  }
@@ -288,23 +294,33 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	  res.status(500).send("Error processing job action");
 	}
   });
-  
-  
 
-  app.get("/job", async (req: Request, res: Response) => {
+  app.get("/assigned", async (req: Request, res: Response) => {
 	try {
-		const { assignment: assignment } = req.query;
-		console.log(" we are here");
+		const { assignment: assignment} = req.query;
 	  
-		  	// Query database for matching assignment
-		  	const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [assignment]);
-			console.log("query result for /job" + queryResult);
-		  	res.status(200).send(queryResult.rows);
+		const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [assignment]);
+		res.status(200).send(queryResult.rows);
 		
 	  } catch (error) {
-		console.error("Error in /job API:", error);
+		console.error("Error in /assigned API:", error);
 		res.status(500).send({ message: "Internal Server Error", error: (error as Error).message });
 	  }
+  });
+
+  app.get("/offered", async (req: Request, res: Response) => {
+	try {
+	  const { offered } = req.query;
+  
+	  // Execute query
+	  const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [offered]);
+  
+	  // Return the rows in the response
+	  res.status(200).send(queryResult.rows);
+	} catch (error) {
+	  console.error("Error in /offered API:", error);
+	  res.status(500).send({ message: "Internal Server Error", error: (error as Error).message });
+	}
   });
   
 
