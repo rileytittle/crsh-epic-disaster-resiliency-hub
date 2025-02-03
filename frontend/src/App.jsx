@@ -8,7 +8,6 @@ import {
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
-import HomeownerApplication from "./pages/HomeownerApplication";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
 import EmailTest from './pages/SendEmailPage';

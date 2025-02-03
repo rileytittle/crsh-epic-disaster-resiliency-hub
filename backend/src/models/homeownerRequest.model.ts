@@ -1,4 +1,4 @@
-export class HomeownerRequest {
+export class HomeownerRequest { //probably delete this and get anything its referencing to the other one
 	id: number;
 	firstName: string;
 	lastName: string;
