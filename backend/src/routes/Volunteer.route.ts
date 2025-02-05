@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { VolunteerApplication } from "../models/volunteerApplication.model";
+import { volunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -18,7 +18,7 @@ const SECRET_KEY =
 const app = Router();
 
 /*************************************************DUMMMY DATA*********************************************************/
-let volunteerApplications: VolunteerApplication[] = []; // Temporary storage of applications
+let volunteerApplications: volunteerApplication[] = []; // Temporary storage of applications
 
 let dummyVolunteers: Volunteer[] = [
   new Volunteer(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"], false,
@@ -28,9 +28,9 @@ let dummyVolunteers: Volunteer[] = [
     "differentPassword"
   )
 ]
-let dummyApplications: VolunteerApplication[] = [
-  new VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]),
-  new VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"])
+let dummyApplications: volunteerApplication[] = [
+  new volunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]),
+  new volunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"])
 ]
 dummyApplications[1].evaluated = true
 dummyApplications[1].rejected = true
@@ -82,7 +82,7 @@ app.post("/create", (req, res) => {
   const id = Math.floor(Math.random() * 10000);
 
   // Create a new instance of VolunteerApplication
-  const newVolunteer = new VolunteerApplication(
+  const newVolunteer = new volunteerApplication(
     id,
     firstName,
     lastName,
@@ -104,7 +104,7 @@ app.post("/create", (req, res) => {
 app.post("/changePassword", (req, res) => {
   const { username, currentPassword, newPassword } = req.body;
 
-  // Create a new instance of VolunteerApplication
+  // Create a new instance of volunteerApplication
   const index = dummyVolunteers.findIndex(volunteer => volunteer.id == username)
 
   console.log(`${dummyVolunteers[0].id} == ${username} (${index})`)

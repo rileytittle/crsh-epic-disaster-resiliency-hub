@@ -19,7 +19,7 @@ function ApplicationStatus() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/volunteer/status", {
+            const response = await fetch(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/status", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

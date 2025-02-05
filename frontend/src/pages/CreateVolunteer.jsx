@@ -9,7 +9,7 @@ function CreateVolunteer() {
 		let token = sessionStorage.getItem('userToken');
 
 		axios
-			.get("http://localhost:3000/admin/create-volunteer/applications",{
+			.get(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/applications",{
 				headers: {
 					Authorization: `Bearer ${token}`
 				},

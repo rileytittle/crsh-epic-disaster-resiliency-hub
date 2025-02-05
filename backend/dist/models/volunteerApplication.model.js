@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VolunteerApplication = void 0;
-class VolunteerApplication {
+exports.volunteerApplication = void 0;
+class volunteerApplication {
     constructor(id, firstName, lastName, phoneNumber, email, streetAddress, city, state, zipCode, areasOfHelp) {
         this.evaluated = false;
         this.rejected = false;
@@ -18,4 +18,4 @@ class VolunteerApplication {
         this.areasOfHelp = areasOfHelp;
     }
 }
-exports.VolunteerApplication = VolunteerApplication;
+exports.volunteerApplication = volunteerApplication;

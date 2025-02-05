@@ -7,7 +7,7 @@ function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
 	useEffect(() => {
 		axios
-			.get("http://localhost:3000/admin/volunteers")
+			.get(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers")
 			.then((res) => {
 				setVolunteers(res.data);
 				console.log(res.data);

@@ -18,7 +18,7 @@ function PasswordReset() {
         e.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:3000/volunteer/resetPassword", {
+            const response = await fetch(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/resetPassword", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

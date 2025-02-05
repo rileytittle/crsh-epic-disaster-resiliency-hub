@@ -1,4 +1,4 @@
-export class VolunteerApplication {
+export class volunteerApplication {
 	id: number;
 	firstName: string;
 	lastName: string;

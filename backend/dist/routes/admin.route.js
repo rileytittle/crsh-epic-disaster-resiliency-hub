@@ -52,8 +52,8 @@ let requests = [
     },
 ];
 let volunteerApplications = [];
-let firstApplication = new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team"]);
-let secondApplication = new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team", "Community Outreach Team"]);
+let firstApplication = new volunteerApplication_model_1.volunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team"]);
+let secondApplication = new volunteerApplication_model_1.volunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking Team", "Community Outreach Team"]);
 volunteerApplications.push(firstApplication);
 volunteerApplications.push(secondApplication);
 let volunteers = [];

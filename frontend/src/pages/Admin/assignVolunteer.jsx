@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-// Define the AssignVolunteer component
+
 const AssignVolunteer = () => {
   const [requests, setRequests] = useState([]); // State to hold the requests
   const [selectedRequest, setSelectedRequest] = useState(null); // State to hold the selected request
@@ -114,7 +114,7 @@ const AssignVolunteer = () => {
 
   return (
     <div>
-      <h1>Volunteer Requests</h1>
+      <h1>Current Homeowner Requests</h1>
       <div>
         {requests.length > 0 ? (
           <ul>

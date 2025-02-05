@@ -1,6 +1,6 @@
-import { VolunteerApplication } from "./volunteerApplication.model";
+import { volunteerApplication } from "./volunteerApplication.model";
 
-export class Volunteer extends VolunteerApplication {
+export class Volunteer extends volunteerApplication {
 	teamLeader: boolean;
 	password: string;
 	constructor(

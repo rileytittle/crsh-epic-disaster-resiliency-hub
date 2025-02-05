@@ -1,5 +1,5 @@
 import { Router, application } from "express";
-import { VolunteerApplication } from "../models/volunteerApplication.model";
+import { volunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
 import { Job } from "../models/job.model";
@@ -41,8 +41,8 @@ let requests: HomeownerRequest[] = [
 		evaluation: undefined,
 	},
 ];
-let volunteerApplications: VolunteerApplication[] = [];
-let firstApplication = new VolunteerApplication(
+let volunteerApplications: volunteerApplication[] = [];
+let firstApplication = new volunteerApplication(
 	0,
 	"Riley",
 	"Tittle",
@@ -54,7 +54,7 @@ let firstApplication = new VolunteerApplication(
 	32256,
 	["Logistic Tracking Team"]
 );
-let secondApplication = new VolunteerApplication(
+let secondApplication = new volunteerApplication(
 	1,
 	"Coleman",
 	"George",
@@ -135,7 +135,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
-		let foundApplication: VolunteerApplication | undefined = undefined;
+		let foundApplication: volunteerApplication | undefined = undefined;
 		for (let application of volunteerApplications) {
 			if (application.email === req.body.email) {
 				foundApplication = application;

@@ -35,8 +35,8 @@ let dummyVolunteers = [
     new volunteer_model_1.Volunteer(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"], false, "differentPassword")
 ];
 let dummyApplications = [
-    new volunteerApplication_model_1.VolunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]),
-    new volunteerApplication_model_1.VolunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"])
+    new volunteerApplication_model_1.volunteerApplication(0, "Riley", "Tittle", 9047352653, "rileytittle02@gmail.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking"]),
+    new volunteerApplication_model_1.volunteerApplication(1, "Coleman", "George", 9047352653, "fake@email.com", "7816 Southside Blvd", "Jacksonville", "FL", 32256, ["Logistic Tracking", "Community Outreach"])
 ];
 dummyApplications[1].evaluated = true;
 dummyApplications[1].rejected = true;
@@ -82,14 +82,14 @@ app.post("/create", (req, res) => {
     const { firstName, lastName, phoneNumber, email, streetAddress, city, state, zipCode, areasOfHelp } = req.body;
     const id = Math.floor(Math.random() * 10000);
     // Create a new instance of VolunteerApplication
-    const newVolunteer = new volunteerApplication_model_1.VolunteerApplication(id, firstName, lastName, phoneNumber, email, streetAddress, city, state, zipCode, areasOfHelp);
+    const newVolunteer = new volunteerApplication_model_1.volunteerApplication(id, firstName, lastName, phoneNumber, email, streetAddress, city, state, zipCode, areasOfHelp);
     // Add the new volunteer to the list
     volunteerApplications.push(newVolunteer);
     res.status(201).json({ message: 'Volunteer Application Created', volunteer: newVolunteer });
 });
 app.post("/changePassword", (req, res) => {
     const { username, currentPassword, newPassword } = req.body;
-    // Create a new instance of VolunteerApplication
+    // Create a new instance of volunteerApplication
     const index = dummyVolunteers.findIndex(volunteer => volunteer.id == username);
     console.log(`${dummyVolunteers[0].id} == ${username} (${index})`);
     if (index != -1) {

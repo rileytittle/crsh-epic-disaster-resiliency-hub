@@ -25,7 +25,7 @@ function PasswordChange() {
             alert("new password must not match old password")
         else {
             try {
-                const response = await fetch("http://localhost:3000/volunteer/changePassword", {
+                const response = await fetch(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/changePassword", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -62,7 +62,7 @@ const HomeownerApply = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/homeowner/requestHelp", {
+            const response = await fetch(" https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

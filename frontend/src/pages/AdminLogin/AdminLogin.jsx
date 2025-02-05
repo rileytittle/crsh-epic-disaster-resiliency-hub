@@ -20,7 +20,7 @@ function AdminLogin() {
 			let headers = {
 				Authorization: `Basic ${basicAuthHeader}`
 			}
-			await axios.post('http://localhost:3000/admin/login', userData, { headers })
+			await axios.post(' https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login', userData, { headers })
 				.then(response => {
 					sessionStorage.setItem('isLoggedIn', true)
 					sessionStorage.setItem('userType', 'admin')
