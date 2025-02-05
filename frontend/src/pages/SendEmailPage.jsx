@@ -5,7 +5,7 @@ const SendEmailPage = () => {
 
   const sendTestEmail = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/mailgun/send-email', {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/mailgun/send-email`, {
         to: 'CoreyR.Sorelle@hotmail.com',
         subject: 'Test Email',
         text: 'This is a test email from Mailgun.'

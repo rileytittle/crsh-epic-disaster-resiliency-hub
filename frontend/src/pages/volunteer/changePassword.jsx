@@ -26,7 +26,7 @@ function PasswordChange() {
 		else {
 			try {
 				const response = await fetch(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/changePassword",
+					`${import.meta.env.VITE_BACKEND_URL}/volunteer/changePassword`,
 					{
 						method: "POST",
 						headers: {

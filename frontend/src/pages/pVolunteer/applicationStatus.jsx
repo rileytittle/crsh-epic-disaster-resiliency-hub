@@ -20,7 +20,7 @@ function ApplicationStatus() {
 
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/status",
+				`${import.meta.env.VITE_BACKEND_URL}/volunteer/status`,
 				{
 					method: "POST",
 					headers: {

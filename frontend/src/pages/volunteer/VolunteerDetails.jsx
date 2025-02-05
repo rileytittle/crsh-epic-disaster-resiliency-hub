@@ -7,7 +7,7 @@ function VolunteerDetails() {
 		console.log("Clicked: ", selectedArea);
 		axios
 			.patch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details",
+				`${import.meta.env.VITE_BACKEND_URL}/admin/volunteers/volunteer-details`,
 				{
 					id: id,
 					selectedArea: selectedArea,
@@ -40,7 +40,7 @@ function VolunteerDetails() {
 		console.log("Clicked: ", area);
 		await axios
 			.delete(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details",
+				`${import.meta.env.VITE_BACKEND_URL}/admin/volunteers/volunteer-details`,
 				{
 					data: {
 						id: id,
@@ -80,7 +80,7 @@ function VolunteerDetails() {
 	useEffect(() => {
 		axios
 			.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers/volunteer-details/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/admin/volunteers/volunteer-details/${id}`
 			)
 			.then((res) => {
 				const activeAreas = [];

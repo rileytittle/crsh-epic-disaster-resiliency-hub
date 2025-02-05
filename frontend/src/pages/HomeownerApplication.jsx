@@ -63,7 +63,7 @@ const HomeownerApply = () => {
 
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp",
+				`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp`,
 				{
 					method: "POST",
 					headers: {
@@ -81,7 +81,7 @@ const HomeownerApply = () => {
 	};
 
 	return (
-		// action="https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp" method="POST"
+		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
 		<div style={{ margin: "5px" }}>
 			<form onSubmit={formSubmitted} className="row g-3">
 				<div className="col-md-6">
@@ -408,14 +408,14 @@ Phone number
 email
 physical address for service requested with state and County
 “I need help with” 
-    ☐ Tarping
-    ☐ Yard cleanup
-    ☐ Interior cleanup
-    ☐ Emotional Support
-    ☐ Cleaning Supplies
-    ☐ Clean Water
-    ☐ Emergency Food
-    ☐ Other ____________
+	☐ Tarping
+	☐ Yard cleanup
+	☐ Interior cleanup
+	☐ Emotional Support
+	☐ Cleaning Supplies
+	☐ Clean Water
+	☐ Emergency Food
+	☐ Other ____________
 Ability to upload photos
 SUBMIT button: “Submit” 
 */

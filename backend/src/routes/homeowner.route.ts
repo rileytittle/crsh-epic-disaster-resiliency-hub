@@ -1,7 +1,21 @@
 import express from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
+import { Authchecker } from "../utils/auth.utils";
+import sgMail from "@sendgrid/mail";
+import { Pool } from "pg";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import * as dotenv from 'dotenv';
 
+// Load custom .env file
+dotenv.config();
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 let app = express.Router();
 
 let HomeownerApplications: HomeownerApplication[] = []; // database
@@ -10,7 +24,7 @@ app.get("/", (req, res) => {
   res.send("Homeowner Assistance Backend");
 });
 let requests: HomeownerApplication[] = [];
-let dummy1 = new HomeownerApplication(
+requests.push(new HomeownerApplication(
   999,
   'Hayden',
   "O'Neill",
@@ -23,8 +37,7 @@ let dummy1 = new HomeownerApplication(
   43325,
   ["Emotional Support"],
   ""
-)
-requests.push(dummy1);
+));
 
 app.get("/viewRequests", (req, res) => {
   if (requests.length > 0) {

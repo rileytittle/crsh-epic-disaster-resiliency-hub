@@ -12,7 +12,7 @@ const AssignVolunteer = () => {
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/viewRequests"
+				`${import.meta.env.VITE_BACKEND_URL}/homeowner/viewRequests`
 			);
 			if (!response.ok) {
 				throw new Error("Network response was not ok");
@@ -50,7 +50,7 @@ const AssignVolunteer = () => {
 	const handleTeamButtonClick = async (team) => {
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/list",
+				`${import.meta.env.VITE_BACKEND_URL}/admin/assign-volunteer/list`,
 				{
 					method: "POST",
 					headers: {
@@ -93,7 +93,7 @@ const AssignVolunteer = () => {
 	const handleAssignVolunteers = async () => {
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/update-assignment",
+				`${import.meta.env.VITE_BACKEND_URL}/homeowner/update-assignment`,
 				{
 					method: "POST",
 					headers: {

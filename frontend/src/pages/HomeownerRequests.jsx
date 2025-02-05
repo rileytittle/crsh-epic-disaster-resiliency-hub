@@ -7,7 +7,7 @@ function HomeownerRequests() {
 	useEffect(() => {
 		axios
 			.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests"
+				`${import.meta.env.VITE_BACKEND_URL}/admin/homeowner-requests`
 			)
 			.then((res) => {
 				setRequests(res.data);

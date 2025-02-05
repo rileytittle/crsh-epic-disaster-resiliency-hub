@@ -22,7 +22,7 @@ function AdminLogin() {
 			};
 			await axios
 				.post(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login",
+					`${import.meta.env.VITE_BACKEND_URL}/admin/login`,
 					userData,
 					{ headers }
 				)
