@@ -156,6 +156,14 @@ const MainLayout = () => {
 												Requests
 											</a>
 										</li>
+										<li>
+											<a
+												className="dropdown-item"
+												href="/reports"
+											>
+												Reports
+											</a>
+										</li>
 									</ul>
 								</li>
 							) : (
