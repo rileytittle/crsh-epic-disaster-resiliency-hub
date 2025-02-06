@@ -31,6 +31,11 @@ function VolLogin() {
 					sessionStorage.setItem("userType", "volunteer");
 					sessionStorage.setItem("userToken", response.data.token);
 					sessionStorage.setItem("justLoggedIn", true);
+					sessionStorage.setItem("firstName", response.data.firstName); // Store first name
+               		sessionStorage.setItem("lastName", response.data.lastName); // Store last name
+					sessionStorage.setItem("assignment", response.data.assignment);
+					sessionStorage.setItem("offered", response.data.offered);
+					sessionStorage.setItem("id", response.data.id);
 					navigate("/volunteer-dashboard");
 				})
 				.catch((error) => {

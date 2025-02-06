@@ -5,6 +5,8 @@ import { Volunteer } from "../models/volunteer.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Pool } from "pg";
+import { Job } from '../models/job.model';
+import { Request, Response } from "express";
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
@@ -12,6 +14,7 @@ const pool = new Pool({
 		rejectUnauthorized: false,
 	},
 });
+  
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
 
@@ -83,6 +86,7 @@ dummyApplications[1].reasonRejected =
 /*************************************************DUMMMY DATA*********************************************************/
 
 app.post("/login", async (req, res) => {
+
 	try {
 		//write some logic here
 		if (req.headers["authorization"]) {
@@ -92,12 +96,12 @@ app.post("/login", async (req, res) => {
 			let password = decodedUserInfo.split(":")[1];
 			console.log(email, password, decodedUserInfo, userInfo);
 			let queryResult = await pool.query(
-				"SELECT * FROM VolunteerAccount WHERE email = $1",
+				"SELECT * FROM Volunteer WHERE email = $1",
 				[email]
 			);
+
 			if (queryResult.rows.length > 0) {
 				let user = queryResult.rows[0];
-				console.log(user.password);
 				bcrypt.compare(
 					password,
 					user.password.trim(),
@@ -110,10 +114,17 @@ app.post("/login", async (req, res) => {
 						});
 						if (result) {
 							let token = jwt.sign(
-								{ email: user.email, isVolunteer: true },
+								{ email: user.email, isVolunteer: true, assignment: user.assignment },
 								SECRET_KEY
 							);
-							res.status(200).send({ token: token });
+							res.status(200).send({ token: token, 
+								firstName: user.first_name, // Send first name separately
+              					lastName: user.last_name, // Send last name separately
+								assignment: user.assignment,
+								offered: user.offered,
+								id: user.id,
+								
+							});
 						} else {
 							res.status(401).send({
 								status: 401,
@@ -131,8 +142,9 @@ app.post("/login", async (req, res) => {
 			res.status(401).send({ message: "missing required login details" });
 		}
 	} catch (e) {
-		res.status(500).send(e);
-	}
+		console.error("Error in login route:", e); // Log the error
+		res.status(500).send({ message: "Internal Server Error", error: e });
+	  }
 });
 
 app.post("/create", (req, res) => {
@@ -248,5 +260,70 @@ app.post("/status", (req, res) => {
 		res.status(401).json({ message: "Name Not Found" });
 	}
 });
+
+
+
+app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
+	try {
+	  const { offered, action, id } = req.body;  
+  
+	  // Validate inputs
+	  if (!offered || !action || !id) {
+		return res.status(400).send("Missing required parameters: 'offered', 'action', or 'id'.");
+	  }
+  
+	  if (action === 'reject') {
+		// Reject the job for a specific volunteer
+		await pool.query(
+		  "UPDATE Volunteer SET offered = NULL WHERE offered = $1 AND id = $2",
+		  [offered, id]
+		);
+		
+		res.status(200).send("Job rejected successfully");
+	  } else if (action === 'accept') {
+		// Accept the job: set assignment to offered and clear offered
+		await pool.query(
+		  "UPDATE Volunteer SET assignment = $1, offered = NULL WHERE id = $2",
+		  [offered, id]
+		);
+		
+		res.status(200).send("Job accepted successfully");
+	  } else {
+		return res.status(400).send("Invalid action. Must be 'accept' or 'reject'.");
+	  }
+	} catch (error) {
+	  console.error(error);
+	  res.status(500).send("Error processing job action");
+	}
+  });
+
+  app.get("/assigned", async (req: Request, res: Response) => {
+	try {
+		const { assignment: assignment} = req.query;
+	  
+		const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [assignment]);
+		res.status(200).send(queryResult.rows);
+		
+	  } catch (error) {
+		console.error("Error in /assigned API:", error);
+		res.status(500).send({ message: "Internal Server Error", error: (error as Error).message });
+	  }
+  });
+
+  app.get("/offered", async (req: Request, res: Response) => {
+	try {
+	  const { offered } = req.query;
+  
+	  // Execute query
+	  const queryResult = await pool.query("SELECT * FROM Request WHERE request_id = $1", [offered]);
+  
+	  // Return the rows in the response
+	  res.status(200).send(queryResult.rows);
+	} catch (error) {
+	  console.error("Error in /offered API:", error);
+	  res.status(500).send({ message: "Internal Server Error", error: (error as Error).message });
+	}
+  });
+  
 
 export { app };
