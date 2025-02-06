@@ -287,13 +287,13 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
-app.post("assign-volunteer/updateAssignment", async (req, res) => {
+app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 	let assignment = req.body.assignment;
 	let volId = req.body.id;
 	console.log(assignment, volId);
 	try {
 		await pool.query(
-			'UPDATE "volunteer" SET "assignment" = $1 WHERE "id" = $2',
+			'UPDATE "volunteer" SET "offered" = $1 WHERE "id" = $2',
 			[assignment, volId]
 		);
 		res.status(200).send({ message: "Volunteer Assigned" });
@@ -399,4 +399,5 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
+
 export { app };
