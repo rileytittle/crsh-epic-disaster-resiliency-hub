@@ -87,14 +87,6 @@ const MainLayout = () => {
 										<li>
 											<a
 												className="dropdown-item"
-												href="/applyVolunteer"
-											>
-												Apply to Volunteer
-											</a>
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
 												href="/applyVolunteer/status"
 											>
 												Check Status of Application
@@ -197,9 +189,17 @@ const MainLayout = () => {
 							)}
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
-							<a className="nav-link" href="/request-help">
-								Request Help
-							</a>
+							<>
+								<a
+									className="dropdown-item"
+									href="/applyVolunteer"
+								>
+									Apply to Volunteer
+								</a>
+								<a className="nav-link" href="/request-help">
+									Request Help
+								</a>
+							</>
 						) : (
 							<a className="nav-link" href="#" onClick={logout}>
 								Log Out
