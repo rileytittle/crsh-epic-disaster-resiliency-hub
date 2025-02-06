@@ -10,7 +10,6 @@ function RequestCard({
 	city,
 	state,
 	zip,
-	helpType,
 }) {
 	return (
 		<div className="card" style={{ width: 20 + "rem" }}>
@@ -21,11 +20,6 @@ function RequestCard({
 					<br></br>
 					{address + ", " + city + ", " + state + " " + zip}
 				</h6>
-				<p className="card-text">
-					{helpType.map((helpType, index) => (
-						<li key={index}>{helpType}</li>
-					))}
-				</p>
 				<Link
 					to="/homeowner-requests/request-details"
 					className="card-link"
@@ -38,7 +32,6 @@ function RequestCard({
 						city,
 						state,
 						zip,
-						helpType,
 					}}
 				>
 					More info

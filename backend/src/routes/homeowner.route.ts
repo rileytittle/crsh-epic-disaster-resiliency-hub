@@ -59,7 +59,7 @@ app.post("/requestHelp", async (req, res) => {
 	const cleaning_supplies = req.body.helpSupplies;
 	const clean_water = req.body.helpWater;
 	const emergency_food = req.body.helpFood;
-	const other = req.body.helpOther;
+	const other = req.body.other;
 
 	console.log("yard_cleanup:", req.body.yard_cleanup);
 	console.log("interior_cleanup:", req.body.interior_cleanup);

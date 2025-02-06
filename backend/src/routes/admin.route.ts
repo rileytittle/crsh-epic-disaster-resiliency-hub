@@ -254,11 +254,10 @@ app.post("/assign-volunteer/list", async (req, res) => {
 			last_name: volunteer.last_name,
 			email: volunteer.email,
 			phone_number: volunteer.phone_number,
-		  })),
-		message:
-			filteredVolunteers.rowCount
-				? `${filteredVolunteers.rowCount} volunteer(s) found for the ${team} team.`
-				: "No volunteers found for this team.",
+		})),
+		message: filteredVolunteers.rowCount
+			? `${filteredVolunteers.rowCount} volunteer(s) found for the ${team} team.`
+			: "No volunteers found for this team.",
 	});
 });
 app.patch("/volunteers/volunteer-details", async (req, res) => {
@@ -289,22 +288,19 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 	}
 });
 app.post("assign-volunteer/updateAssignment", async (req, res) => {
-	let assignment = req.body.assignment
+	let assignment = req.body.assignment;
 	let volId = req.body.id;
-	console.log(assignment, volId)
-   try{
-	await pool.query(
-	'UPDATE "volunteer" SET "assignment" = $1 WHERE "id" = $2',
-	[assignment, volId]
-  )
-  res.status(200).send({message:"Volunteer Assigned"})
-  }
-  catch(e){
-	res.status(500).send(e);
-  }
-  
-   
-  });
+	console.log(assignment, volId);
+	try {
+		await pool.query(
+			'UPDATE "volunteer" SET "assignment" = $1 WHERE "id" = $2',
+			[assignment, volId]
+		);
+		res.status(200).send({ message: "Volunteer Assigned" });
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
 app.post("/homeowner-requests/reject", (req, res) => {
 	try {
 		let foundRequest: HomeownerRequest | undefined = undefined;
@@ -384,12 +380,12 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 	}
 });
 
-app.get("/homeowner-requests", (req, res) => {
+app.get("/homeowner-requests", async (req, res) => {
 	try {
-		let filteredRequests = requests.filter(
-			(request) => request.evaluation === undefined
+		let requests = await pool.query(
+			"SELECT id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
 		);
-		res.status(200).send(filteredRequests);
+		res.status(200).send(requests.rows);
 	} catch (e) {
 		res.send("Bad");
 	}

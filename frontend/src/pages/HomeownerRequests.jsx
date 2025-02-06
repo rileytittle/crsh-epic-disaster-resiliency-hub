@@ -25,14 +25,13 @@ function HomeownerRequests() {
 						<RequestCard
 							key={request.id}
 							id={request.id}
-							firstName={request.firstName}
-							lastName={request.lastName}
+							firstName={request.first_name}
+							lastName={request.last_name}
 							email={request.email}
-							address={request.address}
+							address={request.street_address_1}
 							city={request.city}
 							state={request.state}
-							zip={request.zip}
-							helpType={request.helpType}
+							zip={request.zip_code}
 						></RequestCard>
 					))}
 				</div>
