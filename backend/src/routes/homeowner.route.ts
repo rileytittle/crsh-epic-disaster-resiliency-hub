@@ -17,20 +17,22 @@ app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
 });
 let requests: HomeownerApplication[] = [];
-/*requests.push(new HomeownerApplication( 
-  999,
-  'Hayden',
-  "O'Neill",
-  "haydeno221@outlook.com",
-  9045555555,
-  "9274 Real Street",
-  "",
-  "Jacksonville",
-  "florida",
-  43325,
-  ["Emotional Support"],
-  ""
-));//*/
+requests.push(
+	new HomeownerApplication(
+		999,
+		"Hayden",
+		"O'Neill",
+		"haydeno221@outlook.com",
+		9045555555,
+		"9274 Real Street",
+		"",
+		"Jacksonville",
+		"florida",
+		43325,
+		["Emotional Support"],
+		""
+	)
+); //
 
 app.get("/viewRequests", (req, res) => {
 	if (requests.length > 0) {
