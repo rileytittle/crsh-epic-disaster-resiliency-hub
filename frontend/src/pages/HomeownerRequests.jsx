@@ -10,6 +10,7 @@ function HomeownerRequests() {
 				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests"
 			)
 			.then((res) => {
+				console.log(res.data);
 				setRequests(res.data);
 				console.log(res.data);
 			})
