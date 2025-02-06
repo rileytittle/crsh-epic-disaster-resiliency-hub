@@ -2,16 +2,23 @@ import React, { useState } from "react";
 
 const HomeownerApply = () => {
 	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
+		first_name: "",
+		last_name: "",
 		email: "",
-		phone: "",
-		address_1: "",
-		address_2: "",
+		phone_number: "",
+		street_address_1: "",
+		street_address_2: undefined,
 		city: "",
 		state: "",
-		zip: "",
-		helpType: [],
+		zip_code: "",
+		county: "",
+		helpExterior: false,
+		helpInterior: false,
+		helpEmotional: false,
+		helpSupplies: false,
+		helpWater: false,
+		helpFood: false,
+		helpOther: false,
 		other: "",
 	});
 
@@ -37,8 +44,13 @@ const HomeownerApply = () => {
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
-
-		if (name === "inputHelpType") {
+		//console.log(type);
+		if (type === "checkbox") {
+			setFormData({
+				...formData,
+				[e.target.id]: e.target.checked,
+			});
+			/*
 			setFormData((prevData) => {
 				const newHelpType = checked
 					? [...prevData.helpType, value] // Add value if checked
@@ -49,6 +61,7 @@ const HomeownerApply = () => {
 					helpType: newHelpType,
 				};
 			});
+			*/
 		} else {
 			//console.log({ name, value, checked });
 			setFormData({
@@ -60,7 +73,8 @@ const HomeownerApply = () => {
 
 	const formSubmitted = async (e) => {
 		e.preventDefault();
-
+		console.log(formData);
+		console.log(JSON.stringify(formData));
 		try {
 			const response = await fetch(
 				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp",
@@ -75,39 +89,45 @@ const HomeownerApply = () => {
 
 			const result = await response.json();
 			console.log(result);
+			alert(result.message);
+			//document.getElementById("homeownerForm").reset();
 		} catch (error) {
 			console.error("Error:", error);
 		}
 	};
 
 	return (
-		// action="https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp" method="POST"
+		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
 		<div style={{ margin: "5px" }}>
-			<form onSubmit={formSubmitted} className="row g-3">
+			<form
+				id="homeownerForm"
+				onSubmit={formSubmitted}
+				className="row g-3"
+			>
 				<div className="col-md-6">
-					<label htmlFor="firstName" className="form-label">
+					<label htmlFor="first_name" className="form-label">
 						First Name
 					</label>
 					<input
 						type="text"
 						className="form-control"
-						name="firstName"
-						id="firstName"
-						value={formData.firstName}
+						name="first_name"
+						id="first_name"
+						value={formData.first_name}
 						onChange={handleChange}
 						required
 					/>
 				</div>
 				<div className="col-md-6">
-					<label htmlFor="lastName" className="form-label">
+					<label htmlFor="last_name" className="form-label">
 						Last Name
 					</label>
 					<input
 						type="text"
 						className="form-control"
-						name="lastName"
-						id="lastName"
-						value={formData.lastName}
+						name="last_name"
+						id="last_name"
+						value={formData.last_name}
 						onChange={handleChange}
 						required
 					/>
@@ -128,16 +148,16 @@ const HomeownerApply = () => {
 					/>
 				</div>
 				<div className="col-md-6">
-					<label htmlFor="phone" className="form-label">
+					<label htmlFor="phone_number" className="form-label">
 						Phone Number
 					</label>
 					<input
 						type="tel"
 						className="form-control"
-						name="phone"
-						id="phone"
+						name="phone_number"
+						id="phone_number"
 						placeholder=""
-						value={formData.phone}
+						value={formData.phone_number}
 						onChange={handleChange}
 						required
 					/>
@@ -149,30 +169,29 @@ const HomeownerApply = () => {
 					<input
 						type="text"
 						className="form-control"
-						name="address_1"
-						id="address_1"
+						name="street_address_1"
+						id="street_address_1"
 						placeholder="1234 Main St"
-						value={formData.address_1}
+						value={formData.street_address_1}
 						onChange={handleChange}
 						required
 					/>
 				</div>
 				<div className="col-12">
-					<label htmlFor="address_2" className="form-label">
+					<label htmlFor="street_address_2" className="form-label">
 						Address 2
 					</label>
 					<input
 						type="text"
 						className="form-control"
-						name="address_2"
-						id="address_2"
+						name="street_address_2"
+						id="street_address_2"
 						placeholder="Apartment, studio, or floor"
-						value={formData.address_2}
+						value={formData.street_address_2}
 						onChange={handleChange}
-						required
 					/>
 				</div>
-				<div className="col-md-6">
+				<div className="col-md-5">
 					<label htmlFor="city" className="form-label">
 						City
 					</label>
@@ -186,7 +205,7 @@ const HomeownerApply = () => {
 						required
 					/>
 				</div>
-				<div className="col-md-4">
+				<div className="col-md-2">
 					<label htmlFor="state" className="form-label">
 						State
 					</label>
@@ -204,18 +223,35 @@ const HomeownerApply = () => {
 					</select>
 				</div>
 				<div className="col-md-2">
-					<label htmlFor="zip" className="form-label">
+					<label htmlFor="zip_code" className="form-label">
 						Zip
 					</label>
 					<input
 						type="number"
 						className="form-control"
-						name="zip"
-						id="zip"
-						value={formData.zipCode}
+						name="zip_code"
+						id="zip_code"
+						value={formData.zip_code}
 						onChange={handleChange}
 						required
 					/>
+				</div>
+				<div className="col-md-3">
+					<label htmlFor="county" className="form-label">
+						County
+					</label>
+					<select
+						id="county"
+						name="county"
+						className="form-select"
+						placeholder="Choose..."
+						value={formData.county}
+						onChange={handleChange}
+					>
+						<option>Choose...</option>
+						<option>Charlotte</option>
+						<option>Sarasota</option>
+					</select>
 				</div>
 				<div className="col-12">
 					I need help with...
@@ -223,35 +259,15 @@ const HomeownerApply = () => {
 						<div className="form-check">
 							<input
 								className="form-check-input"
-								id="helpTarping"
-								value="tarping"
-								checked={formData.helpType.includes("tarping")}
+								id="helpExterior"
 								type="checkbox"
-								name="inputHelpType"
+								name="helpExterior"
+								value={formData.helpExterior}
 								onChange={handleChange}
 							/>
 							<label
 								className="form-check-label"
-								htmlFor="helpTarping"
-							>
-								Tarping
-							</label>
-						</div>
-						<div className="form-check">
-							<input
-								className="form-check-input"
-								id="helpYard"
-								value="yardCleanup"
-								checked={formData.helpType.includes(
-									"yardCleanup"
-								)}
-								type="checkbox"
-								name="inputHelpType"
-								onChange={handleChange}
-							/>
-							<label
-								className="form-check-label"
-								htmlFor="helpYard"
+								htmlFor="helpExterior"
 							>
 								Yard Cleanup
 							</label>
@@ -260,12 +276,9 @@ const HomeownerApply = () => {
 							<input
 								className="form-check-input"
 								id="helpInterior"
-								value="interiorCleanup"
-								checked={formData.helpType.includes(
-									"interiorCleanup"
-								)}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpInterior"
+								value={formData.helpInterior}
 								onChange={handleChange}
 							/>
 							<label
@@ -279,12 +292,9 @@ const HomeownerApply = () => {
 							<input
 								className="form-check-input"
 								id="helpEmotional"
-								value="emotionalSupport"
-								checked={formData.helpType.includes(
-									"emotionalSupport"
-								)}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpEmotional"
+								value={formData.helpEmotional}
 								onChange={handleChange}
 							/>
 							<label
@@ -298,12 +308,9 @@ const HomeownerApply = () => {
 							<input
 								className="form-check-input"
 								id="helpSupplies"
-								value="cleaningSupplies"
-								checked={formData.helpType.includes(
-									"cleaningSupplies"
-								)}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpSupplies"
+								value={formData.helpSupplies}
 								onChange={handleChange}
 							/>
 							<label
@@ -317,12 +324,9 @@ const HomeownerApply = () => {
 							<input
 								className="form-check-input"
 								id="helpWater"
-								value="cleanWater"
-								checked={formData.helpType.includes(
-									"cleanWater"
-								)}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpWater"
+								value={formData.helpWater}
 								onChange={handleChange}
 							/>
 							<label
@@ -336,12 +340,9 @@ const HomeownerApply = () => {
 							<input
 								className="form-check-input"
 								id="helpFood"
-								value="emergencyFood"
-								checked={formData.helpType.includes(
-									"emergencyFood"
-								)}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpFood"
+								value={formData.helpFood}
 								onChange={handleChange}
 							/>
 							<label
@@ -356,9 +357,9 @@ const HomeownerApply = () => {
 								className="form-check-input"
 								id="helpOther"
 								value="other"
-								checked={formData.helpType.includes("other")}
+								checked={formData.helpOther}
 								type="checkbox"
-								name="inputHelpType"
+								name="helpOther"
 								onChange={handleChange}
 								onClick={toggleOther}
 							/>
@@ -375,6 +376,7 @@ const HomeownerApply = () => {
 								id="other"
 								style={{ display: "none" }}
 								placeholder="Other"
+								value={formData.other}
 								onChange={handleChange}
 							/>
 						</div>
@@ -408,14 +410,14 @@ Phone number
 email
 physical address for service requested with state and County
 “I need help with” 
-    ☐ Tarping
-    ☐ Yard cleanup
-    ☐ Interior cleanup
-    ☐ Emotional Support
-    ☐ Cleaning Supplies
-    ☐ Clean Water
-    ☐ Emergency Food
-    ☐ Other ____________
+	☐ Tarping
+	☐ Yard cleanup
+	☐ Interior cleanup
+	☐ Emotional Support
+	☐ Cleaning Supplies
+	☐ Clean Water
+	☐ Emergency Food
+	☐ Other ____________
 Ability to upload photos
 SUBMIT button: “Submit” 
 */

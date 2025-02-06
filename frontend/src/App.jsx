@@ -8,16 +8,14 @@ import {
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
-import HomeownerApplication from "./pages/HomeownerApplication";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
 
-
-import HomeownerForm from "./pages/HomeownerApplication";
+import HomeownerForm from "./pages/Homeowner/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
-import VolLogin from './pages/VolLogin/VolLogin'
+import VolLogin from "./pages/VolLogin/VolLogin";
 import VolunteerForm from "./pages/pVolunteer/volunteerApp";
 import Volunteers from "./pages/volunteer/Volunteers";
 import VolunteerDetails from "./pages/volunteer/VolunteerDetails";
@@ -34,6 +32,7 @@ const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
 			<Route path="/home" element={<Homepage />}></Route>
+
 			<Route
 				path="/create-volunteer"
 				element={<CreateVolunteer />}
@@ -52,10 +51,13 @@ const router = createBrowserRouter(
 				element={<RequestDetails />}
 			></Route>
 			<Route path="/admin-login" element={<AdminLogin />}></Route>
-			<Route path="/admin-dashboard" element={<AdminDashboard/>}></Route>
-			
+			<Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
+
 			<Route path="/vol-login" element={<VolLogin />}></Route>
-			<Route path='/volunteer-dashboard' element={<VolunteerDashboard/>}></Route>
+			<Route
+				path="/volunteer-dashboard"
+				element={<VolunteerDashboard />}
+			></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
 
 			<Route
@@ -66,10 +68,7 @@ const router = createBrowserRouter(
 				path="/applyVolunteer/status"
 				element={<ApplicationStatus />}
 			></Route>
-			<Route
-				path="/volunteer/jobs"
-				element={<VolunteerJobs />}
-			></Route>
+			<Route path="/volunteer/jobs" element={<VolunteerJobs />}></Route>
 			<Route
 				path="/volunteer/changePassword"
 				element={<VolunteerPasswordChange />}
