@@ -244,7 +244,7 @@ app.post("/assign-volunteer/list", async (req, res) => {
 	const { team } = req.body;
 
 	let filteredVolunteers = await pool.query(
-		`SELECT id, first_name, last_name, email, phone_number FROM "VolunteerAccount" WHERE "${team}" = TRUE`
+		`SELECT id, first_name, last_name, email, phone_number FROM "volunteer" WHERE "${team}" = TRUE`
 	);
 
 	res.status(200).json({
@@ -294,7 +294,7 @@ app.post("assign-volunteer/updateAssignment", async (req, res) => {
 	console.log(assignment, volId)
    try{
 	await pool.query(
-	'UPDATE "VolunteerAccount" SET "assignment" = $1 WHERE "id" = $2',
+	'UPDATE "volunteer" SET "assignment" = $1 WHERE "id" = $2',
 	[assignment, volId]
   )
   res.status(200).send({message:"Volunteer Assigned"})
