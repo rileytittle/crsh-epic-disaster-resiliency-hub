@@ -73,7 +73,14 @@ const MainLayout = () => {
 												Reset Password
 											</a>
 										</li>
-										<li><a className="nav-item nav-link" href="/volunteer/jobs">Check Job Offer</a></li>
+										<li>
+											<a
+												className="nav-item nav-link"
+												href="/volunteer/jobs"
+											>
+												Check Job Offer
+											</a>
+										</li>
 										<li>
 											<hr className="dropdown-divider" />
 										</li>
@@ -91,14 +98,6 @@ const MainLayout = () => {
 												href="/applyVolunteer/status"
 											>
 												Check Status of Application
-											</a>
-										</li>
-										<li>
-											<a
-												className="nav-item nav-link"
-												href="/assignVolunteers"
-											>
-												Assign volunteers to job
 											</a>
 										</li>
 										<li>
@@ -155,6 +154,14 @@ const MainLayout = () => {
 												href="/homeowner-requests"
 											>
 												Requests
+											</a>
+										</li>
+										<li>
+											<a
+												className="nav-item nav-link"
+												href="/assignVolunteers"
+											>
+												Assign volunteers to job
 											</a>
 										</li>
 									</ul>
