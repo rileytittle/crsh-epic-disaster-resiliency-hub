@@ -324,12 +324,12 @@ app.get("/assigned", async (req: Request, res: Response) => {
 
 app.get("/offered", async (req: Request, res: Response) => {
 	try {
-		//const { offered } = req.query;
+		const { offered } = req.query;
 
 		// Execute query
 		const queryResult = await pool.query(
 			"SELECT * FROM Request WHERE request_id = $1",
-			[req.params.offered]
+			[offered]
 		);
 
 		// Return the rows in the response
