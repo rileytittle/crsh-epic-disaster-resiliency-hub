@@ -26,6 +26,7 @@ import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import VolunteerJobs from "./pages/volunteer/jobsOffered";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
