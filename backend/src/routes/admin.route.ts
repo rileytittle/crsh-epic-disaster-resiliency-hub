@@ -383,11 +383,11 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 app.get("/homeowner-requests", async (req, res) => {
 	try {
 		let requests = await pool.query(
-			"SELECT id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
+			"SELECT request_id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
 		);
 		res.status(200).send(requests.rows);
 	} catch (e) {
-		res.send("Bad");
+		res.send(e);
 	}
 });
 
