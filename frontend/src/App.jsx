@@ -4,6 +4,7 @@ import {
 	createRoutesFromElements,
 	Route,
 	RouterProvider,
+	Navigate,
 } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
@@ -13,7 +14,7 @@ import RequestDetails from "./pages/RequestDetails";
 import EmailTest from './pages/SendEmailPage';
 
 
-import HomeownerForm from "./pages/HomeownerApplication";
+import HomeownerForm from "./pages/Homeowner/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
 import ConfirmVolunteer from "./pages/ConfirmVolunteer";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
@@ -33,7 +34,11 @@ import SendEmailPage from "./pages/SendEmailPage";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
-			<Route path="/home" element={<Homepage />}></Route>
+			<Route index element={<Navigate to="/home" replace />} />
+			<Route
+				path="/home"
+				element={<Homepage />}>
+			</Route>
 			<Route
 				path="/create-volunteer"
 				element={<CreateVolunteer />}

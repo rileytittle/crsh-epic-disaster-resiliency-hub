@@ -1,4 +1,4 @@
-import express from "express";
+import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
@@ -16,7 +16,7 @@ const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
-let app = express.Router();
+let app = Router();
 
 let HomeownerApplications: HomeownerApplication[] = []; // database
 
@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   res.send("Homeowner Assistance Backend");
 });
 let requests: HomeownerApplication[] = [];
-requests.push(new HomeownerApplication(
+/*requests.push(new HomeownerApplication( 
   999,
   'Hayden',
   "O'Neill",
@@ -37,7 +37,7 @@ requests.push(new HomeownerApplication(
   43325,
   ["Emotional Support"],
   ""
-));
+));//*/
 
 app.get("/viewRequests", (req, res) => {
   if (requests.length > 0) {
@@ -49,30 +49,80 @@ app.get("/viewRequests", (req, res) => {
 
 
 
-app.post("/requestHelp", (req, res) => {
-  const { first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, helpTypes, other } = req.body;
-  const id = Math.floor(Math.random() * 100000);
+app.post("/requestHelp", async (req, res) => {
+  console.log(req.body);
 
-  // Create a new instance of VolunteerApplication
-  const newHomeownerRequest = new HomeownerApplication(
-    id,
-    first_name,
-    last_name,
-    email,
-    phone_number,
-    street_address_1,
-    street_address_2,
-    city,
-    state,
-    zip_code,
-    helpTypes,
-    other
-  );
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const email = req.body.email;
+  const phone_number = req.body.phone_number;
+  const street_address_1 = req.body.street_address_1;
+  const street_address_2 = req.body.street_address_2;
+  const city = req.body.city;
+  const state = req.body.state;
+  const zip_code = req.body.zip_code;
+  const county = req.body.county
+  const yard_cleanup = req.body.helpExterior;
+  const interior_cleanup = req.body.helpInterior;
+  const emotional_support = req.body.helpEmotional;
+  const cleaning_supplies = req.body.helpSupplies;
+  const clean_water = req.body.helpWater;
+  const emergency_food = req.body.helpFood;
+  const other = req.body.helpOther;
 
+
+
+
+  console.log('yard_cleanup:', req.body.yard_cleanup);
+  console.log('interior_cleanup:', req.body.interior_cleanup);
+  // send data to the database test
+  console.log(`first_name: ${first_name}`)
+  console.log(`last_name: ${last_name}`)
+  console.log(`email: ${email}`)
+  console.log(`phone_number: ${phone_number}`)
+  console.log(`street_address_1: ${street_address_1}`)
+  console.log(`street_address_2: ${street_address_2}`)
+  console.log(`city: ${city}`)
+  console.log(`state: ${state}`)
+  console.log(`zip_code: ${zip_code}`)
+  console.log(`yard_cleanup: ${yard_cleanup}`)
+  console.log(`interior_cleanup: ${interior_cleanup}`)
+  console.log(`emotional_support: ${emotional_support}`)
+  console.log(`cleaning_supplies: ${cleaning_supplies}`)
+  console.log(`clean_water: ${clean_water}`)
+  console.log(`emergency_food: ${emergency_food}`)
+  console.log(`other: ${other}`)
+
+  try {
+    let result = pool.query(
+      `INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, status, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
+      [
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        street_address_1,
+        street_address_2,
+        city,
+        state,
+        zip_code,
+        "Pending",
+        yard_cleanup,
+        interior_cleanup,
+        emotional_support,
+        cleaning_supplies,
+        clean_water,
+        emergency_food,
+        other,
+      ]
+    );
+    res.status(200).send({ message: 'Request succcessfully Submitted' })
+  } catch (e) {
+    res.status(400).send({ message: 'Something went wrong' });
+    console.log(e);
+  }
   // Add the new volunteer to the list
-  HomeownerApplications.push(newHomeownerRequest);
-  console.log(newHomeownerRequest)
-  res.status(200).send({ message: 'Request Submitted' })
 });
 
 app.get("/requestHelp", (req, res) => {

@@ -8,11 +8,17 @@ export class HomeownerApplication {
     street_address_2: string;
     city: string;
     state: string;
+    county: string;
     zip_code: number;
-    status: string= "pending";
+    status: string = "pending";
     reason_rejected: string = "";
-    helpTypes: string[];
-    other: string;
+    yard_cleanup: boolean;
+    interior_cleanup: boolean;
+    emotional_support: boolean;
+    cleaning_supplies: boolean;
+    clean_water: boolean;
+    emergency_food: boolean;
+    other: string = "";
     constructor(
         id: number,
         first_name: string,
@@ -23,9 +29,15 @@ export class HomeownerApplication {
         street_address_2: string,
         city: string,
         state: string,
+        county: string,
         zip_code: number,
-        helpTypes: string[],
-        other: string
+        yard_cleanup: boolean,
+        interior_cleanup: boolean,
+        emotional_support: boolean,
+        cleaning_supplies: boolean,
+        clean_water: boolean,
+        emergency_food: boolean,
+        other: string,
     ) {
         this.id = id;
         this.first_name = first_name;
@@ -36,8 +48,14 @@ export class HomeownerApplication {
         this.street_address_2 = street_address_2;
         this.city = city;
         this.state = state;
+        this.county = county;
         this.zip_code = zip_code;
-        this.helpTypes = helpTypes;
+        this.yard_cleanup = yard_cleanup;
+        this.interior_cleanup = interior_cleanup;
+        this.emotional_support = emotional_support;
+        this.cleaning_supplies = cleaning_supplies;
+        this.clean_water = clean_water;
+        this.emergency_food = emergency_food;
         this.other = other;
     }
 }

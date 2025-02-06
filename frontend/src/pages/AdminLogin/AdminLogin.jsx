@@ -20,6 +20,7 @@ function AdminLogin() {
 			let headers = {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
+			//console.log(`backend URL: ${import.meta.env.VITE_BACKEND_URL}/admin/login`);
 			await axios
 				.post(
 					`${import.meta.env.VITE_BACKEND_URL}/admin/login`,
@@ -35,6 +36,7 @@ function AdminLogin() {
 				})
 				.catch((error) => {
 					console.log("error logging in");
+					console.log(error);
 				});
 		} catch (err) {
 			console.log("If checks for status codes here");
