@@ -264,6 +264,7 @@ app.post("/status", (req, res) => {
 	}
 });
 
+//allows user to accept or reject their job
 app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	try {
 		const { offered, action, id } = req.body;
@@ -304,6 +305,7 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
+//fetches the user's assigned job
 app.get("/assigned", async (req: Request, res: Response) => {
 	try {
 		const { assignment: assignment } = req.query;
@@ -322,6 +324,7 @@ app.get("/assigned", async (req: Request, res: Response) => {
 	}
 });
 
+//fetches the offered job so that the user can accept or reject it
 app.get("/offered", async (req: Request, res: Response) => {
 	try {
 		const { offered } = req.query;
@@ -342,5 +345,63 @@ app.get("/offered", async (req: Request, res: Response) => {
 		});
 	}
 });
+
+app.get("/user-details", async (req, res) => {
+    try{
+
+		const { email: email } = req.query;
+
+
+		const queryResult = await pool.query(
+			"SELECT * FROM Volunteer WHERE email = $1",
+			[email]
+		);
+
+
+		res.status(200).send(queryResult.rows);
+	} catch (error){
+		console.error("Error in /user-details API:", error);
+		res.status(500).send({
+			message: "Internal Server Error",
+			error: (error as Error).message,
+		});
+	}
+});
+
+app.post("/update-user-details", async (req:Request, res:any) => {
+    try {
+
+        const { email: email, phone: phone, address: address, city: city, state: state, zip: zip } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+		console.log(email, phone, address, city, state, zip);
+
+        // 3. Execute SQL query to update user details
+        const query = `
+            UPDATE Volunteer 
+            SET phone_number = $1, street_address = $2, city = $3, state = $4, zip_code = $5
+            WHERE email = $6
+            RETURNING *;
+        `;
+        const values = [phone, address, city, state, zip, email];
+
+        const result = await pool.query(query, values);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({ message: "User details updated successfully", user: result.rows[0] });
+
+    } catch (error:any) {
+        console.error("Error updating user details:", error);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+});
+
+
 
 export { app };

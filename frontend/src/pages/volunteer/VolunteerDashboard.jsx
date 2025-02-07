@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
+
+
+
 
 function VolunteerDashboard() {
 	const navigate = useNavigate();
@@ -16,6 +21,10 @@ function VolunteerDashboard() {
 	const userId = sessionStorage.getItem("id");
 	const userToken = sessionStorage.getItem("userToken"); // Assuming this token is used for authentication
 
+	useEffect(()=>{
+		console.log(jwtDecode(userToken));
+	}, []);
+
 	// Use state for assignment and offered
 	const [assignment, setAssignment] = useState(
 		parseInt(sessionStorage.getItem("assignment")) || "No Assigned Jobs"
@@ -28,7 +37,7 @@ function VolunteerDashboard() {
 	const fetchAssigned = async () => {
 		try {
 			const response = await axios.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/assigned",
+				"http://localhost:3000/volunteer/assigned",
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -48,7 +57,7 @@ function VolunteerDashboard() {
 	const fetchOffered = async () => {
 		try {
 			const response = await axios.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/offered",
+				"http://localhost:3000/volunteer/offered",
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -90,7 +99,7 @@ function VolunteerDashboard() {
 
 		try {
 			const response = await axios.post(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept",
+				"http://localhost:3000/volunteer/job-accept",
 				{
 					offered: offered, // Send assignment in the body
 					action: action, // Send action in the body

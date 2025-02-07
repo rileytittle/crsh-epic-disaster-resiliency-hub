@@ -82,6 +82,9 @@ const MainLayout = () => {
 											</a>
 										</li>
 										<li>
+											<a href="/volunteer/account-details" className="dropdown-item">Account Settings</a>
+										</li>
+										<li>
 											<hr className="dropdown-divider" />
 										</li>
 										<li>

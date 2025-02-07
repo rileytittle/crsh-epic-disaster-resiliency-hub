@@ -27,6 +27,7 @@ import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import VolunteerJobs from "./pages/volunteer/jobsOffered";
+import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -82,6 +83,7 @@ const router = createBrowserRouter(
 				path="/volunteers/volunteer-details"
 				element={<VolunteerDetails />}
 			></Route>
+			<Route path="volunteer/account-details" element={<VolunteerAccountSettings/>}></Route>
 		</Route>
 	)
 );
