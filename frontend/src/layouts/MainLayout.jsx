@@ -156,6 +156,14 @@ const MainLayout = () => {
 												Assign volunteers to job
 											</a>
 										</li>
+										<li>
+											<a
+												className="nav-item nav-link"
+												href="/generate-reports"
+											>
+												Generate Reports
+											</a>
+										</li>
 									</ul>
 								</li>
 							) : (

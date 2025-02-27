@@ -8,6 +8,9 @@ import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+const ExcelJS = require("exceljs");
+const fs = require("fs");
+const path = require("path");
 let saltRounds = 10;
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
@@ -399,5 +402,38 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
+app.get("/reports", async (req, res) => {
+	let queryString = "SELECT * FROM requests";
+	if (req.body.year) {
+		queryString = queryString + " WHERE year = " + parseInt(req.body.year);
+	}
+	let queryResult = await pool.query(queryString);
+	let queryRows = queryResult.rows;
+	// Create a new workbook and worksheet
+	const workbook = new ExcelJS.Workbook();
+	const worksheet = workbook.addWorksheet("Report");
 
+	console.log(queryRows);
+	// Add column headers
+	worksheet.columns = [
+		{ header: "ID", key: "id", width: 10 },
+		{ header: "Name", key: "name", width: 30 },
+		{ header: "Age", key: "age", width: 10 },
+	];
+
+	// Add some rows
+	worksheet.addRow({ id: 1, name: "John Doe", age: 30 });
+	worksheet.addRow({ id: 2, name: "Jane Smith", age: 25 });
+
+	// Set the response headers for file download
+	res.setHeader(
+		"Content-Type",
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+	);
+	res.setHeader("Content-Disposition", "attachment; filename=example.xlsx");
+
+	// Write the workbook to the response object (this sends the file directly to the client)
+	await workbook.xlsx.write(res);
+	res.end(); // Make sure to end the response
+});
 export { app };

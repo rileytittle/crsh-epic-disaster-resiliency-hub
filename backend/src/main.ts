@@ -12,7 +12,7 @@ let localURL = "http://localhost:5173";
 app.use(express.json());
 app.use(
 	cors({
-		origin: "https://crsh-epic-disaster-resiliency-hub-client.vercel.app", 
+		origin: "http://localhost:5173",
 	})
 );
 app.get("/", (req, res) => {
