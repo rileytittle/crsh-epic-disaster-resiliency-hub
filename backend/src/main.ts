@@ -2,6 +2,7 @@ import express from "express";
 import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
 import { app as volunteerRouter } from "./routes/Volunteer.route";
+require('dotenv').config();
 const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();

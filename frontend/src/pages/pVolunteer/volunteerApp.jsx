@@ -8,7 +8,8 @@ const VolunteerForm = () => {
 		lastName: "",
 		phoneNumber: "",
 		email: "",
-		streetAddress: "",
+		streetAddress1: "",
+		streetAddress2: "",
 		city: "",
 		state: "",
 		zipCode: "",
@@ -42,7 +43,7 @@ const VolunteerForm = () => {
 
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/create",
+				"http://localhost:3000/volunteer/create",
 				{
 					method: "POST",
 					headers: {
@@ -100,11 +101,19 @@ const VolunteerForm = () => {
 			<input
 				className={styles.volunteerInput}
 				type="text"
-				name="streetAddress"
-				placeholder="Street Address"
-				value={formData.streetAddress}
+				name="streetAddress1"
+				placeholder="Street Address Line 1"
+				value={formData.streetAddress1}
 				onChange={handleChange}
 				required
+			/>
+			<input
+				className={styles.volunteerInput}
+				type="text"
+				name="streetAddress2"
+				placeholder="Street Address Line 2"
+				value={formData.streetAddress2}
+				onChange={handleChange}
 			/>
 			<input
 				className={styles.volunteerInput}
