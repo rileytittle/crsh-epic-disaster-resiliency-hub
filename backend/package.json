@@ -6,8 +6,9 @@
 	"scripts": {
 		"dev": "nodemon src/main.ts",
 		"build": "tsc",
-		"start": "node dist/main.js",
-		"vercel-build": "npm run build"
+		"start": "ts-node dist/main.js",
+		"vercel-build": "npm run build",
+		"postinstall": "npm run build"
 	},
 	"author": "",
 	"license": "ISC",
