@@ -5,8 +5,11 @@ function GenerateReports() {
 	const [queryResponse, setQueryResponse] = useState(null);
 	async function generateReport() {
 		try {
-			const response = await axios.get(
+			const response = await axios.post(
 				"http://localhost:3000/admin/reports",
+				{
+					year: year,
+				},
 				{
 					responseType: "blob", // Make sure you're getting a blob response
 				}

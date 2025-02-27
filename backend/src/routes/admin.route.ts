@@ -15,11 +15,18 @@ let saltRounds = 10;
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
 
+// const pool = new Pool({
+// 	connectionString: process.env.DATABASE_URL,
+// 	ssl: {
+// 		rejectUnauthorized: false,
+// 	},
+// });
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	user: "postgres",
+	host: "localhost",
+	database: "Senior-Project",
+	password: "garnetisGold!1820",
+	port: 5432,
 });
 let app = Router();
 //enter your api key below
@@ -402,10 +409,11 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.get("/reports", async (req, res) => {
-	let queryString = "SELECT * FROM requests";
+app.post("/reports", async (req, res) => {
+	let queryString = "SELECT * FROM request";
 	if (req.body.year) {
-		queryString = queryString + " WHERE year = " + parseInt(req.body.year);
+		queryString =
+			queryString + " WHERE EXTRACT(YEAR FROM year) = " + req.body.year;
 	}
 	let queryResult = await pool.query(queryString);
 	let queryRows = queryResult.rows;
