@@ -28,6 +28,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import VolunteerJobs from "./pages/volunteer/jobsOffered";
 import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings";
+import ThankYouPage from "./pages/pVolunteer/ThankYouPage";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -59,7 +60,14 @@ const router = createBrowserRouter(
 				path="/volunteer-dashboard"
 				element={<VolunteerDashboard />}
 			></Route>
-			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
+			<Route 
+			path="/applyVolunteer" 
+			element={<VolunteerForm />}>
+			</Route>
+			 <Route 
+			 path="/thank-you" 
+			 element={<ThankYouPage />} 
+			 />
 
 			<Route
 				path="/assignVolunteers"

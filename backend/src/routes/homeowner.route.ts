@@ -2,6 +2,8 @@ import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
+import { Job } from "../models/job.model";
+require('dotenv').config();
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
@@ -34,13 +36,69 @@ requests.push(
 	)
 ); //
 
-app.get("/viewRequests", (req, res) => {
-	if (requests.length > 0) {
-		res.status(200).json(requests);
-	} else {
-		res.status(404).json({ message: "No requests found." });
+app.get("/viewRequests", async (req, res) => {
+	let sendRequests: Job[] = [];
+	try {
+	  // Query to get rows with the "Active" status
+	  const result = await pool.query(
+		'SELECT * FROM "Request" WHERE status = $1',
+		['Active']
+	  );
+  
+	  // Define the columns with boolean values representing help types
+	  const helpTypeColumns = [
+		'emotional_support',
+		'cleaning_supplies',
+		'clean_water',
+		'emergency_food',
+		'yard_cleanup',
+		'interior_cleanup',
+		
+	  ];
+  
+	  // Map the result rows to an array of Job objects
+	  result.rows.forEach(row => {
+		const helpType: string[] = [];
+  
+		
+		helpTypeColumns.forEach(column => {
+		  if (row[column]) {
+			
+			const label = column
+			  .replace(/_/g, ' ')  // Replace underscores with spaces
+			  .replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
+  
+			helpType.push(label);
+		  }
+		});
+  
+		
+		const newJob = new Job(
+		  row.id, 
+		  row.first_name,  
+		  row.last_name,  
+		  row.email,  
+		  row.street_address_1,  
+		  row.city,  
+		  row.state,  
+		  row.zip_code,  
+		  helpType,
+		  row.other  
+		);
+		sendRequests.push(newJob);
+	  });
+  
+	
+	  if (sendRequests.length > 0) {
+		res.status(200).json(sendRequests);  
+	  } else {
+		res.status(404).json({ message: "No requests found." });  
+	  }
+	} catch (e) {
+	  console.error('Error querying database', e);
+	  res.status(500).json({ message: 'Internal Server Error' });  
 	}
-});
+  });
 
 app.post("/requestHelp", async (req, res) => {
 	console.log(req.body);

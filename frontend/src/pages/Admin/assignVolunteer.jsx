@@ -124,7 +124,7 @@ const AssignVolunteer = () => {
                 onClick={() => handleSelectRequest(request)}
                 style={{ cursor: 'pointer', margin: '10px 0', padding: '10px', border: '1px solid #ccc' }}
               >
-                {request.firstname} {request.lastname} - {request.helpType}
+                {request.firstName} {request.lastName} - {request.helpType}
               </li>
             ))}
           </ul>
@@ -136,7 +136,7 @@ const AssignVolunteer = () => {
         <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #007bff', borderRadius: '5px' }}>
           <h2>Request Details</h2>
           <p>
-            <strong>Name:</strong> {selectedRequest.firstname} {selectedRequest.lastname}
+            <strong>Name:</strong> {selectedRequest.firstName} {selectedRequest.lastName}
           </p>
           <p><strong>Email:</strong> {selectedRequest.email}</p>
           <p><strong>Address:</strong> {selectedRequest.address}, {selectedRequest.city}, {selectedRequest.state} {selectedRequest.zip}</p>

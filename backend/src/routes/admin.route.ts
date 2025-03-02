@@ -227,7 +227,7 @@ app.post("/homeowner-requests/accept", (req, res) => {
 					foundRequest.state,
 					foundRequest.zip,
 					foundRequest.helpType,
-					"Test Team"
+					"HELP ME"
 				);
 				foundRequest.evaluation = "accepted";
 				jobs.push(newJob);

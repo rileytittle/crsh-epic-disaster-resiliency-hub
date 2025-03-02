@@ -12,9 +12,8 @@ require('dotenv').config();
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
-	ssl: false/*{
-		rejectUnauthorized: false,
-	},*/
+	ssl: {rejectUnauthorized: false,
+	},
 });
 
 const SECRET_KEY =
@@ -369,7 +368,7 @@ app.get("/jobs", async (req:Request, res:Response): Promise<any> => {
                 row.state,
                 row.zip_code,
                 helpTypes,
-                assignedTeam
+				row.other
             );
         };
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import styles from "./volunteerApp.module.css";
 
 const VolunteerForm = () => {
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -12,6 +13,7 @@ const VolunteerForm = () => {
 		streetAddress2: "",
 		city: "",
 		state: "",
+		county: "",
 		zipCode: "",
 		areasOfHelp: [],
 	});
@@ -43,7 +45,7 @@ const VolunteerForm = () => {
 
 		try {
 			const response = await fetch(
-				"http://localhost:3000/volunteer/create",
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/create",
 				{
 					method: "POST",
 					headers: {
@@ -55,6 +57,12 @@ const VolunteerForm = () => {
 
 			const result = await response.json();
 			console.log(result);
+			if(response.ok){
+				navigate("/thank-you");
+			}
+			else{
+				alert("submission failed")
+			}
 		} catch (error) {
 			console.error("Error:", error);
 		}
@@ -82,7 +90,7 @@ const VolunteerForm = () => {
 			/>
 			<input
 				className={styles.volunteerInput}
-				type="text"
+				type="tel"
 				name="phoneNumber"
 				placeholder="Phone Number"
 				value={formData.phoneNumber}
@@ -133,6 +141,19 @@ const VolunteerForm = () => {
 				onChange={handleChange}
 				required
 			/>
+			<select
+						id="county"
+						name="county"
+						className={styles.volunteerInput}
+						placeholder="Choose..."
+						value={formData.county}
+						onChange={handleChange}
+						required
+					>
+						<option>Choose...</option>
+						<option>Charlotte</option>
+						<option>Sarasota</option>
+			</select>
 			<input
 				className={styles.volunteerInput}
 				type="text"
