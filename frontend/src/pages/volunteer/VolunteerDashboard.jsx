@@ -21,10 +21,10 @@ function VolunteerDashboard() {
         async function fetchData() {
             try {
                 const [userRes, jobsRes] = await Promise.all([
-                    axios.get("http://localhost:3000/volunteer/user-details", {
+                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/user-details", {
                         params: { userToken },
                     }),
-                    axios.get("http://localhost:3000/volunteer/jobs", {
+                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/jobs", {
                         params: { userToken },
                     }),
                 ]);
@@ -50,7 +50,7 @@ function VolunteerDashboard() {
         }
 
         axios
-            .post("http://localhost:3000/volunteer/job-accept", {
+            .post("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept", {
                 offered: offered.id,
                 action,
                 id: user.id,
@@ -72,7 +72,7 @@ function VolunteerDashboard() {
     }
 
     return (
-        <>
+        <div style={{ marginLeft: "10px" }}>
             <h1>Volunteer Dashboard</h1>
             <h2>Welcome, {user.firstName} {user.lastName}!</h2>
 
@@ -98,8 +98,8 @@ function VolunteerDashboard() {
                             <>
                                 <strong>Current Offer</strong>
                                 <JobCard job={offered} />
-                                <button onClick={() => answerOffer("accept")}>Accept</button>
-                                <button onClick={() => answerOffer("reject")}>Reject</button>
+                                <button style={{ margin: "auto" }} onClick={() => answerOffer("accept")}>Accept</button>
+                                <button style={{ marginLeft: "10px" }} onClick={() => answerOffer("reject")}>Reject</button>
                             </>
                         ) : (
                             "Nothing offered"
@@ -107,7 +107,7 @@ function VolunteerDashboard() {
                     </p>
                 </>
             )}
-        </>
+        </div>
     );
 }
 
