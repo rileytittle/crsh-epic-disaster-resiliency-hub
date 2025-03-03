@@ -14,7 +14,7 @@
 	},
 	"include": [
     "src/**/*.ts",  // Include all files under src/
-    //"api/**/*.ts"   // Include files in api/ outside of src/
+    "api/**/*.ts"   // Include files in api/ outside of src/
   ],
 	"exclude": ["node_modules", "dist"] 
   }
