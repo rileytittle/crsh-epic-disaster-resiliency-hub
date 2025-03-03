@@ -5,7 +5,7 @@
 	  "module": "Node16",
 	  "moduleResolution": "Node16",
 	  "outDir": "./dist",
-	  "rootDir": "./src", 
+	  "rootDir": "./", 
 	  "esModuleInterop": true,
 	  "allowSyntheticDefaultImports": true,
 	  "forceConsistentCasingInFileNames": true,
