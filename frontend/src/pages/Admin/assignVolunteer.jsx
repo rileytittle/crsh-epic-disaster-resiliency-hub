@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-
 const AssignVolunteer = () => {
   const [requests, setRequests] = useState([]); // State to hold the requests
   const [selectedRequest, setSelectedRequest] = useState(null); // State to hold the selected request
@@ -11,7 +10,7 @@ const AssignVolunteer = () => {
   // Function to fetch requests from the backend
   const fetchRequests = async () => {
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/viewRequests');
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/homeowner/viewRequests`);
       const data = await response.json();
   
       // Check if data is an array before calling .map()
@@ -51,7 +50,7 @@ const AssignVolunteer = () => {
   // Function to handle team button click
   const handleTeamButtonClick = async (team) => {
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/list', {
+      const response = await fetch(				`${import.meta.env.VITE_BACKEND_URL}/admin/assign-volunteer/list`,				{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +87,7 @@ const AssignVolunteer = () => {
     }
 
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/updateAssignment', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin//admin/assign-volunteer/updateAssignment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

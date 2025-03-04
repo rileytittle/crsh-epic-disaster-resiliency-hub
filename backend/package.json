@@ -18,7 +18,8 @@
 		"@types/node": "^22.7.1",
 		"bcrypt": "^5.1.0",
 		"cors": "^2.8.5",
-		"express": "^4.21.2",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.0",
 		"jsonwebtoken": "^9.0.2",
 		"mailgun-js": "^0.22.0",
 		"pg": "^8.11.0",
@@ -26,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^5.0.2",
+		"@types/mailgun-js": "^0.22.18",
 		"@types/pg": "^8.11.10"
 	}
 }

@@ -4,12 +4,14 @@ import {
 	createRoutesFromElements,
 	Route,
 	RouterProvider,
+	Navigate,
 } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
+import EmailTest from './pages/SendEmailPage';
 
 import HomeownerForm from "./pages/Homeowner/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
@@ -32,8 +34,11 @@ import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
-			<Route path="/home" element={<Homepage />}></Route>
-
+			<Route index element={<Navigate to="/home" replace />} />
+			<Route
+				path="/home"
+				element={<Homepage />}>
+			</Route>
 			<Route
 				path="/create-volunteer"
 				element={<CreateVolunteer />}
@@ -60,6 +65,7 @@ const router = createBrowserRouter(
 				element={<VolunteerDashboard />}
 			></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
+			<Route path='/test-email' element={<SendEmailPage/>}></Route>
 
 			<Route
 				path="/assignVolunteers"

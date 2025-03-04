@@ -13,7 +13,7 @@ function Volunteers() {
 	useEffect(() => {
 		axios
 			.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers"
+				`${import.meta.env.VITE_BACKEND_URL}/admin/volunteers`
 			)
 			.then((res) => {
 				// Transform data to include areas of help

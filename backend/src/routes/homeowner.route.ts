@@ -2,6 +2,11 @@ import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
+import * as dotenv from 'dotenv';
+
+// Load custom .env file
+dotenv.config();
+import { Pool } from "pg";
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
@@ -44,6 +49,7 @@ app.get("/viewRequests", (req, res) => {
 
 app.post("/requestHelp", async (req, res) => {
 	console.log(req.body);
+
 
 	const first_name = req.body.first_name;
 	const last_name = req.body.last_name;

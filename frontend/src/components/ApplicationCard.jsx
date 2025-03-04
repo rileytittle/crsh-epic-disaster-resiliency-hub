@@ -6,7 +6,7 @@ const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 		console.log(email);
 		axios
 			.post(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/reject",
+				`${import.meta.env.VITE_BACKEND_URL}/admin/create-volunteer/reject`,
 				{
 					email: email,
 				}
