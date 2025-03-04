@@ -60,6 +60,14 @@ const MainLayout = () => {
 										<li>
 											<a
 												className="dropdown-item"
+												href="/volunteer/account-details"
+											>
+												Update Account Details
+											</a>
+										</li>
+										<li>
+											<a
+												className="dropdown-item"
 												href="/volunteer/changePassword"
 											>
 												Change Password

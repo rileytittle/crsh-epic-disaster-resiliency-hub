@@ -5,7 +5,7 @@
 		"module": "Node16",
 		"moduleResolution": "Node16",
 		"outDir": "./dist",
-		"rootDir": "./",
+		"rootDir": "./src",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
