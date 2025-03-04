@@ -6,7 +6,7 @@ function GenerateReports() {
 	async function generateReport() {
 		try {
 			const response = await axios.post(
-				"http://localhost:3000/admin/reports",
+				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/reports",
 				{
 					year: year,
 				},
