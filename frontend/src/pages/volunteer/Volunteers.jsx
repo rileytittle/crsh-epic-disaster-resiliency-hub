@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import DataTable from "datatables.net-dt";
+import $ from "jquery"; // Don't forget to import jQuery
 
+let table = new DataTable("#myTable", {
+	// config options...
+});
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
 
@@ -23,11 +28,19 @@ function Volunteers() {
 					].filter(Boolean), // Remove any `false` values
 				}));
 				setVolunteers(transformedData);
+				// Initialize DataTable after setting the data
+				setTimeout(() => {
+					$("#myTable").DataTable();
+				}, 0); // Delay to ensure DOM is updated before DataTable initializes
 				console.log(transformedData);
 			})
 			.catch((error) => {
 				console.error("Error fetching volunteers:", error);
 			});
+		// Cleanup function to destroy the DataTable when the component unmounts
+		return () => {
+			$("#myTable").DataTable().destroy();
+		};
 	}, []);
 
 	return (
@@ -35,7 +48,7 @@ function Volunteers() {
 			<h1>Volunteers</h1>
 			<div className="card">
 				<div className="card-body">
-					<table className="table">
+					<table className="table" id="myTable">
 						<thead>
 							<tr>
 								<th scope="col">Edit</th>

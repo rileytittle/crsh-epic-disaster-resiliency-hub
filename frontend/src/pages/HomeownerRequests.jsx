@@ -10,6 +10,7 @@ function HomeownerRequests() {
 				`${import.meta.env.VITE_BACKEND_URL}/admin/homeowner-requests`
 			)
 			.then((res) => {
+				console.log(res.data);
 				setRequests(res.data);
 				console.log(res.data);
 			})
@@ -25,14 +26,13 @@ function HomeownerRequests() {
 						<RequestCard
 							key={request.id}
 							id={request.id}
-							firstName={request.firstName}
-							lastName={request.lastName}
+							firstName={request.first_name}
+							lastName={request.last_name}
 							email={request.email}
-							address={request.address}
+							address={request.street_address_1}
 							city={request.city}
 							state={request.state}
-							zip={request.zip}
-							helpType={request.helpType}
+							zip={request.zip_code}
 						></RequestCard>
 					))}
 				</div>

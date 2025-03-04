@@ -60,6 +60,14 @@ const MainLayout = () => {
 										<li>
 											<a
 												className="dropdown-item"
+												href="/volunteer/account-details"
+											>
+												Update Account Details
+											</a>
+										</li>
+										<li>
+											<a
+												className="dropdown-item"
 												href="/volunteer/changePassword"
 											>
 												Change Password
@@ -74,15 +82,15 @@ const MainLayout = () => {
 											</a>
 										</li>
 										<li>
-											<hr className="dropdown-divider" />
+											<a
+												className="nav-item nav-link"
+												href="/volunteer/jobs"
+											>
+												Check Job Offer
+											</a>
 										</li>
 										<li>
-											<a
-												className="dropdown-item"
-												href="/applyVolunteer"
-											>
-												Apply to Volunteer
-											</a>
+											<hr className="dropdown-divider" />
 										</li>
 										<li>
 											<a
@@ -90,14 +98,6 @@ const MainLayout = () => {
 												href="/applyVolunteer/status"
 											>
 												Check Status of Application
-											</a>
-										</li>
-										<li>
-											<a
-												className="nav-item nav-link"
-												href="/assignVolunteers"
-											>
-												Assign volunteers to job
 											</a>
 										</li>
 										<li>
@@ -156,6 +156,14 @@ const MainLayout = () => {
 												Requests
 											</a>
 										</li>
+										<li>
+											<a
+												className="nav-item nav-link"
+												href="/assignVolunteers"
+											>
+												Assign volunteers to job
+											</a>
+										</li>
 									</ul>
 								</li>
 							) : (
@@ -189,9 +197,17 @@ const MainLayout = () => {
 							)}
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
-							<a className="nav-link" href="/request-help">
-								Request Help
-							</a>
+							<>
+								<a
+									className="dropdown-item"
+									href="/applyVolunteer"
+								>
+									Apply to Volunteer
+								</a>
+								<a className="nav-link" href="/request-help">
+									Request Help
+								</a>
+							</>
 						) : (
 							<a className="nav-link" href="#" onClick={logout}>
 								Log Out

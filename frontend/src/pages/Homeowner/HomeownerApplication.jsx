@@ -48,7 +48,7 @@ const HomeownerApply = () => {
 		if (type === "checkbox") {
 			setFormData({
 				...formData,
-				[e.target.id]: e.target.checked
+				[e.target.id]: e.target.checked,
 			});
 			/*
 			setFormData((prevData) => {
@@ -73,7 +73,7 @@ const HomeownerApply = () => {
 
 	const formSubmitted = async (e) => {
 		e.preventDefault();
-		console.log((formData));
+		console.log(formData);
 		console.log(JSON.stringify(formData));
 		try {
 			const response = await fetch(
@@ -89,7 +89,7 @@ const HomeownerApply = () => {
 
 			const result = await response.json();
 			console.log(result);
-			alert(result.message)
+			alert(result.message);
 			//document.getElementById("homeownerForm").reset();
 		} catch (error) {
 			console.error("Error:", error);
@@ -99,7 +99,11 @@ const HomeownerApply = () => {
 	return (
 		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
 		<div style={{ margin: "5px" }}>
-			<form id="homeownerForm" onSubmit={formSubmitted} className="row g-3">
+			<form
+				id="homeownerForm"
+				onSubmit={formSubmitted}
+				className="row g-3"
+			>
 				<div className="col-md-6">
 					<label htmlFor="first_name" className="form-label">
 						First Name
