@@ -413,7 +413,9 @@ app.post("/reports", async (req, res) => {
 	let queryString = "SELECT * FROM request";
 	if (req.body.year) {
 		queryString =
-			queryString + " WHERE EXTRACT(YEAR FROM year) = " + req.body.year;
+			queryString +
+			" WHERE EXTRACT(YEAR FROM date_created) = " +
+			req.body.year;
 	}
 	let queryResult = await pool.query(queryString);
 	let queryRows = queryResult.rows;
