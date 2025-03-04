@@ -1,21 +1,22 @@
 import { VolunteerApplication } from "./volunteerApplication.model";
 
 export class Volunteer extends VolunteerApplication {
-	teamLeader: boolean;
-	password: string;
+	assignment: number | null;
+	offered: number | null;
 	constructor(
 		id: number,
+		email: string,
 		firstName: string,
 		lastName: string,
 		phoneNumber: number,
-		email: string,
-		streetAddress: string,
+		streetAddress1: string,
+		streetAddress2: string,
 		city: string,
 		state: string,
 		zipCode: number,
 		areasOfHelp: string[],
-		teamLeader: boolean,
-		password: string
+		assignment: number | null,
+		offered: number | null
 	) {
 		super(
 			id,
@@ -23,13 +24,14 @@ export class Volunteer extends VolunteerApplication {
 			lastName,
 			phoneNumber,
 			email,
-			streetAddress,
+			streetAddress1,
+			streetAddress2,
 			state,
 			city,
 			zipCode,
 			areasOfHelp
 		);
-		this.teamLeader = teamLeader;
-		this.password = password;
+		this.assignment = assignment;
+		this.offered = offered;
 	}
 }

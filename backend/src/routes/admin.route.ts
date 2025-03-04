@@ -393,8 +393,56 @@ app.get("/homeowner-requests", async (req, res) => {
 
 app.get("/volunteers", async (req, res) => {
 	try {
+		let formattedVolunteers: Volunteer[] = [];
 		let volunteers = await pool.query("SELECT * FROM volunteer");
-		res.status(200).send(volunteers.rows);
+		for (let vol of volunteers.rows) {
+			let id = vol.id;
+			let first_name = vol.first_name;
+			let last_name = vol.last_name;
+			let phone_number = vol.phone_number;
+			let email = vol.email;
+			let street_address_1 = vol.street_address_1;
+			let street_address_2 = vol.street_address_2;
+			let city = vol.city;
+			let state = vol.state;
+			let zip_code = vol.zip_code;
+
+			let areasOfHelp: string[] = [];
+			if (vol.admin_team) {
+				areasOfHelp.push("Admin");
+			}
+			if (vol.hospitality) {
+				areasOfHelp.push("Hospitality");
+			}
+			if (vol.logistic_tracking) {
+				areasOfHelp.push("Logistic Tracking");
+			}
+			if (vol.community_outreach) {
+				areasOfHelp.push("Community Outreach");
+			}
+			if (vol.community_helpers) {
+				areasOfHelp.push("Community Helpers");
+			}
+			let newVolunteer = new Volunteer(
+				id,
+				first_name,
+				last_name,
+				phone_number,
+				email,
+				street_address_1,
+				street_address_2,
+				city,
+				state,
+				zip_code,
+				areasOfHelp,
+				null,
+				null
+			);
+			formattedVolunteers.push(newVolunteer);
+			//list all of the endpoints that affect volunteer number and details.
+			//If one of those are called, we call this function.
+		}
+		res.status(200).send(formattedVolunteers);
 	} catch (e) {
 		res.status(500).send(e);
 	}
