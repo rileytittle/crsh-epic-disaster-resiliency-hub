@@ -412,6 +412,7 @@ app.post("/reports", async (req, res) => {
 	}
 	let queryResult = await pool.query(queryString);
 	let queryRows = queryResult.rows;
+	console.log(queryRows);
 	// Create a new workbook and worksheet
 	const workbook = new ExcelJS.Workbook();
 	const worksheet = workbook.addWorksheet("Report");

@@ -10,7 +10,9 @@ function CreateVolunteer() {
 
 		axios
 			.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/applications",
+				`${
+					import.meta.env.VITE_SERVER_URL
+				}/admin/create-volunteer/applications`,
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,

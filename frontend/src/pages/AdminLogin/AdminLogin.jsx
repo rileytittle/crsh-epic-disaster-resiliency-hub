@@ -22,9 +22,11 @@ function AdminLogin() {
 			};
 			await axios
 				.post(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login",
+					`${import.meta.env.VITE_SERVER_URL}/admin/login`,
 					userData,
-					{ headers }
+					{
+						headers,
+					}
 				)
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
