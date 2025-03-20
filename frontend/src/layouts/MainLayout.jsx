@@ -12,7 +12,11 @@ const MainLayout = () => {
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">
-						EPIC
+						<img
+							src="../../EPIC-logo.png"
+							alt="Logo"
+							style={{ height: "100px" }}
+						/>
 					</a>
 					<button
 						className="navbar-toggler"
