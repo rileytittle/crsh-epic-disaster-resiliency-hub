@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import AccountDetails from "../../components/AccountDetails";
 import ChangeAccountDetails from "../../components/ChangeAccountDetails";
 import axios from 'axios';
 import { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css"; 
 
-// Page where volunteer users can update information about their account
 function VolunteerAccountSettings() {
+    const navigate = useNavigate(); // Initialize navigation
     const userToken = sessionStorage.getItem("userToken");
+
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
@@ -15,15 +18,11 @@ function VolunteerAccountSettings() {
 
     useEffect(() => {
         function fetchUserData() {
-            const apiUrl = 'https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/user-details';
-
-            axios.get(apiUrl, {
+            axios.get("http://localhost:3000/volunteer/user-details", {
                 params: { userToken: userToken }
             })
             .then(response => {
                 console.log('User data:', response.data);
-
-                // Assuming response.data is an array and the first element contains the user details
                 const user = response.data;
 
                 setEmail(user.email);
@@ -34,7 +33,6 @@ function VolunteerAccountSettings() {
                 setZip(user.zipCode);
             })
             .catch(error => {
-                // Handle error
                 console.error('There was an error fetching the user data:', error);
             });
         }
@@ -42,15 +40,19 @@ function VolunteerAccountSettings() {
         if (userToken) {
             fetchUserData();
         }
-
-    }, [userToken]);  // Fetch data only when userToken changes
+    }, [userToken]); 
 
     return (
-        <>
-            <h1>Account Details</h1>
+        <div className="container mt-4">
+            {/* Back Button */}
+            <button className="btn btn-secondary mb-3" onClick={() => navigate("/volunteer-dashboard")}>
+                ← Back to Dashboard
+            </button>
+
+            <h1 className="text-center">Account Details</h1>
             <AccountDetails email={email} phone={phone} address={address} city={city} state={state} zip={zip} />
             <ChangeAccountDetails email={email} phone={phone} address={address} city={city} state={state} zip={zip} />
-        </>
+        </div>
     );
 }
 

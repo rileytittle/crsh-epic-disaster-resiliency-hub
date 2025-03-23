@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import JobCard from "../../components/JobCard";
 
 function VolunteerDashboard() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null);
 
     const userToken = sessionStorage.getItem("userToken");
 
@@ -21,10 +22,10 @@ function VolunteerDashboard() {
         async function fetchData() {
             try {
                 const [userRes, jobsRes] = await Promise.all([
-                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/user-details", {
+                    axios.get("http://localhost:3000/volunteer/user-details", {
                         params: { userToken },
                     }),
-                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/jobs", {
+                    axios.get("http://localhost:3000/volunteer/jobs", {
                         params: { userToken },
                     }),
                 ]);
@@ -36,7 +37,7 @@ function VolunteerDashboard() {
                 console.error("Error fetching data:", error);
                 setError("Failed to load data.");
             } finally {
-                setLoading(false); // Stop loading once both requests are done
+                setLoading(false);
             }
         }
 
@@ -50,7 +51,7 @@ function VolunteerDashboard() {
         }
 
         axios
-            .post("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept", {
+            .post("http://localhost:3000/volunteer/job-accept", {
                 offered: offered.id,
                 action,
                 id: user.id,
@@ -60,7 +61,7 @@ function VolunteerDashboard() {
                 if (action === "accept") {
                     setAssigned(offered);
                 }
-                setOffered(0); // Clear the offered job after action
+                setOffered(0);
             })
             .catch((error) => {
                 console.error("Error processing job action:", error);
@@ -68,45 +69,53 @@ function VolunteerDashboard() {
     };
 
     if (!sessionStorage.getItem("isLoggedIn") || sessionStorage.getItem("userType") !== "volunteer") {
-        return <h1>Please Login</h1>;
+        return <h1 className="text-center text-danger mt-5">Please Login</h1>;
     }
 
     return (
-        <div style={{ marginLeft: "10px" }}>
-            <h1>Volunteer Dashboard</h1>
-            <h2>Welcome, {user.firstName} {user.lastName}!</h2>
+        <div className="container mt-4">
+            <div className="card shadow-sm">
+                <div className="card-body text-center">
+                    <h1 className="text-dark fw-bold">Volunteer Dashboard</h1>
+                    <h2 className="fw-semibold">{user.firstName} {user.lastName}</h2>
 
-            {loading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <p style={{ color: "red" }}>{error}</p>
-            ) : (
-                <>
-                    <p>
-                        {assigned !== 0 ? (
-                            <>
-                                <strong>Current Job</strong>
-                                <JobCard job={assigned} />
-                            </>
-                        ) : (
-                            "Nothing assigned"
-                        )}
-                    </p>
+                    {loading ? (
+                        <p className="text-muted mt-3">Loading...</p>
+                    ) : error ? (
+                        <p className="text-danger mt-3">{error}</p>
+                    ) : (
+                        <>
+                            <div className="mt-4">
+                                <h4 className="fw-bold">Current Job</h4>
+                                {assigned !== 0 ? (
+                                    <JobCard job={assigned} />
+                                ) : (
+                                    <p className="text-muted">Nothing assigned</p>
+                                )}
+                            </div>
 
-                    <p>
-                        {offered !== 0 ? (
-                            <>
-                                <strong>Current Offer</strong>
-                                <JobCard job={offered} />
-                                <button style={{ margin: "auto" }} onClick={() => answerOffer("accept")}>Accept</button>
-                                <button style={{ marginLeft: "10px" }} onClick={() => answerOffer("reject")}>Reject</button>
-                            </>
-                        ) : (
-                            "Nothing offered"
-                        )}
-                    </p>
-                </>
-            )}
+                            <div className="mt-4">
+                                <h4 className="fw-bold">Current Offer</h4>
+                                {offered !== 0 ? (
+                                    <>
+                                        <JobCard job={offered} />
+                                        <div className="btn-group mt-3">
+                                            <button className="btn btn-success px-4" onClick={() => answerOffer("accept")}>
+                                                Accept
+                                            </button>
+                                            <button className="btn btn-danger px-4 ms-2" onClick={() => answerOffer("reject")}>
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <p className="text-muted">Nothing offered</p>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
