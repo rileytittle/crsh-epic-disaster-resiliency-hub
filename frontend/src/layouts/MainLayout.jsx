@@ -14,7 +14,7 @@ const MainLayout = () => {
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">
 						<img
-							src="../../EPIC-logo.png"
+							src="/EPIC-logo"
 							alt="Logo"
 							style={{ height: "100px" }}
 						/>
