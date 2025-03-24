@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./MainLayout.css";
 import { Outlet } from "react-router-dom";
+import logo from "../../public/EPIC-logo.png";
+
 const MainLayout = () => {
 	function logout() {
 		sessionStorage.removeItem("isLoggedIn");
@@ -14,7 +16,7 @@ const MainLayout = () => {
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">
 						<img
-							src="/EPIC-logo"
+							src={logo}
 							alt="Logo"
 							style={{ height: "100px" }}
 						/>
