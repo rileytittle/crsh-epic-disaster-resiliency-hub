@@ -133,8 +133,11 @@ function GenerateReports() {
 						}}
 					>
 						<option value="0">Any</option>
-						<option value="01">Zip code</option>
-						<option value="02">Zip code</option>
+						<option value="34223">34223</option>
+						<option value="34224">34224</option>
+						<option value="33947">33947</option>
+						<option value="33946">33946</option>
+						<option value="33981">33981</option>
 					</select>
 					<label htmlFor="status" className="form-label">
 						Request Status

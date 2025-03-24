@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./MainLayout.css";
 import { Outlet } from "react-router-dom";
 const MainLayout = () => {
 	function logout() {
@@ -34,11 +35,6 @@ const MainLayout = () => {
 						id="navbarSupportedContent"
 					>
 						<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-							<li className="nav-item">
-								<a className="nav-link active" href="/home">
-									Home
-								</a>
-							</li>
 							{sessionStorage.getItem("isLoggedIn") &&
 							sessionStorage.getItem("userType") ==
 								"volunteer" ? (
@@ -175,12 +171,17 @@ const MainLayout = () => {
 							)}
 							{!sessionStorage.getItem("isLoggedIn") ? (
 								<li className="nav-item">
-									<a
-										className="nav-link"
-										aria-disabled="true"
-										href="/admin-login"
-									>
+									<a className="nav-link" href="/admin-login">
 										Admin Login
+									</a>
+								</li>
+							) : (
+								<></>
+							)}
+							{!sessionStorage.getItem("isLoggedIn") ? (
+								<li className="nav-item">
+									<a className="nav-link" href="/vol-login">
+										Volunteer Login
 									</a>
 								</li>
 							) : (
@@ -190,10 +191,9 @@ const MainLayout = () => {
 								<li className="nav-item">
 									<a
 										className="nav-link"
-										aria-disabled="true"
-										href="/vol-login"
+										href="/applyVolunteer"
 									>
-										Volunteer Login
+										Apply to Volunteer
 									</a>
 								</li>
 							) : (
@@ -202,12 +202,6 @@ const MainLayout = () => {
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
-								<a
-									className="dropdown-item"
-									href="/applyVolunteer"
-								>
-									Apply to Volunteer
-								</a>
 								<a className="nav-link" href="/request-help">
 									Request Help
 								</a>
