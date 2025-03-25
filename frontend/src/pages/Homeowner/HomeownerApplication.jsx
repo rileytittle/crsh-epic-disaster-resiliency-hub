@@ -77,7 +77,7 @@ const HomeownerApply = () => {
 		console.log(JSON.stringify(formData));
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_SERVER_URL}/homeowner/requestHelp`,
+				`${SERVER_URL}/homeowner/requestHelp`,
 				{
 					method: "POST",
 					headers: {

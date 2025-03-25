@@ -11,7 +11,7 @@ const AssignVolunteer = () => {
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_SERVER_URL}/homeowner/viewRequests`
+				`${SERVER_URL}/homeowner/viewRequests`
 			);
 			const data = await response.json();
 
@@ -53,9 +53,7 @@ const AssignVolunteer = () => {
 	const handleTeamButtonClick = async (team) => {
 		try {
 			const response = await fetch(
-				`${
-					import.meta.env.VITE_SERVER_URL
-				}/admin/assign-volunteer/list`,
+				`${SERVER_URL}/admin/assign-volunteer/list`,
 				{
 					method: "POST",
 					headers: {
@@ -95,9 +93,7 @@ const AssignVolunteer = () => {
 
 		try {
 			const response = await fetch(
-				`${
-					import.meta.env.VITE_SERVER_URL
-				}/admin/assign-volunteer/updateAssignment`,
+				`${SERVER_URL}/admin/assign-volunteer/updateAssignment`,
 				{
 					method: "POST",
 					headers: {
