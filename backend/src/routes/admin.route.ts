@@ -452,7 +452,6 @@ app.post("/reports", async (req, res) => {
 			{ header: "City", key: "city", width: 20 },
 			{ header: "County", key: "county", width: 15 },
 			{ header: "Zip Code", key: "zip_code", width: 10 },
-			{ header: "Tarping", key: "tarping", width: 10 },
 			{ header: "Yard Cleanup", key: "yard_cleanup", width: 15 },
 			{ header: "Interior Cleanup", key: "interior_cleanup", width: 15 },
 			{
@@ -486,7 +485,6 @@ app.post("/reports", async (req, res) => {
 				city: row.city,
 				county: row.county,
 				zip_code: row.zip_code,
-				tarping: row.tarping,
 				yard_cleanup: row.yard_cleanup,
 				interior_cleanup: row.interior_cleanup,
 				emotional_support: row.emotional_support,
