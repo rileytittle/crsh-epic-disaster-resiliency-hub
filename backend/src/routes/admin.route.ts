@@ -430,6 +430,7 @@ app.post("/reports", async (req, res) => {
 	if (queryConditions.length > 0) {
 		queryString += " WHERE " + queryConditions.join(" AND ");
 	}
+	console.log(queryString);
 	let queryResult = await pool.query(queryString);
 	let queryRows = queryResult.rows;
 	// console.log(queryRows);
