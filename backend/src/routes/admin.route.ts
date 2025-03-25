@@ -404,6 +404,15 @@ app.get("/volunteers", async (req, res) => {
 	}
 });
 app.post("/reports", async (req, res) => {
+	res.setHeader(
+		"Access-Control-Allow-Origin",
+		"https://crsh-epic-disaster-resiliency-hub-client.vercel.app"
+	); // Adjust to your frontend domain
+	res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+	res.setHeader(
+		"Access-Control-Allow-Headers",
+		"Content-Type, Authorization, Accept, Content-Disposition"
+	);
 	let queryString = "SELECT * FROM request";
 	let queryConditions: string[] = [];
 	let year = parseInt(req.body.year);
