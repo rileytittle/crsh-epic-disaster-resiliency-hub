@@ -442,7 +442,7 @@ app.post("/reports", async (req, res) => {
 
 		// Add column headers
 		worksheet.columns = [
-			{ header: "ID", key: "id", width: 10 },
+			{ header: "ID", key: "request_id", width: 10 },
 			{ header: "First Name", key: "first_name", width: 20 },
 			{ header: "Last Name", key: "last_name", width: 20 },
 			{ header: "Phone Number", key: "phone_number", width: 15 },
@@ -476,7 +476,7 @@ app.post("/reports", async (req, res) => {
 		// Add rows
 		for (let row of queryRows) {
 			worksheet.addRow({
-				id: row.id,
+				request_id: row.request_id,
 				first_name: row.first_name,
 				last_name: row.last_name,
 				phone_number: row.phone_number,
