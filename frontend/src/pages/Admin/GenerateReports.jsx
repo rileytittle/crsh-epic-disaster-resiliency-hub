@@ -17,7 +17,7 @@ function GenerateReports() {
 	async function generateReport() {
 		try {
 			const response = await axios.post(
-				`${VITE_SERVER_URL}/admin/reports`,
+				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/reports`,
 				{
 					year: year,
 					month: month,

@@ -5,7 +5,7 @@ const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 	function rejectVolunteer() {
 		console.log(email);
 		axios
-			.post(`${VITE_SERVER_URL}/admin/create-volunteer/reject`, {
+			.post(`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/reject`, {
 				email: email,
 			})
 			.then((res) => {

@@ -19,7 +19,7 @@ function PasswordReset() {
 
 		try {
 			const response = await fetch(
-				`${VITE_SERVER_URL}/volunteer/resetPassword`,
+				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/resetPassword`,
 				{
 					method: "POST",
 					headers: {

@@ -21,9 +21,13 @@ function VolLogin() {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
 			await axios
-				.post(`${VITE_SERVER_URL}/volunteer/login`, userData, {
-					headers,
-				})
+				.post(
+					`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/login`,
+					userData,
+					{
+						headers,
+					}
+				)
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "volunteer");
