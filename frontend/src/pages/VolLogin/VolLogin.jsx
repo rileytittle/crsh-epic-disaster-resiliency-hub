@@ -21,19 +21,23 @@ function VolLogin() {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
 			await axios
-				.post(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/login",
-					userData,
-					{ headers }
-				)
+				.post(`${SERVER_URL}/volunteer/login`, userData, {
+					headers,
+				})
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "volunteer");
 					sessionStorage.setItem("userToken", response.data.token);
 					sessionStorage.setItem("justLoggedIn", true);
-					sessionStorage.setItem("firstName", response.data.firstName); // Store first name
-               		sessionStorage.setItem("lastName", response.data.lastName); // Store last name
-					sessionStorage.setItem("assignment", response.data.assignment);
+					sessionStorage.setItem(
+						"firstName",
+						response.data.firstName
+					); // Store first name
+					sessionStorage.setItem("lastName", response.data.lastName); // Store last name
+					sessionStorage.setItem(
+						"assignment",
+						response.data.assignment
+					);
 					sessionStorage.setItem("offered", response.data.offered);
 					sessionStorage.setItem("id", response.data.id);
 					navigate("/volunteer-dashboard");

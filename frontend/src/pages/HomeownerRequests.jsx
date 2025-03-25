@@ -6,9 +6,7 @@ function HomeownerRequests() {
 	const [requests, setRequests] = useState([]);
 	useEffect(() => {
 		axios
-			.get(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests"
-			)
+			.get(`${SERVER_URL}/admin/homeowner-requests`)
 			.then((res) => {
 				console.log(res.data);
 				setRequests(res.data);

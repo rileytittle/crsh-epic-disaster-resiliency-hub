@@ -18,12 +18,9 @@ function RequestDetails() {
 
 	async function acceptRequest() {
 		await axios
-			.post(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests/accept",
-				{
-					id: id,
-				}
-			)
+			.post(`${SERVER_URL}/admin/homeowner-requests/accept`, {
+				id: id,
+			})
 			.then((res) => {
 				navigate("/homeowner-requests");
 			})
@@ -33,12 +30,9 @@ function RequestDetails() {
 	}
 	async function rejectRequest() {
 		await axios
-			.post(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests/reject",
-				{
-					id: id,
-				}
-			)
+			.post(`${SERVER_URL}/admin/homeowner-requests/reject`, {
+				id: id,
+			})
 			.then((res) => {
 				navigate("/homeowner-requests");
 			})
