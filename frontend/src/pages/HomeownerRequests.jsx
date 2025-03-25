@@ -6,7 +6,7 @@ function HomeownerRequests() {
 	const [requests, setRequests] = useState([]);
 	useEffect(() => {
 		axios
-			.get(`${SERVER_URL}/admin/homeowner-requests`)
+			.get(`${import.meta.env.VITE_SERVER_URL}/admin/homeowner-requests`)
 			.then((res) => {
 				console.log(res.data);
 				setRequests(res.data);

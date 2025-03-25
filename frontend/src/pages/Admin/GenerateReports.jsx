@@ -17,7 +17,7 @@ function GenerateReports() {
 	async function generateReport() {
 		try {
 			const response = await axios.post(
-				`${SERVER_URL}/admin/reports`,
+				`${import.meta.env.VITE_SERVER_URL}/admin/reports`,
 				{
 					year: year,
 					month: month,

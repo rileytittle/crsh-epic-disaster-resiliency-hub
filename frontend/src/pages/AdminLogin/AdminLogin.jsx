@@ -21,9 +21,13 @@ function AdminLogin() {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
 			await axios
-				.post(`${SERVER_URL}/admin/login`, userData, {
-					headers,
-				})
+				.post(
+					`${import.meta.env.VITE_SERVER_URL}/admin/login`,
+					userData,
+					{
+						headers,
+					}
+				)
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "admin");

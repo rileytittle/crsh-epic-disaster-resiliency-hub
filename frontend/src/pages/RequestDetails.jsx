@@ -18,9 +18,14 @@ function RequestDetails() {
 
 	async function acceptRequest() {
 		await axios
-			.post(`${SERVER_URL}/admin/homeowner-requests/accept`, {
-				id: id,
-			})
+			.post(
+				`${
+					import.meta.env.VITE_SERVER_URL
+				}/admin/homeowner-requests/accept`,
+				{
+					id: id,
+				}
+			)
 			.then((res) => {
 				navigate("/homeowner-requests");
 			})
@@ -30,9 +35,14 @@ function RequestDetails() {
 	}
 	async function rejectRequest() {
 		await axios
-			.post(`${SERVER_URL}/admin/homeowner-requests/reject`, {
-				id: id,
-			})
+			.post(
+				`${
+					import.meta.env.VITE_SERVER_URL
+				}/admin/homeowner-requests/reject`,
+				{
+					id: id,
+				}
+			)
 			.then((res) => {
 				navigate("/homeowner-requests");
 			})

@@ -19,13 +19,16 @@ function ApplicationStatus() {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`${SERVER_URL}/volunteer/status`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(applicationData),
-			});
+			const response = await fetch(
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/status`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(applicationData),
+				}
+			);
 
 			const result = await response.json();
 			console.log(result);

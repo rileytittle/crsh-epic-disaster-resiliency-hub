@@ -19,7 +19,7 @@ function PasswordReset() {
 
 		try {
 			const response = await fetch(
-				`${SERVER_URL}/volunteer/resetPassword`,
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/resetPassword`,
 				{
 					method: "POST",
 					headers: {

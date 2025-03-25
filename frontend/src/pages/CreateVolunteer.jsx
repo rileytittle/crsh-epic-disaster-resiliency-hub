@@ -9,11 +9,16 @@ function CreateVolunteer() {
 		let token = sessionStorage.getItem("userToken");
 
 		axios
-			.get(`${SERVER_URL}/admin/create-volunteer/applications`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			.get(
+				`${
+					import.meta.env.VITE_SERVER_URL
+				}/admin/create-volunteer/applications`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 
 			.then((res) => {
 				setApplications(res.data);

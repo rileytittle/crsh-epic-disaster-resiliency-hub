@@ -26,7 +26,9 @@ function PasswordChange() {
 		else {
 			try {
 				const response = await fetch(
-					`${SERVER_URL}/volunteer/changePassword`,
+					`${
+						import.meta.env.VITE_SERVER_URL
+					}/volunteer/changePassword`,
 					{
 						method: "POST",
 						headers: {

@@ -41,13 +41,16 @@ const VolunteerForm = () => {
 		e.preventDefault();
 
 		try {
-			const response = await fetch(`${SERVER_URL}/volunteer/create`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
+			const response = await fetch(
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/create`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
 
 			const result = await response.json();
 			console.log(result);

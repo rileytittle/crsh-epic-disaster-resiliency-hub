@@ -28,7 +28,7 @@ function VolunteerDashboard() {
 	const fetchAssigned = async () => {
 		try {
 			const response = await axios.get(
-				`${SERVER_URL}/volunteer/assigned`,
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/assigned`,
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -48,7 +48,7 @@ function VolunteerDashboard() {
 	const fetchOffered = async () => {
 		try {
 			const response = await axios.get(
-				`${SERVER_URL}/volunteer/offered`,
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/offered`,
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -90,7 +90,7 @@ function VolunteerDashboard() {
 
 		try {
 			const response = await axios.post(
-				`${SERVER_URL}/volunteer/job-accept`,
+				`${import.meta.env.VITE_SERVER_URL}/volunteer/job-accept`,
 				{
 					offered: offered, // Send assignment in the body
 					action: action, // Send action in the body
