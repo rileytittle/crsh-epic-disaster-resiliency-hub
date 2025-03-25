@@ -42,7 +42,7 @@ const VolunteerForm = () => {
 
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_SERVER_URL}/volunteer/create`,
+				`${VITE_SERVER_URL}/volunteer/create`,
 				{
 					method: "POST",
 					headers: {
