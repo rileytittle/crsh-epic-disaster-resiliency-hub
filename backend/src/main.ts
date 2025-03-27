@@ -2,6 +2,7 @@ import express from "express";
 import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
 import { app as volunteerRouter } from "./routes/Volunteer.route";
+import { mailgunRouter as mailgunRouter } from "./routes/mailgun.route";
 const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/admin", AdminRouter);
 app.use("/homeowner", helpRouter);
 app.use("/volunteer", volunteerRouter);
+app.use("/mailgun", mailgunRouter);
 
 app.listen(port, () => {
 	console.log(`Server running on port ${port}`);
