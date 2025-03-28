@@ -1,0 +1,52 @@
+.requests-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px; /* Larger font for readability */
+  }
+  
+  .requests-table th, 
+  .requests-table td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .requests-table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .requests-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .requests-table tr:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+  }
+  
+  .help-list {
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .help-list li {
+    background: #f1f1f1;
+    padding: 5px;
+    margin: 2px 0;
+    border-radius: 5px;
+  }
+  
+  .assign-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .assign-btn:hover {
+    background-color: #218838;
+  }

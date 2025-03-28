@@ -1,86 +1,74 @@
 import React, { useEffect, useState } from 'react';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './assignVolunteers.css';
 
 const AssignVolunteer = () => {
-  const [requests, setRequests] = useState([]); // State to hold the requests
-  const [selectedRequest, setSelectedRequest] = useState(null); // State to hold the selected request
-  const [showAssignMenu, setShowAssignMenu] = useState(false); // State to toggle the assign menu
-  const [volunteers, setVolunteers] = useState([]); // State to hold the volunteers returned from the API
-  const [selectedVolunteer, setSelectedVolunteer] = useState(null); // State to hold the selected volunteer
+  const [requests, setRequests] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [showAssignMenu, setShowAssignMenu] = useState(false);
+  const [volunteers, setVolunteers] = useState([]);
+  const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [volunteerSearchTerm, setVolunteerSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState('');
 
-  // Function to fetch requests from the backend
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
   const fetchRequests = async () => {
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/viewRequests');
+      const response = await fetch('http://localhost:3000/homeowner/viewRequests');
       const data = await response.json();
-  
-      // Check if data is an array before calling .map()
       if (Array.isArray(data)) {
-        setRequests(data); // Set requests directly if it's an array
+        setRequests(data);
       } else {
         console.error("Unexpected response format:", data);
-        alert("Failed to load requests. Please try again.");
+        alert("Failed to load requests.");
       }
     } catch (error) {
       console.error("Error fetching requests:", error);
     }
   };
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  // Handle request selection
   const handleSelectRequest = (request) => {
     setSelectedRequest(request);
+    setShowAssignMenu(false); // Reset assign menu when switching requests
   };
 
-  // Handle deselecting the request
   const handleDeselectRequest = () => {
     setSelectedRequest(null);
-    setShowAssignMenu(false); // Hide the assign menu when deselecting
-    setVolunteers([]); // Clear volunteers when deselecting
-    setSelectedVolunteer(null); // Clear selected volunteer
+    setShowAssignMenu(false);
+    setVolunteers([]);
+    setSelectedVolunteer(null);
   };
 
-  // Handle showing the assign menu
-  const handleShowAssignMenu = () => {
+  const handleAssignButtonClick = () => {
     setShowAssignMenu(true);
   };
 
-  // Function to handle team button click
   const handleTeamButtonClick = async (team) => {
+    setSelectedTeam(team); // Set the selected team when a button is clicked
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/list', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ team }),
+      const response = await fetch('http://localhost:3000/admin/assign-volunteer/list', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const data = await response.json();
-      if (Array.isArray(data.volunteers) && data.volunteers.length > 0) {
-        setVolunteers(data.volunteers); // Set the volunteers returned from the API
+      console.log('Fetched Volunteers:', data); // Log the raw response data
+
+      if (Array.isArray(data)) {
+        setVolunteers(data); // Directly assign the array to the state
       } else {
-        setVolunteers([]);
-        alert(data.message); // Notify if no volunteers found
+        console.error('Invalid data format:', data);
       }
     } catch (error) {
       console.error('Error fetching volunteers:', error);
     }
   };
 
-  // Function to handle radio button change
-  const handleVolunteerSelect = (volunteer) => {
-    setSelectedVolunteer(volunteer); // Set the selected volunteer
-  };
-
-  // Function to handle volunteer assignments
   const handleAssignVolunteer = async () => {
     if (!selectedRequest?.id || !selectedVolunteer) {
       alert('Please select a request and a volunteer.');
@@ -88,105 +76,179 @@ const AssignVolunteer = () => {
     }
 
     try {
-      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/updateAssignment', {
+      const response = await fetch('http://localhost:3000/admin/assign-volunteer/updateAssignment', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          assignment: selectedRequest.id, // Send the request ID
-          id: selectedVolunteer.id, // Send the ID of the selected volunteer
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assignment: selectedRequest.id, id: selectedVolunteer.id }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const data = await response.json();
-      alert(data.message); // Notify the user of success or failure
-      handleDeselectRequest(); // Reset the selection after assignment
+      alert(data.message);
+      handleDeselectRequest();
     } catch (error) {
       console.error('Error assigning volunteer:', error);
       alert('Failed to assign volunteer.');
     }
   };
 
+  const filteredRequests = requests.filter((request) => {
+    const fullName = `${request.firstName} ${request.lastName}`.toLowerCase();
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      request.id?.toString().includes(searchTerm)
+    ) && (filterType ? request.helpType.includes(filterType) : true);
+  });
+
+  // Filter volunteers by search term, selected team, and volunteerSearchTerm
+  const filteredVolunteers = volunteers.filter((volunteer) => {
+    const fullName = `${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
+    return (
+      (fullName.includes(volunteerSearchTerm.toLowerCase()) ||
+        volunteer.id?.toString().includes(volunteerSearchTerm)) &&
+      (selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam) : true)
+    );
+  });
+
   return (
-    <div>
+    <div className="container mt-5">
       <h1>Current Homeowner Requests</h1>
-      <div>
-        {requests.length > 0 ? (
-          <ul>
-            {requests.map((request, index) => (
-              <li
-                key={index}
-                onClick={() => handleSelectRequest(request)}
-                style={{ cursor: 'pointer', margin: '10px 0', padding: '10px', border: '1px solid #ccc' }}
-              >
-                {request.firstName} {request.lastName} - {request.helpType}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No requests found.</p>
-        )}
+
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search Requests by Name or ID"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+
+      <div className="mb-3">
+        <select className="form-select" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+          <option value="">All Help Types</option>
+          {[...new Set(requests.flatMap(req => req.helpType))].map((type, index) => (
+            <option key={index} value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
+
+      {filteredRequests.length > 0 ? (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th>Help Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRequests.map((request, index) => (
+              <tr key={request.id || index} onClick={() => handleSelectRequest(request)}>
+                <td>{request.id}</td>
+                <td>{request.firstName} {request.lastName}</td>
+                <td>{request.email}</td>
+                <td>{request.address}, {request.city}, {request.state} {request.zip}</td>
+                <td>
+                  <ul>
+                    {request.helpType.map((type, i) => (
+                      <li key={i}>{type}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click event from interfering
+                      handleSelectRequest(request);
+                      handleAssignButtonClick();
+                    }}
+                  >
+                    Assign
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No matching requests found.</p>
+      )}
+
       {selectedRequest && (
-        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #007bff', borderRadius: '5px' }}>
+        <div className="card mt-4 p-3">
           <h2>Request Details</h2>
-          <p>
-            <strong>Name:</strong> {selectedRequest.firstName} {selectedRequest.lastName}
-          </p>
+          <p><strong>Name:</strong> {selectedRequest.firstName} {selectedRequest.lastName}</p>
           <p><strong>Email:</strong> {selectedRequest.email}</p>
           <p><strong>Address:</strong> {selectedRequest.address}, {selectedRequest.city}, {selectedRequest.state} {selectedRequest.zip}</p>
-          <p><strong>Support Type:</strong> {selectedRequest.helpType}</p>
-          <button onClick={handleDeselectRequest}>Back to Requests</button>
-          <button onClick={handleShowAssignMenu} style={{ marginLeft: '10px' }}>Assign Volunteer</button>
+          <p><strong>Support Type:</strong> {selectedRequest.helpType.join(', ')}</p>
+          <button className="btn btn-secondary" onClick={handleDeselectRequest}>Back to Requests</button>
         </div>
       )}
-      {showAssignMenu && selectedRequest && (
-        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #28a745', borderRadius: '5px' }}>
-          <h3>Choose a team to assign a volunteer from for {selectedRequest.firstName} {selectedRequest.lastName}</h3>
-          <button onClick={() => handleTeamButtonClick('admin_team')} style={{ margin: '5px' }}>
-            Volunteer Management and Administration
-          </button>
-          <button onClick={() => handleTeamButtonClick('hospitality')} style={{ margin: '5px' }}>
-            Hospitality Team
-          </button>
-          <button onClick={() => handleTeamButtonClick('logistic_tracking')} style={{ margin: '5px' }}>
-            Logistic Tracking Team
-          </button>
-          <button onClick={() => handleTeamButtonClick('community_outreach')} style={{ margin: '5px' }}>
-            Community Outreach Team
-          </button>
-          <button onClick={() => handleTeamButtonClick('community_helpers')} style={{ margin: '5px' }}>
-            Community Helpers Team
-          </button>
-          <button onClick={() => setShowAssignMenu(false)} style={{ marginTop: '10px' }}>Close</button>
-          {volunteers.length > 0 && (
-            <div style={{ marginTop: '20px' }}>
-              <h4>Select a Volunteer:</h4>
-              <ul>
-                {volunteers.map((volunteer, index) => (
-                  <li key={index}>
-                    <label>
+
+      {showAssignMenu && (
+        <div className="card mt-4 p-3">
+          <h3>Select a Team for {selectedRequest?.firstName} {selectedRequest?.lastName}</h3>
+          <div className="btn-group mb-3" role="group">
+            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Admin Team')}>Admin Team</button>
+            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Hospitality')}>Hospitality</button>
+            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Logistics')}>Logistics</button>
+            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Community Outreach')}>Community Outreach</button>
+            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Community Helpers')}>Community Helpers</button>
+            <button className="btn btn-outline-danger" onClick={() => setShowAssignMenu(false)}>Close</button>
+          </div>
+
+          {/* Volunteer Search Bar */}
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search Volunteers by Name or ID"
+              value={volunteerSearchTerm}
+              onChange={(e) => setVolunteerSearchTerm(e.target.value)}
+            />
+          </div>
+
+          {filteredVolunteers.length > 0 ? (
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Address</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredVolunteers.map((volunteer) => (
+                  <tr key={volunteer.id}>
+                    <td>{volunteer.id}</td>
+                    <td>{volunteer.firstName} {volunteer.lastName}</td>
+                    <td>{volunteer.email}</td>
+                    <td>{volunteer.phoneNumber}</td>
+                    <td>{volunteer.streetAddress1} {volunteer.streetAddress2}, {volunteer.city}, {volunteer.state} {volunteer.zipCode}</td>
+                    <td>
                       <input
                         type="radio"
                         name="volunteer"
                         checked={selectedVolunteer?.id === volunteer.id}
-                        onChange={() => handleVolunteerSelect(volunteer)}
+                        onChange={() => setSelectedVolunteer(volunteer)}
                       />
-                      {volunteer.id} {volunteer.email} {volunteer.first_name} {volunteer.last_name} {volunteer.phone_number}
-                    </label>
-                  </li>
+                    </td>
+                  </tr>
                 ))}
-              </ul>
-              <button onClick={handleAssignVolunteer} style={{ marginTop: '10px', color: 'white', backgroundColor: '#007bff', border: 'none', padding: '10px 15px', borderRadius: '5px' }}>
-                Assign
-              </button>
-            </div>
+              </tbody>
+            </table>
+          ) : (
+            <p>No volunteers available for this team.</p>
           )}
+
+          <button className="btn btn-success" onClick={handleAssignVolunteer}>Assign</button>
         </div>
       )}
     </div>

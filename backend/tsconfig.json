@@ -12,8 +12,8 @@
 	  "strict": true,
 	  "skipLibCheck": true
 	},
-	"include": ["..api/**/*.ts"   // Include files in api/ outside of src/
-  ],
+ 	"include": ["..api/**/*.ts","src/**/*.ts"   // Include files in api/ outside of src/
+   ],
 	"exclude": ["node_modules", "dist"] 
   }
   

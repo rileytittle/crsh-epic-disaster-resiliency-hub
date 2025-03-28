@@ -8,6 +8,7 @@ import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
+require('dotenv').config();
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,

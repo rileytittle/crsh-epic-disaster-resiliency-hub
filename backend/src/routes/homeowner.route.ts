@@ -3,7 +3,7 @@ import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
-
+require('dotenv').config();
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
 	ssl: {
