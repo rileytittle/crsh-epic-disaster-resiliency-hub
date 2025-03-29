@@ -270,7 +270,7 @@ app.post("/status", (req, res) => {
 * assignment is index 0
 * offered is index 1
 */
-app.get("/jobs", async (req, res) => {
+app.get("/jobs", async (req, res): Promise<any> =>{
     try {
         const userToken = req.query.userToken as string;
 
@@ -401,7 +401,7 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.get("/user-details", async (req, res) => {
+app.get("/user-details", async (req, res): Promise<any> => {
     try{
 
 		const userToken = req.query.userToken as string; 

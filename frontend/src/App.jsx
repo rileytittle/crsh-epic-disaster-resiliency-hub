@@ -11,7 +11,7 @@ import MainLayout from "./layouts/MainLayout";
 import Homepage from "./pages/Homepage";
 import HomeownerRequests from "./pages/HomeownerRequests";
 import RequestDetails from "./pages/RequestDetails";
-import EmailTest from './pages/SendEmailPage';
+//import EmailTest from './pages/SendEmailPage';
 
 import HomeownerForm from "./pages/Homeowner/HomeownerApplication";
 import CreateVolunteer from "./pages/CreateVolunteer";
@@ -65,7 +65,6 @@ const router = createBrowserRouter(
 				element={<VolunteerDashboard />}
 			></Route>
 			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
-			<Route path='/test-email' element={<SendEmailPage/>}></Route>
 
 			<Route
 				path="/assignVolunteers"

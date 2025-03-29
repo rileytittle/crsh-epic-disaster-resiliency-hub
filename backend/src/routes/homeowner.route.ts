@@ -6,7 +6,6 @@ import * as dotenv from 'dotenv';
 
 // Load custom .env file
 dotenv.config();
-import { Pool } from "pg";
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
@@ -33,8 +32,14 @@ requests.push(
 		"",
 		"Jacksonville",
 		"florida",
+		"Sarasota",
 		43325,
-		["Emotional Support"],
+		true,
+		false,
+		true,
+		false,
+		true,
+		false,
 		""
 	)
 ); //
