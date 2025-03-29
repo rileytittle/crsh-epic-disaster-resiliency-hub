@@ -14,13 +14,25 @@ const path = require("path");
 let saltRounds = 10;
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
+const IN_DEVELOPMENT = true;
+let pool: Pool;
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
 
 let app = Router();
 //enter your api key below

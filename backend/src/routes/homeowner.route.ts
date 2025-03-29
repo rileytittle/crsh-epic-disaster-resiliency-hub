@@ -2,13 +2,25 @@ import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
+const IN_DEVELOPMENT = true;
+let pool: Pool;
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
 let app = Router();
 
 let HomeownerApplications: HomeownerApplication[] = []; // database
@@ -84,9 +96,15 @@ app.post("/requestHelp", async (req, res) => {
 	console.log(`other: ${other}`);
 
 	try {
+		const currentDate = new Date().toISOString().split("T")[0];
+		console.log(currentDate); // Example: "2025-03-28"
+		const now = new Date();
+		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
+		console.log(currentTime); // Example: "14:35:45"
+
 		let result = pool.query(
-			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, status, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
+			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, date_created, time_created)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)`,
 			[
 				first_name,
 				last_name,
@@ -97,7 +115,9 @@ app.post("/requestHelp", async (req, res) => {
 				city,
 				state,
 				zip_code,
+				county,
 				"Pending",
+				null,
 				yard_cleanup,
 				interior_cleanup,
 				emotional_support,
@@ -105,6 +125,8 @@ app.post("/requestHelp", async (req, res) => {
 				clean_water,
 				emergency_food,
 				other,
+				currentDate,
+				currentTime,
 			]
 		);
 		res.status(200).send({ message: "Request succcessfully Submitted" });
