@@ -1,55 +1,92 @@
 import { Router } from "express";
 import mailgun from "mailgun-js";
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { Pool } from "pg";
 
-// Test route to verify that it is being loaded
-console.log("Mailgun routes are being set up");
-
-// Load custom .env file
 dotenv.config();
-
-if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-  throw new Error("MAILGUN_API_KEY or MAILGUN_DOMAIN is not set in the environment variables.");
-}
 
 const router = Router();
 
-// Mailgun setup
-const mg = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false,
+	},
 });
 
-router.get("/test", (req, res) => {
-    res.status(200).send("Mailgun route is working correctly!");
-  });
+const mg = mailgun({
+  apiKey: process.env.MAILGUN_API_KEY as string,
+  domain: process.env.MAILGUN_DOMAIN as string,
+});
 
-// Define the email endpoint
-router.post("/send-email", (req, res) => {
-    console.log("we are here");
-    console.log("Headers:", req.headers); // Log headers for debugging
-    console.log("Body:", req.body); // Log body for debugging
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Change this in production!
 
-    const { to, subject, text } = req.body;
+//Request Password Reset (Generate JWT & Send Email)
+router.post("/request-password-reset", async (req, res) => {
 
     
+  const { email } = req.body;
 
-    const data = {
-        from: "Corey <mailgun@sandbox0899d39dee96409cb71929568a4022bd.mailgun.org>",
-        to,
-        subject,
-        text,
+  
+
+  try {
+    //Check if user exists
+    const userQuery = await pool.query("SELECT email FROM volunteer WHERE email = $1", [email]);
+    if (userQuery.rowCount === 0) {
+        console.log("we are here");
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    //Generate a JWT (valid for 1 hour)
+    const resetToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+
+    //Create reset link
+    const resetLink = `http://localhost:5173/volunteer/reset-password?token=${resetToken}`;
+
+    //Send email
+    const emailData = {
+      from: "EPIC <no-reply@mg.epic-disaster-relief.com>",
+      to: email,
+      subject: "Password Reset Request",
+      text: `Click the link to reset your password: ${resetLink}`,
     };
 
-    mg.messages().send(data, (error: any, body: any) => {
-        if (error) {
-          console.error("Mailgun Error:", error); // Log detailed Mailgun error
-          return res.status(500).json({ error: error.message });
-        }
-        console.log("Mailgun Response:", body); // Log Mailgun's response for debugging
-        res.status(200).json({ message: "Email sent successfully", body });
-      });
-      
+    mg.messages().send(emailData, (error, body) => {
+      if (error) {
+        console.error("Mailgun Error:", error);
+        return res.status(500).json({ error: "Failed to send reset email" });
+      }
+      res.status(200).json({ message: "Password reset email sent" });
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//actually resets the password
+router.post("/reset-password", async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { email: string };
+    if (!decoded.email) {
+      return res.status(400).json({ error: "Invalid token" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await pool.query("UPDATE volunteer SET password = $1 WHERE email = $2", [hashedPassword, decoded.email]);
+
+    res.status(200).json({ message: "Password successfully reset" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Invalid or expired token" });
+  }
 });
 
 export { router as mailgunRouter };

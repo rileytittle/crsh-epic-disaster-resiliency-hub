@@ -25,6 +25,7 @@ import AssignVolunteer from "./pages/Admin/assignVolunteer";
 import ApplicationStatus from "./pages/pVolunteer/applicationStatus";
 import VolunteerPasswordChange from "./pages/volunteer/changePassword";
 import VolunteerPasswordReset from "./pages/volunteer/resetPassword";
+import VolunteerRequestReset from "./pages/volunteer/RequestReset";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import VolunteerJobs from "./pages/volunteer/jobsOffered";
@@ -70,14 +71,19 @@ const router = createBrowserRouter(
 				path="/applyVolunteer/status"
 				element={<ApplicationStatus />}
 			></Route>
+
 			<Route path="/volunteer/jobs" element={<VolunteerJobs />}></Route>
 			<Route
 				path="/volunteer/changePassword"
 				element={<VolunteerPasswordChange />}
 			></Route>
 			<Route
-				path="/volunteer/resetPassword"
+				path="/volunteer/reset-password"
 				element={<VolunteerPasswordReset />}
+			></Route>
+			<Route
+				path="/volunteer/request-reset"
+				element={<VolunteerRequestReset />}
 			></Route>
 			<Route path="/volunteers" element={<Volunteers />}></Route>
 			<Route
