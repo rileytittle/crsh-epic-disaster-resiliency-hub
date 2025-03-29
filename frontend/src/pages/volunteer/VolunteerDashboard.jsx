@@ -28,7 +28,7 @@ function VolunteerDashboard() {
 	const fetchAssigned = async () => {
 		try {
 			const response = await axios.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/assigned`,
+				`http://localhost:3000/volunteer/assigned`,
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -48,7 +48,7 @@ function VolunteerDashboard() {
 	const fetchOffered = async () => {
 		try {
 			const response = await axios.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/offered`,
+				`http://localhost:3000/volunteer/offered`,
 				{
 					headers: {
 						Authorization: `Bearer ${userToken}`,
@@ -90,7 +90,7 @@ function VolunteerDashboard() {
 
 		try {
 			const response = await axios.post(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept`,
+				`http://localhost:3000/volunteer/job-accept`,
 				{
 					offered: offered, // Send assignment in the body
 					action: action, // Send action in the body

@@ -11,7 +11,7 @@ const AssignVolunteer = () => {
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/viewRequests`
+				`http://localhost:3000/homeowner/viewRequests`
 			);
 			const data = await response.json();
 
@@ -53,7 +53,7 @@ const AssignVolunteer = () => {
 	const handleTeamButtonClick = async (team) => {
 		try {
 			const response = await fetch(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/list`,
+				`http://localhost:3000/admin/assign-volunteer/list`,
 				{
 					method: "POST",
 					headers: {
@@ -93,7 +93,7 @@ const AssignVolunteer = () => {
 
 		try {
 			const response = await fetch(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/updateAssignment`,
+				`http://localhost:3000/admin/assign-volunteer/updateAssignment`,
 				{
 					method: "POST",
 					headers: {

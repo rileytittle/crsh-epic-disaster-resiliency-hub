@@ -77,7 +77,7 @@ const HomeownerApply = () => {
 		console.log(JSON.stringify(formData));
 		try {
 			const response = await fetch(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/requestHelp`,
+				`http://localhost:3000/homeowner/requestHelp`,
 				{
 					method: "POST",
 					headers: {
