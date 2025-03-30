@@ -84,10 +84,6 @@ const router = createBrowserRouter(
 				path="/assignVolunteers"
 				element={<AssignVolunteer />}
 			></Route>
-			<Route
-				path="/applyVolunteer/status"
-				element={<ApplicationStatus />}
-			></Route>
 
 			<Route path="/volunteer/jobs" element={<VolunteerJobs />}></Route>
 			<Route
