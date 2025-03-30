@@ -79,7 +79,7 @@ function RequestDetails() {
 						</ul>
 					</div>
 					<h4>Description:</h4>
-					<>{description}</>
+					<></>
 					<p>Pictures should go here</p>
 					<br></br>
 					<button

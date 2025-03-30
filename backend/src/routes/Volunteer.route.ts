@@ -9,12 +9,25 @@ import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+const IN_DEVELOPMENT = true;
+let pool: Pool;
+
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
 
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
@@ -266,98 +279,103 @@ app.post("/status", (req, res) => {
 });
 
 /*Returns an array of Job objects
-* if a job doesn't exist, it will return 0
-* assignment is index 0
-* offered is index 1
-*/
+ * if a job doesn't exist, it will return 0
+ * assignment is index 0
+ * offered is index 1
+ */
 app.get("/jobs", async (req, res) => {
-    try {
-        const userToken = req.query.userToken as string;
+	try {
+		const userToken = req.query.userToken as string;
 
-        if (!userToken) {
-            return res.status(400).send({ message: "User token is required" });
-        }
+		if (!userToken) {
+			return res.status(400).send({ message: "User token is required" });
+		}
 
-        const decodedToken = jwtDecode<{ email: string }>(userToken);
+		const decodedToken = jwtDecode<{ email: string }>(userToken);
 
-        const queryUser = await pool.query(
-            "SELECT assignment, offered FROM Volunteer WHERE email = $1",
-            [decodedToken.email]
-        );
+		const queryUser = await pool.query(
+			"SELECT assignment, offered FROM Volunteer WHERE email = $1",
+			[decodedToken.email]
+		);
 
-        if (queryUser.rows.length === 0) {
-            return res.status(404).send({ message: "Volunteer not found" });
-        }
+		if (queryUser.rows.length === 0) {
+			return res.status(404).send({ message: "Volunteer not found" });
+		}
 
-        const user = queryUser.rows[0];
+		const user = queryUser.rows[0];
 
-        let jobs: (Job | number)[] = [];
+		let jobs: (Job | number)[] = [];
 
-        // Function to map request data to Job model
-        const createJobFromRequest = (row: any, assignedTeam: string): Job => {
-            const helpTypes: string[] = [];
+		// Function to map request data to Job model
+		const createJobFromRequest = (row: any, assignedTeam: string): Job => {
+			const helpTypes: string[] = [];
 
-            if (row.yard_cleanup) helpTypes.push("Yard Cleanup");
-            if (row.interior_cleanup) helpTypes.push("Interior Cleanup");
-            if (row.emotional_support) helpTypes.push("Emotional Support");
-            if (row.cleaning_supplies) helpTypes.push("Cleaning Supplies");
-            if (row.clean_water) helpTypes.push("Clean Water");
-            if (row.emergency_food) helpTypes.push("Emergency Food");
-            if (row.other) helpTypes.push(row.other);
+			if (row.yard_cleanup) helpTypes.push("Yard Cleanup");
+			if (row.interior_cleanup) helpTypes.push("Interior Cleanup");
+			if (row.emotional_support) helpTypes.push("Emotional Support");
+			if (row.cleaning_supplies) helpTypes.push("Cleaning Supplies");
+			if (row.clean_water) helpTypes.push("Clean Water");
+			if (row.emergency_food) helpTypes.push("Emergency Food");
+			if (row.other) helpTypes.push(row.other);
 
-            return new Job(
-                row.request_id,
-                row.first_name,
-                row.last_name,
-                row.email,
-                row.street_address_1,
-                row.city,
-                row.state,
-                row.zip_code,
-                helpTypes,
-                assignedTeam
-            );
-        };
+			return new Job(
+				row.request_id,
+				row.first_name,
+				row.last_name,
+				row.email,
+				row.street_address_1,
+				row.city,
+				row.state,
+				row.zip_code,
+				helpTypes,
+				assignedTeam
+			);
+		};
 
-        if (user.assignment !== null) {
-            const queryResult = await pool.query(
-                "SELECT * FROM Request WHERE request_id = $1",
-                [user.assignment]
-            );
+		if (user.assignment !== null) {
+			const queryResult = await pool.query(
+				"SELECT * FROM Request WHERE request_id = $1",
+				[user.assignment]
+			);
 
-            if (queryResult.rows.length > 0) {
-				let job = createJobFromRequest(queryResult.rows[0], "Assigned Team");
+			if (queryResult.rows.length > 0) {
+				let job = createJobFromRequest(
+					queryResult.rows[0],
+					"Assigned Team"
+				);
 				console.log(job);
 
-                jobs.push(job);
-            }
-        } else {
+				jobs.push(job);
+			}
+		} else {
 			jobs.push(0);
 		}
 
-        if (user.offered !== null) {
-            const queryResult = await pool.query(
-                "SELECT * FROM Request WHERE request_id = $1",
-                [user.offered]
-            );
+		if (user.offered !== null) {
+			const queryResult = await pool.query(
+				"SELECT * FROM Request WHERE request_id = $1",
+				[user.offered]
+			);
 
-            if (queryResult.rows.length > 0) {
-                jobs.push(createJobFromRequest(queryResult.rows[0], "Offered Team"));
-            }
-        } else {
+			if (queryResult.rows.length > 0) {
+				jobs.push(
+					createJobFromRequest(queryResult.rows[0], "Offered Team")
+				);
+			}
+		} else {
 			jobs.push(0);
 		}
 
 		console.log("Jobs", jobs);
 
-        res.status(200).json(jobs);
-    } catch (error) {
-        console.error("Error in /jobs API:", error);
-        res.status(500).send({
-            message: "Internal Server Error",
-            error: (error as Error).message,
-        });
-    }
+		res.status(200).json(jobs);
+	} catch (error) {
+		console.error("Error in /jobs API:", error);
+		res.status(500).send({
+			message: "Internal Server Error",
+			error: (error as Error).message,
+		});
+	}
 });
 
 //allows user to accept or reject their job
@@ -402,30 +420,31 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 });
 
 app.get("/user-details", async (req, res) => {
-    try{
+	try {
+		const userToken = req.query.userToken as string;
 
-		const userToken = req.query.userToken as string; 
+		if (!userToken) {
+			return res.status(400).send({ message: "User token is required" });
+		}
 
-        if (!userToken) {
-            return res.status(400).send({ message: "User token is required" });
-        }
+		const decodedToken = jwtDecode<{ email: string }>(userToken);
 
-        const decodedToken = jwtDecode<{ email: string }>(userToken);
+		if (!decodedToken.email) {
+			return res
+				.status(400)
+				.send({ message: "Invalid token: email missing" });
+		}
 
-        if (!decodedToken.email) {
-            return res.status(400).send({ message: "Invalid token: email missing" });
-        }
-
-        const queryResult = await pool.query(
-            "SELECT * FROM Volunteer WHERE email = $1",
-            [decodedToken.email]
-        );
+		const queryResult = await pool.query(
+			"SELECT * FROM Volunteer WHERE email = $1",
+			[decodedToken.email]
+		);
 
 		if (queryResult.rows.length === 0) {
-            return res.status(404).send({ message: "Volunteer not found" });
-        }
+			return res.status(404).send({ message: "Volunteer not found" });
+		}
 
-        const row = queryResult.rows[0];
+		const row = queryResult.rows[0];
 
 		const workTypes: string[] = [];
 
@@ -436,26 +455,25 @@ app.get("/user-details", async (req, res) => {
 		if (row.community_outreach) workTypes.push("community_outreach");
 		if (row.community_helpers) workTypes.push("community_helpers");
 
-
-        const volunteer = new Volunteer(
+		const volunteer = new Volunteer(
 			row.id,
-			row.first_name,       
-			row.last_name,        
-			row.phone_number,     
+			row.first_name,
+			row.last_name,
+			row.phone_number,
 			row.email,
-			row.street_address,   
+			row.street_address_1,
 			row.city,
 			row.state,
-			row.zip_code,         
-			workTypes, 
-			row.team_leader,      
+			row.zip_code,
+			workTypes,
+			row.team_leader,
 			"Yeah, you really thought I was going to send a password back to the frontend lol"
 		);
 
 		//console.log(volunteer);
 
-        res.status(200).send(volunteer);
-	} catch (error){
+		res.status(200).send(volunteer);
+	} catch (error) {
 		console.error("Error in /user-details API:", error);
 		res.status(500).send({
 			message: "Internal Server Error",
@@ -464,40 +482,48 @@ app.get("/user-details", async (req, res) => {
 	}
 });
 
-app.post("/update-user-details", async (req:Request, res:any) => {
-    try {
+app.post("/update-user-details", async (req: Request, res: any) => {
+	try {
+		const {
+			email: email,
+			phone: phone,
+			address: address,
+			city: city,
+			state: state,
+			zip: zip,
+		} = req.body;
 
-        const { email: email, phone: phone, address: address, city: city, state: state, zip: zip } = req.body;
-
-        if (!email) {
-            return res.status(400).json({ message: "Email is required" });
-        }
+		if (!email) {
+			return res.status(400).json({ message: "Email is required" });
+		}
 
 		console.log(email, phone, address, city, state, zip);
 
-
-        const query = `
+		const query = `
             UPDATE Volunteer 
-            SET phone_number = $1, street_address = $2, city = $3, state = $4, zip_code = $5
+            SET phone_number = $1, street_address_1 = $2, city = $3, state = $4, zip_code = $5
             WHERE email = $6
             RETURNING *;
         `;
-        const values = [phone, address, city, state, zip, email];
+		const values = [phone, address, city, state, zip, email];
 
-        const result = await pool.query(query, values);
+		const result = await pool.query(query, values);
 
-        if (result.rowCount === 0) {
-            return res.status(404).json({ message: "User not found" });
-        }
+		if (result.rowCount === 0) {
+			return res.status(404).json({ message: "User not found" });
+		}
 
-        res.status(200).json({ message: "User details updated successfully", user: result.rows[0] });
-
-    } catch (error:any) {
-        console.error("Error updating user details:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
-    }
+		res.status(200).json({
+			message: "User details updated successfully",
+			user: result.rows[0],
+		});
+	} catch (error: any) {
+		console.error("Error updating user details:", error);
+		res.status(500).json({
+			message: "Internal Server Error",
+			error: error.message,
+		});
+	}
 });
-
-
 
 export { app };

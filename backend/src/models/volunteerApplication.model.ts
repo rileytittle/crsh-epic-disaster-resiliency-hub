@@ -4,7 +4,7 @@ export class VolunteerApplication {
 	lastName: string;
 	phoneNumber: number;
 	email: string;
-	streetAddress: string;
+	streetAddress1: string;
 	city: string;
 	state: string;
 	zipCode: number;
@@ -18,7 +18,7 @@ export class VolunteerApplication {
 		lastName: string,
 		phoneNumber: number,
 		email: string,
-		streetAddress: string,
+		streetAddress1: string,
 		city: string,
 		state: string,
 		zipCode: number,
@@ -29,7 +29,7 @@ export class VolunteerApplication {
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.streetAddress = streetAddress;
+		this.streetAddress1 = streetAddress1;
 		this.city = city;
 		this.state = state;
 		this.zipCode = zipCode;
