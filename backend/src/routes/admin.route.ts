@@ -244,7 +244,7 @@ app.post("/homeowner-requests/accept", (req, res) => {
 app.get("/assign-volunteer/list", async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
-		const result = await pool.query('SELECT * FROM public."VolunteerAccount"');
+		const result = await pool.query('SELECT * FROM "volunteer"');
 		
 		// Map the results to Volunteer instances
 		const volunteers = result.rows.map((row) => {

@@ -19,7 +19,7 @@ const AssignVolunteer = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await fetch('http://localhost:3000/homeowner/viewRequests');
+      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/homeowner/viewRequests');
       const data = await response.json();
       if (Array.isArray(data)) {
         setRequests(data);
@@ -51,7 +51,7 @@ const AssignVolunteer = () => {
   const handleTeamButtonClick = async (team) => {
     setSelectedTeam(team); // Set the selected team when a button is clicked
     try {
-      const response = await fetch('http://localhost:3000/admin/assign-volunteer/list', {
+      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/list', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -76,7 +76,7 @@ const AssignVolunteer = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/admin/assign-volunteer/updateAssignment', {
+      const response = await fetch('https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/assign-volunteer/updateAssignment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ assignment: selectedRequest.id, id: selectedVolunteer.id }),

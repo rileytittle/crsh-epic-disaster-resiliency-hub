@@ -40,7 +40,7 @@ app.get("/viewRequests", async (req, res) => {
 	try {
 	  // Query to get rows with the "Active" status
 	  const result = await pool.query(
-		'SELECT * FROM "Request" WHERE status = $1',
+		'SELECT * FROM "request" WHERE status = $1',
 		['Active']
 	  );
   
