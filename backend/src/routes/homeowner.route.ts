@@ -2,6 +2,10 @@ import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
+import * as dotenv from "dotenv";
+
+// Load custom .env file
+dotenv.config();
 const IN_DEVELOPMENT = true;
 let pool: Pool;
 
@@ -40,8 +44,14 @@ requests.push(
 		"",
 		"Jacksonville",
 		"florida",
+		"Sarasota",
 		43325,
-		["Emotional Support"],
+		true,
+		false,
+		true,
+		false,
+		true,
+		false,
 		""
 	)
 ); //

@@ -59,7 +59,10 @@ function VolLogin() {
 					/>
 					<button onClick={login}>GO</button>
 				</form>
-				<button onClick={handleForgotPassword} style={{ marginTop: "10px" }}>
+				<button
+					onClick={handleForgotPassword}
+					style={{ marginTop: "10px" }}
+				>
 					Forgot Password?
 				</button>
 				{message && <p>{message}</p>}

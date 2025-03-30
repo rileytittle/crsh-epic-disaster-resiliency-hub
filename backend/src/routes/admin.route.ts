@@ -155,6 +155,7 @@ app.post("/login", async (req, res) => {
 		}
 	} catch (e) {
 		res.status(500).send(e);
+		console.log(e);
 	}
 });
 app.post("/create-volunteer/accept", async (req, res) => {
@@ -171,7 +172,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			[
 				application.rows[0].email,
 				application.rows[0].first_name[0] +
-					application.rows[0].last_name,
+				application.rows[0].last_name,
 				null,
 				application.rows[0].first_name,
 				application.rows[0].last_name,
