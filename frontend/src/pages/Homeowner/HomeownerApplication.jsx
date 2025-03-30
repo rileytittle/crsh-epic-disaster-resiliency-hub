@@ -518,9 +518,7 @@ const HomeownerApply = () => {
 					<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}>
 						<div className="card-header">
 							Description
-							<span
-								className={`${styles.counter}`}
-							>
+							<span className={`${styles.counter}`}>
 								&ensp; {formData.description.trim().length} / 500
 							</span>
 						</div>
