@@ -75,25 +75,25 @@ app.post("/requestHelp", async (req, res) => {
 	const emergency_food = req.body.helpFood;
 	const other = req.body.other;
 
-	console.log("yard_cleanup:", req.body.yard_cleanup);
-	console.log("interior_cleanup:", req.body.interior_cleanup);
-	// send data to the database test
-	console.log(`first_name: ${first_name}`);
-	console.log(`last_name: ${last_name}`);
-	console.log(`email: ${email}`);
-	console.log(`phone_number: ${phone_number}`);
-	console.log(`street_address_1: ${street_address_1}`);
-	console.log(`street_address_2: ${street_address_2}`);
-	console.log(`city: ${city}`);
-	console.log(`state: ${state}`);
-	console.log(`zip_code: ${zip_code}`);
-	console.log(`yard_cleanup: ${yard_cleanup}`);
-	console.log(`interior_cleanup: ${interior_cleanup}`);
-	console.log(`emotional_support: ${emotional_support}`);
-	console.log(`cleaning_supplies: ${cleaning_supplies}`);
-	console.log(`clean_water: ${clean_water}`);
-	console.log(`emergency_food: ${emergency_food}`);
-	console.log(`other: ${other}`);
+	// console.log("yard_cleanup:", req.body.yard_cleanup);
+	// console.log("interior_cleanup:", req.body.interior_cleanup);
+	// // send data to the database test
+	// console.log(`first_name: ${first_name}`);
+	// console.log(`last_name: ${last_name}`);
+	// console.log(`email: ${email}`);
+	// console.log(`phone_number: ${phone_number}`);
+	// console.log(`street_address_1: ${street_address_1}`);
+	// console.log(`street_address_2: ${street_address_2}`);
+	// console.log(`city: ${city}`);
+	// console.log(`state: ${state}`);
+	// console.log(`zip_code: ${zip_code}`);
+	// console.log(`yard_cleanup: ${yard_cleanup}`);
+	// console.log(`interior_cleanup: ${interior_cleanup}`);
+	// console.log(`emotional_support: ${emotional_support}`);
+	// console.log(`cleaning_supplies: ${cleaning_supplies}`);
+	// console.log(`clean_water: ${clean_water}`);
+	// console.log(`emergency_food: ${emergency_food}`);
+	// console.log(`other: ${other}`);
 
 	try {
 		const currentDate = new Date().toISOString().split("T")[0];

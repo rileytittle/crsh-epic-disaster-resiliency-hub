@@ -8,9 +8,9 @@ function HomeownerRequests() {
 		axios
 			.get(`http://localhost:3000/admin/homeowner-requests`)
 			.then((res) => {
-				console.log(res.data);
+				// console.log(res.data);
 				setRequests(res.data);
-				console.log(res.data);
+				// console.log(res.data.zip_code);
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);
@@ -24,13 +24,22 @@ function HomeownerRequests() {
 						<RequestCard
 							key={request.id}
 							id={request.id}
-							firstName={request.first_name}
-							lastName={request.last_name}
+							firstName={request.firstName}
+							lastName={request.lastName}
 							email={request.email}
-							address={request.street_address_1}
+							phoneNumber={request.phoneNumber}
+							streetAddress1={request.streetAddress1}
+							streetAddress2={request.streetAddress2}
 							city={request.city}
 							state={request.state}
-							zip={request.zip_code}
+							zip={request.zipCode}
+							county={request.county}
+							status={request.status}
+							reasonRejected={request.reasonRejected}
+							helpType={request.helpType}
+							other={request.other}
+							dateCreated={request.dateCreated}
+							timeCreated={request.timeCreated}
 						></RequestCard>
 					))}
 				</div>

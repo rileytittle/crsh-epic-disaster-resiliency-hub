@@ -2,6 +2,7 @@ import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
+import { helpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
@@ -398,10 +399,67 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 
 app.get("/homeowner-requests", async (req, res) => {
 	try {
-		let requests = await pool.query(
-			"SELECT request_id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
-		);
-		res.status(200).send(requests.rows);
+		let requests = await pool.query("SELECT * FROM request;");
+		let requestList: helpRequest[] = [];
+		for (let request of requests.rows) {
+			let id = request.id;
+			let firstName = request.first_name;
+			let lastName = request.last_name;
+			let email = request.email;
+			let phoneNumber = request.phone_number;
+			let streetAddress1 = request.street_address_1;
+			let streetAddress2 = request.street_address_2;
+			let city = request.city;
+			let state = request.state;
+			let zipCode = request.zip_code;
+			let county = request.county;
+			let status = request.status;
+			let reasonRejected = request.reason_rejected;
+			let helpType: string[] = [];
+			if (request.yard_cleanup) {
+				helpType.push("Yard cleanup");
+			}
+			if (request.interior_cleanup) {
+				helpType.push("Interior Cleanup");
+			}
+			if (request.emotional_support) {
+				helpType.push("Emotional Support");
+			}
+			if (request.cleaning_supplies) {
+				helpType.push("Cleaning supplies");
+			}
+			if (request.clean_water) {
+				helpType.push("Clean water");
+			}
+			if (request.emergency_food) {
+				helpType.push("Emergency food");
+			}
+
+			let other = request.other;
+			let dateCreated = request.date_created;
+			let timeCreated = request.time_created;
+			let newRequest = new helpRequest(
+				id,
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				streetAddress1,
+				streetAddress2,
+				city,
+				state,
+				zipCode,
+				county,
+				status,
+				reasonRejected,
+				helpType,
+				other,
+				dateCreated,
+				timeCreated
+			);
+			requestList.push(newRequest);
+		}
+		res.status(200).send(requestList);
 	} catch (e) {
 		res.send(e);
 	}
