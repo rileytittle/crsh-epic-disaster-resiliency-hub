@@ -10,9 +10,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"skipLibCheck": true
-	},
-	"include": ["../api/*.ts"],
-	"exclude": ["node_modules", "dist"]
+	}
 }
 
-  

@@ -21,11 +21,9 @@ function AdminLogin() {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
 			await axios
-				.post(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login",
-					userData,
-					{ headers }
-				)
+				.post(`http://localhost:3000/admin/login`, userData, {
+					headers,
+				})
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "admin");

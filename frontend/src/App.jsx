@@ -30,6 +30,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import VolunteerJobs from "./pages/volunteer/jobsOffered";
 import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings";
+import GenerateReports from "./pages/Admin/GenerateReports";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -91,6 +92,10 @@ const router = createBrowserRouter(
 				element={<VolunteerDetails />}
 			></Route>
 			<Route path="/volunteer/account-details" element={<VolunteerAccountSettings/>}></Route>
+			<Route
+				path="/generate-reports"
+				element={<GenerateReports />}
+			></Route>
 		</Route>
 	)
 );

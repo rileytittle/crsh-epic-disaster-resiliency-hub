@@ -42,7 +42,7 @@ const VolunteerForm = () => {
 
 		try {
 			const response = await fetch(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/create",
+				`http://localhost:3000/volunteer/create`,
 				{
 					method: "POST",
 					headers: {
