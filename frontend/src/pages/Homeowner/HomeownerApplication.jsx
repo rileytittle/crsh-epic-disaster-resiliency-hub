@@ -16,6 +16,7 @@ const HomeownerApply = () => {
 		county: null,
 		help: null,
 		other: null,
+		description: null,
 	});
 	const [formData, setFormData] = useState({
 		first_name: "",
@@ -36,21 +37,25 @@ const HomeownerApply = () => {
 		helpFood: false,
 		helpOther: false,
 		other: "",
+		description: "",
 	});
 
 	function toggleOther() {
 		const checkbox = document.getElementById("helpOther");
 		const customResponse = document.getElementById("other");
+		const customCounter = document.getElementById("otherCount");
 		const label = document.getElementById("otherLabel");
 
 		// Toggle the textarea based on the checkbox status
 		if (checkbox.checked) {
 			label.style.display = "none";
 			customResponse.style.display = "inline";
+			customCounter.style.display = "inline";
 		} else {
 			label.style.display = "inline";
 			customResponse.style.display = "none";
 			customResponse.value = ""; // Clear input when unchecked
+			customCounter.style.display = "none";
 			setFormData({
 				...formData,
 				other: "",
@@ -62,15 +67,14 @@ const HomeownerApply = () => {
 		const checkboxValidity = formData.helpExterior || formData.helpInterior || formData.helpEmotional || formData.helpSupplies || formData.helpWater || formData.helpFood || formData.helpOther;
 		setFormValidity((prev) => ({ ...prev, help: checkboxValidity }));
 
-		//					if  other=unchecked     or  other=checked      &  other has data
-		const  otherValidity = (!formData.helpOther || (formData.helpOther && formData.other.trim() !== ""));
+		//					if  other=unchecked     or  other=checked       &   other has data                &   other is less than 100 chars
+		const otherValidity = (!formData.helpOther || ((formData.helpOther) && (formData.other.trim() !== "") && (formData.other.trim().length <= 100)));
 		setFormValidity((prev) => ({ ...prev, other: otherValidity }));
 	}, [formData]
 	);
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
-		//console.log(type);
 		if (type === "checkbox") {
 			setFormData({
 				...formData,
@@ -94,21 +98,22 @@ const HomeownerApply = () => {
 						validation = emailRegEx.test(value.trim());
 						break;
 					case "phone_number":
-						validation = value.trim().length == 9;
+						validation = value.trim().length == 10;
 						break;
 					case "zip_code":
 						validation = value.trim().length == 5;
 						break;
 					case "county":
-						validation = value.trim() !== "Choose...";
+						validation = value.trim() != "Choose..." && value.trim() != "";;
 						break;
-						case "other":
-							
-						validation = (value.trim() != "") && (value.trim().length < 100);
-
+					case "other":
+						validation = (value.trim() != "") && (value.trim().length <= 100);
 						break;
-
+					case "description":
+						validation = (value.trim() != "") && (value.trim().length <= 500);
+						break;
 				}
+				//console.log(`${name}: ${validation}`);
 				setFormValidity({
 					...formValidity,
 					[name]: validation,
@@ -119,32 +124,35 @@ const HomeownerApply = () => {
 
 	const formSubmitted = async (e) => {
 		e.preventDefault();
-		let validities = Object.keys(formValidity)
 		setFormValidity((prevState) =>
 			Object.fromEntries(
 				Object.entries(prevState).map(([key, value]) => [key, value === null ? false : value])
 			)
 		);
+		// Validate all fields upon form submission
 		const newFormValidity = {
 			first_name: formData.first_name.trim() !== "",
 			last_name: formData.last_name.trim() !== "",
 			email: emailRegEx.test(formData.email.trim()),
-			phone_number: (formData.phone_number.trim().length == 9),
-			street_address_1: formData.street_address_1.trim() !== "",
-			city: formData.city.trim() !== "",
-			zip_code: (formData.zip_code.trim().length == 5),
-			county: formData.county.trim() !== "Choose...",
+			phone_number: formData.phone_number.trim().length == 10,
+			street_address_1: formData.street_address_1.trim() != "",
+			city: formData.city.trim() != "",
+			zip_code: formData.zip_code.trim().length == 5,
+			county: formData.county.trim() != "Choose..." && formData.county.trim() != "",
 			help: formData.helpExterior || formData.helpInterior || formData.helpEmotional || formData.helpSupplies || formData.helpWater || formData.helpFood || formData.helpOther,
-			other: !(formData.helpOther) || (formData.helpOther && formData.other.trim() !== "" && formData.other.trim().length < 100),
+			other: !formData.helpOther || (formData.helpOther && formData.other.trim() !== "" && formData.other.trim().length <= 100),
+			description: (formData.description.trim() != "") && (formData.description.trim().length <= 500),
 		};
 
-		const form = e.currentTarget;
-		if (form.checkValidity() === false) {
-			console.log(`not validated`);
+		setFormValidity(newFormValidity);
+
+		const isFormValid = Object.values(newFormValidity).every((valid) => valid);
+
+		if (!isFormValid) {
+			console.log(`not validated: ${isFormValid}`);
 			e.stopPropagation();
 		} else {
-			console.log(formData);
-			console.log(JSON.stringify(formData));
+			console.log(`validated: ${isFormValid}`, formData);
 			try {
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp`,
@@ -294,6 +302,9 @@ const HomeownerApply = () => {
 										onChange={handleChange}
 										required
 									/>
+									<div className="invalid-feedback">
+										Please enter a valid city.
+									</div>
 								</div>
 								<div className="col-md-2">
 									<label htmlFor="state" className="form-label">
@@ -338,9 +349,10 @@ const HomeownerApply = () => {
 										County
 									</label>
 									<select
+										required
 										id="county"
 										name="county"
-										className="form-select"
+										className={`form-select ${formValidity.county === null ? "" : (formValidity.county ? "is-valid" : "is-invalid")}`}
 										placeholder="Choose..."
 										value={formData.county}
 										onChange={handleChange}
@@ -349,6 +361,9 @@ const HomeownerApply = () => {
 										<option>Charlotte</option>
 										<option>Sarasota</option>
 									</select>
+									<div className="invalid-feedback">
+										Please select a county.
+									</div>
 								</div>
 							</div>
 						</div>
@@ -482,18 +497,56 @@ const HomeownerApply = () => {
 									value={formData.other}
 									onChange={handleChange}
 								/>
+								<span
+									className={`${styles.counter}`}
+									name="otherCount"
+									id="otherCount"
+									style={{ display: "none" }}>
+									&ensp;
+									{formData.other.trim().length} / 100
+								</span>
 								<div className="invalid-feedback">
-									Other must be between 1-100 characters.
+									Please enter an other area of help. <br />
+									Other must be less than 100 characters.
 								</div>
 							</div>
 						</div>
 					</div>
-					<div className="invalid-feedback text-center mb-5">
+					<div className="invalid-feedback text-center mb-3">
 						Please select a help type.
 					</div>
+					<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}>
+						<div className="card-header">
+							Description
+							<span
+								className={`${styles.counter}`}
+							>
+								&ensp; {formData.description.trim().length} / 500
+							</span>
+						</div>
+						<div className="card-body">
+							<textarea
+								required
+								rows="3"
+								name="description"
+								id="description"
+								value={formData.description}
+								onChange={handleChange}
+								className={`form-control ${formValidity.description === null ? "" : (formValidity.description ? "is-valid" : "is-invalid")}`}
+							></textarea>
+							<div className="invalid-feedback text-center">
+								Please enter a brief description of the help needed. <br />
+								Description must be less than 500 characters
+							</div>
+						</div>
+					</div>
+
+
+
 					<div className={`collapse`}>
 						<label htmlFor="inputImages" className="form-label">
 							Upload photos of the help area
+
 						</label>
 						<input
 							className="form-control"
@@ -514,20 +567,3 @@ const HomeownerApply = () => {
 	); //
 };
 export default HomeownerApply;
-/*
-Name
-Phone number
-email
-physical address for service requested with state and County
-“I need help with” 
-	☐ Tarping
-	☐ Yard cleanup
-	☐ Interior cleanup
-	☐ Emotional Support
-	☐ Cleaning Supplies
-	☐ Clean Water
-	☐ Emergency Food
-	☐ Other ____________
-Ability to upload photos
-SUBMIT button: “Submit” 
-*/
