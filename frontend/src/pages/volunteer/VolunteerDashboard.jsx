@@ -22,10 +22,10 @@ function VolunteerDashboard() {
         async function fetchData() {
             try {
                 const [userRes, jobsRes] = await Promise.all([
-                    axios.get("http://localhost:3000/volunteer/user-details", {
+                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/user-details", {
                         params: { userToken },
                     }),
-                    axios.get("http://localhost:3000/volunteer/jobs", {
+                    axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/jobs", {
                         params: { userToken },
                     }),
                 ]);
@@ -51,7 +51,7 @@ function VolunteerDashboard() {
         }
 
         axios
-            .post("http://localhost:3000/volunteer/job-accept", {
+            .post("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept", {
                 offered: offered.id,
                 action,
                 id: user.id,

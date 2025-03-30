@@ -43,7 +43,7 @@ router.post("/request-password-reset", async (req, res) => {
     const resetToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
 
     //Create reset link
-    const resetLink = `http://localhost:5173/volunteer/reset-password?token=${resetToken}`;
+    const resetLink = `https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/reset-password?token=${resetToken}`;
 
     //Send email
     const emailData = {

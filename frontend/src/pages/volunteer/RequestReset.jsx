@@ -7,7 +7,7 @@ const RequestReset = () => {
 
   const handleRequestReset = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/mailgun/request-password-reset", { email });
+      const response = await axios.post("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/mailgun/request-password-reset", { email });
       setMessage(response.data.message);
     } catch (error) {
       setMessage("Error sending reset email");

@@ -18,7 +18,7 @@ function VolunteerAccountSettings() {
 
     useEffect(() => {
         function fetchUserData() {
-            axios.get("http://localhost:3000/volunteer/user-details", {
+            axios.get("https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/user-details", {
                 params: { userToken: userToken }
             })
             .then(response => {
