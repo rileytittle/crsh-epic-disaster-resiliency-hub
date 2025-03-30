@@ -8,6 +8,7 @@ import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
+require('dotenv').config();
 
 const IN_DEVELOPMENT = true;
 let pool: Pool;
@@ -29,10 +30,11 @@ if (IN_DEVELOPMENT) {
 	});
 }
 
+
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
 
-const app = Router();
+let app = Router();
 
 /*************************************************DUMMMY DATA*********************************************************/
 let volunteerApplications: VolunteerApplication[] = []; // Temporary storage of applications
@@ -45,6 +47,7 @@ let dummyVolunteers: Volunteer[] = [
 		9047352653,
 		"rileytittle02@gmail.com",
 		"7816 Southside Blvd",
+		"",
 		"Jacksonville",
 		"FL",
 		32256,
@@ -59,6 +62,7 @@ let dummyVolunteers: Volunteer[] = [
 		9047352653,
 		"fake@email.com",
 		"7816 Southside Blvd",
+		"",
 		"Jacksonville",
 		"FL",
 		32256,
@@ -69,12 +73,13 @@ let dummyVolunteers: Volunteer[] = [
 ];
 let dummyApplications: VolunteerApplication[] = [
 	new VolunteerApplication(
-		0,
+		1,
 		"Riley",
 		"Tittle",
 		9047352653,
 		"rileytittle02@gmail.com",
 		"7816 Southside Blvd",
+		"",
 		"Jacksonville",
 		"FL",
 		32256,
@@ -87,6 +92,7 @@ let dummyApplications: VolunteerApplication[] = [
 		9047352653,
 		"fake@email.com",
 		"7816 Southside Blvd",
+		"",
 		"Jacksonville",
 		"FL",
 		32256,
@@ -164,42 +170,91 @@ app.post("/login", async (req, res) => {
 	}
 });
 
-app.post("/create", (req, res) => {
-	const {
-		firstName,
-		lastName,
-		phoneNumber,
-		email,
-		streetAddress,
-		city,
-		state,
-		zipCode,
-		areasOfHelp,
-	} = req.body;
-	const id = Math.floor(Math.random() * 10000);
+app.post("/create", async (req: Request, res: Response): Promise<any> => {
+  const {
+    firstName,
+    lastName,
+    phoneNumber,
+    email,
+    streetAddress1,
+    streetAddress2,
+    city,
+    state,
+    zipCode,
+    areasOfHelp,
+  } = req.body;
 
-	// Create a new instance of VolunteerApplication
-	const newVolunteer = new VolunteerApplication(
-		id,
-		firstName,
-		lastName,
-		phoneNumber,
-		email,
-		streetAddress,
-		city,
-		state,
-		zipCode,
-		areasOfHelp
-	);
+  
+  let id = Math.floor(Math.random() * 1000000) + 1;
 
-	// Add the new volunteer to the list
-	volunteerApplications.push(newVolunteer);
+  // Create a new instance of VolunteerApplication
+  const newVolunteer = new VolunteerApplication(
+    id,
+    firstName,
+    lastName,
+    phoneNumber,
+    email,
+    streetAddress1,
+    streetAddress2,
+    city,
+    state,
+    zipCode,
+    areasOfHelp
+  );
 
-	res.status(201).json({
-		message: "Volunteer Application Created",
-		volunteer: newVolunteer,
-	});
+  try {
+    // Insert the volunteer data into the database
+    let result = await pool.query(
+      `INSERT INTO "volunteerapplications" 
+      (email, first_name, last_name, phone_number, street_address_1, street_address_2, 
+       city, state, zip_code, admin_team, hospitality, logistic_tracking, 
+       community_outreach, community_helpers, status)
+      VALUES 
+      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [
+        newVolunteer.email,
+        newVolunteer.firstName,
+        newVolunteer.lastName,
+        newVolunteer.phoneNumber,
+        newVolunteer.streetAddress1,
+        newVolunteer.streetAddress2,
+        newVolunteer.city,
+        newVolunteer.state,
+        newVolunteer.zipCode,
+        newVolunteer.areasOfHelp.includes("Volunteer Management and Administration Team"),
+        newVolunteer.areasOfHelp.includes("Hospitality Team"),
+        newVolunteer.areasOfHelp.includes("Logistic Tracking Team"),
+        newVolunteer.areasOfHelp.includes("Community Outreach Team"),
+        newVolunteer.areasOfHelp.includes("Community Helpers Team"),
+        "Not Evaluated", 
+      ]
+    );
+
+    // Send success response
+    res.status(201).json({
+      message: "Volunteer Application Created",
+      volunteer: newVolunteer,
+    });
+  } catch (e) {
+	
+	if (e instanceof Error) {
+	  console.log(e.message); 
+	  res.status(500).json({
+		message: "Something went wrong",
+		error: e.message,  
+	  });
+	} else {
+	  
+	  console.log("An unknown error occurred:", e);
+	  res.status(500).json({
+		message: "Something went wrong",
+		error: "Unknown error",
+	  });
+	}
+  }
+  
 });
+
 
 app.post("/changePassword", (req, res) => {
 	const { username, currentPassword, newPassword } = req.body;
@@ -461,7 +516,8 @@ app.get("/user-details", async (req, res) => {
 			row.last_name,
 			row.phone_number,
 			row.email,
-			row.street_address_1,
+			row.street_address1,
+			row.street_address2,   
 			row.city,
 			row.state,
 			row.zip_code,

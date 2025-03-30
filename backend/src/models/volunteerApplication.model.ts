@@ -1,10 +1,11 @@
 export class VolunteerApplication {
-	id: number;
+	id:number
 	firstName: string;
 	lastName: string;
 	phoneNumber: number;
 	email: string;
 	streetAddress1: string;
+	streetAddress2: string;
 	city: string;
 	state: string;
 	zipCode: number;
@@ -19,6 +20,7 @@ export class VolunteerApplication {
 		phoneNumber: number,
 		email: string,
 		streetAddress1: string,
+		streetAddress2: string,
 		city: string,
 		state: string,
 		zipCode: number,
@@ -30,6 +32,7 @@ export class VolunteerApplication {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.streetAddress1 = streetAddress1;
+		this.streetAddress2 = streetAddress2;
 		this.city = city;
 		this.state = state;
 		this.zipCode = zipCode;
