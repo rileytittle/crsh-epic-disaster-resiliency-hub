@@ -2,7 +2,7 @@ import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
-import { helpRequest } from "../models/helpRequest.model";
+import { HelpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
@@ -420,7 +420,7 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 app.get("/homeowner-requests", async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
-		let requestList: helpRequest[] = [];
+		let requestList: HelpRequest[] = [];
 		for (let request of requests.rows) {
 			let id = request.id;
 			let firstName = request.first_name;
@@ -459,7 +459,7 @@ app.get("/homeowner-requests", async (req, res) => {
 			let description = request.description;
 			let dateCreated = request.date_created;
 			let timeCreated = request.time_created;
-			let newRequest = new helpRequest(
+			let newRequest = new HelpRequest(
 				id,
 				firstName,
 				lastName,

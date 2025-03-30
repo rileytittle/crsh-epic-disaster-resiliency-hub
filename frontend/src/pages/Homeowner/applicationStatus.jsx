@@ -6,12 +6,20 @@ function ApplicationStatus() {
 		firstName: "",
 		lastName: "",
 	});
+	const [formValidity, setFormValidity] = useState({
+		first_name: null,
+		last_name: null,
+	});
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setApplicationData({
 			...applicationData,
 			[name]: value,
+		});
+		setFormValidity({
+			...formValidity,
+			[name]: value.trim() != "",
 		});
 	};
 
@@ -20,7 +28,7 @@ function ApplicationStatus() {
 
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/volunteer/status`,
+				`http://localhost:3000/volunteer/status`,
 				{
 					method: "POST",
 					headers: {

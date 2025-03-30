@@ -1,5 +1,5 @@
 import { Router, application } from "express";
-import { HomeownerApplication } from "../models/homeownerApplication.model";
+import { HelpRequest } from "../models/helpRequest.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
@@ -27,14 +27,14 @@ if (IN_DEVELOPMENT) {
 }
 let app = Router();
 
-let HomeownerApplications: HomeownerApplication[] = []; // database
+let HomeownerApplications: HelpRequest[] = []; // database
 
 app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
 });
-let requests: HomeownerApplication[] = [];
+let requests: HelpRequest[] = [];
 requests.push(
-	new HomeownerApplication(
+	new HelpRequest(
 		999,
 		"Hayden",
 		"O'Neill",
@@ -44,81 +44,81 @@ requests.push(
 		"",
 		"Jacksonville",
 		"florida",
-		"Sarasota",
 		43325,
-		true,
-		false,
-		true,
-		false,
-		true,
-		false,
-		""
+		"Sarasota",
+		"Active",
+		"",
+		['emotional_support', 'cleaning_supplies', 'clean_water', 'emergency_food', 'yard_cleanup', 'interior_cleanup'],
+		"",
+		"I NEED SO MUCH HELP PLEASE SEND HELP",
+		new Date("2024-03-30"),
+    	"14:30"
 	)
 ); //
 
 app.get("/viewRequests", async (req, res) => {
 	let sendRequests: Job[] = [];
 	try {
-	  // Query to get rows with the "Active" status
-	  const result = await pool.query(
-		'SELECT * FROM request WHERE status = $1',
-		['Active']
-	  );
-  
-	  // Define the columns with boolean values representing help types
-	  const helpTypeColumns = [
-		'emotional_support',
-		'cleaning_supplies',
-		'clean_water',
-		'emergency_food',
-		'yard_cleanup',
-		'interior_cleanup',
-		
-	  ];
-  
-	  // Map the result rows to an array of Job objects
-	  result.rows.forEach(row => {
-		const helpType: string[] = [];
-  
-		
-		helpTypeColumns.forEach(column => {
-		  if (row[column]) {
-			
-			const label = column
-			  .replace(/_/g, ' ')  // Replace underscores with spaces
-			  .replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
-  
-			helpType.push(label);
-		  }
-		});
-  
-		
-		const newJob = new Job(
-		  row.id, 
-		  row.first_name,  
-		  row.last_name,  
-		  row.email,  
-		  row.street_address_1,  
-		  row.city,  
-		  row.state,  
-		  row.zip_code,  
-		  helpType,
-		  row.other  
+		// Query to get rows with the "Active" status
+		const result = await pool.query(
+			'SELECT * FROM request WHERE status = $1',
+			['Active']
 		);
-		sendRequests.push(newJob);
-	  });
-  
-	
-	  if (sendRequests.length > 0) {
-		res.status(200).json(sendRequests);  
-	  } else {
-		res.status(404).json({ message: "No requests found." });  
-	  }
+
+		// Define the columns with boolean values representing help types
+		const helpTypeColumns = [
+			'emotional_support',
+			'cleaning_supplies',
+			'clean_water',
+			'emergency_food',
+			'yard_cleanup',
+			'interior_cleanup',
+
+		];
+
+		// Map the result rows to an array of Job objects
+		result.rows.forEach(row => {
+			const helpType: string[] = [];
+
+
+			helpTypeColumns.forEach(column => {
+				if (row[column]) {
+
+					const label = column
+						.replace(/_/g, ' ')  // Replace underscores with spaces
+						.replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
+
+					helpType.push(label);
+				}
+			});
+
+
+			const newJob = new Job(
+				row.id,
+				row.first_name,
+				row.last_name,
+				row.email,
+				row.street_address_1,
+				row.city,
+				row.state,
+				row.zip_code,
+				helpType,
+				row.other
+			);
+			sendRequests.push(newJob);
+		});
+
+
+		if (sendRequests.length > 0) {
+			res.status(200).json(sendRequests);
+		} else {
+			res.status(404).json({ message: "No requests found." });
+		}
 	} catch (e) {
-	  console.error('Error querying database', e);
-	  res.status(500).json({ message: 'Internal Server Error' });  
+		console.error('Error querying database', e);
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
-  });
+});
 
 app.post("/requestHelp", async (req, res) => {
 	console.log(req.body);
@@ -205,6 +205,76 @@ app.post("/requestHelp", async (req, res) => {
 	// Add the new volunteer to the list
 });
 
+app.get("/homeowner-requests", async (req, res) => {
+	try {
+		let requests = await pool.query("SELECT * FROM request;");
+		let requestList: HelpRequest[] = [];
+		for (let request of requests.rows) {
+			let id = request.id;
+			let firstName = request.first_name;
+			let lastName = request.last_name;
+			let email = request.email;
+			let phoneNumber = request.phone_number;
+			let streetAddress1 = request.street_address_1;
+			let streetAddress2 = request.street_address_2;
+			let city = request.city;
+			let state = request.state;
+			let zipCode = request.zip_code;
+			let county = request.county;
+			let status = request.status;
+			let reasonRejected = request.reason_rejected;
+			let helpType: string[] = [];
+			if (request.yard_cleanup) {
+				helpType.push("Yard cleanup");
+			}
+			if (request.interior_cleanup) {
+				helpType.push("Interior Cleanup");
+			}
+			if (request.emotional_support) {
+				helpType.push("Emotional Support");
+			}
+			if (request.cleaning_supplies) {
+				helpType.push("Cleaning supplies");
+			}
+			if (request.clean_water) {
+				helpType.push("Clean water");
+			}
+			if (request.emergency_food) {
+				helpType.push("Emergency food");
+			}
+
+			let other = request.other;
+			let description = request.description;
+			let dateCreated = request.date_created;
+			let timeCreated = request.time_created;
+			let newRequest = new HelpRequest(
+				id,
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				streetAddress1,
+				streetAddress2,
+				city,
+				state,
+				zipCode,
+				county,
+				status,
+				reasonRejected,
+				helpType,
+				other,
+				description,
+				dateCreated,
+				timeCreated
+			);
+			requestList.push(newRequest);
+		}
+		res.status(200).send(requestList);
+	} catch (e) {
+		res.send(e);
+	}
+});
+
 app.get("/requestHelp", (req, res) => {
 	res.send("Here is your Help!");
 });
@@ -217,11 +287,11 @@ app.post("/update-assignment", (req, res) => {
   const request = requests.find((req) => req.first_name + req.last_name === requestName); // Adjust if request does not have an id property
 
   if (request) {
-    request.assignedVolunteers.push(volunteers); // Update the assigned volunteers
-    console.log(JSON.stringify(request));
-    res.status(200).json({ message: 'Volunteers assigned successfully!' });
+	request.assignedVolunteers.push(volunteers); // Update the assigned volunteers
+	console.log(JSON.stringify(request));
+	res.status(200).json({ message: 'Volunteers assigned successfully!' });
   } else {
-    res.status(404).json({ message: 'Request not found.' });
+	res.status(404).json({ message: 'Request not found.' });
   }
 });
 */
