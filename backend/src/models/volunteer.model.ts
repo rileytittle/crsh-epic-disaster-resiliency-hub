@@ -26,7 +26,6 @@ export class Volunteer extends VolunteerApplication {
 			email,
 			streetAddress1,
 			streetAddress2,
-			state,
 			city,
 			state,
 			zipCode,
