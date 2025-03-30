@@ -3,13 +3,28 @@ import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
-require('dotenv').config();
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+import * as dotenv from "dotenv";
+// Load custom .env file
+dotenv.config();
+const IN_DEVELOPMENT = true;
+let pool: Pool;
+
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
 let app = Router();
 
 let HomeownerApplications: HomeownerApplication[] = []; // database
@@ -29,8 +44,14 @@ requests.push(
 		"",
 		"Jacksonville",
 		"florida",
+		"Sarasota",
 		43325,
-		["Emotional Support"],
+		true,
+		false,
+		true,
+		false,
+		true,
+		false,
 		""
 	)
 ); //
@@ -119,31 +140,38 @@ app.post("/requestHelp", async (req, res) => {
 	const clean_water = req.body.helpWater;
 	const emergency_food = req.body.helpFood;
 	const other = req.body.other;
+	const description = req.body.description;
 
-	console.log("yard_cleanup:", req.body.yard_cleanup);
-	console.log("interior_cleanup:", req.body.interior_cleanup);
-	// send data to the database test
-	console.log(`first_name: ${first_name}`);
-	console.log(`last_name: ${last_name}`);
-	console.log(`email: ${email}`);
-	console.log(`phone_number: ${phone_number}`);
-	console.log(`street_address_1: ${street_address_1}`);
-	console.log(`street_address_2: ${street_address_2}`);
-	console.log(`city: ${city}`);
-	console.log(`state: ${state}`);
-	console.log(`zip_code: ${zip_code}`);
-	console.log(`yard_cleanup: ${yard_cleanup}`);
-	console.log(`interior_cleanup: ${interior_cleanup}`);
-	console.log(`emotional_support: ${emotional_support}`);
-	console.log(`cleaning_supplies: ${cleaning_supplies}`);
-	console.log(`clean_water: ${clean_water}`);
-	console.log(`emergency_food: ${emergency_food}`);
-	console.log(`other: ${other}`);
+	// console.log("yard_cleanup:", req.body.yard_cleanup);
+	// console.log("interior_cleanup:", req.body.interior_cleanup);
+	// // send data to the database test
+	// console.log(`first_name: ${first_name}`);
+	// console.log(`last_name: ${last_name}`);
+	// console.log(`email: ${email}`);
+	// console.log(`phone_number: ${phone_number}`);
+	// console.log(`street_address_1: ${street_address_1}`);
+	// console.log(`street_address_2: ${street_address_2}`);
+	// console.log(`city: ${city}`);
+	// console.log(`state: ${state}`);
+	// console.log(`zip_code: ${zip_code}`);
+	// console.log(`yard_cleanup: ${yard_cleanup}`);
+	// console.log(`interior_cleanup: ${interior_cleanup}`);
+	// console.log(`emotional_support: ${emotional_support}`);
+	// console.log(`cleaning_supplies: ${cleaning_supplies}`);
+	// console.log(`clean_water: ${clean_water}`);
+	// console.log(`emergency_food: ${emergency_food}`);
+	// console.log(`other: ${other}`);
 
 	try {
+		const currentDate = new Date().toISOString().split("T")[0];
+		console.log(currentDate); // Example: "2025-03-28"
+		const now = new Date();
+		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
+		console.log(currentTime); // Example: "14:35:45"
+
 		let result = pool.query(
-			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, status, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
+			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)`,
 			[
 				first_name,
 				last_name,
@@ -154,7 +182,9 @@ app.post("/requestHelp", async (req, res) => {
 				city,
 				state,
 				zip_code,
+				county,
 				"Pending",
+				null,
 				yard_cleanup,
 				interior_cleanup,
 				emotional_support,
@@ -162,11 +192,14 @@ app.post("/requestHelp", async (req, res) => {
 				clean_water,
 				emergency_food,
 				other,
+				description,
+				currentDate,
+				currentTime,
 			]
 		);
 		res.status(200).send({ message: "Request succcessfully Submitted" });
 	} catch (e) {
-		res.status(400).send({ message: "Something went wrong" });
+		res.status(500).send({ message: "Something went wrong" });
 		console.log(e);
 	}
 	// Add the new volunteer to the list

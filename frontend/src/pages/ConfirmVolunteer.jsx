@@ -13,13 +13,10 @@ function ConfirmVolunteer() {
 	}
 	async function createVolunteer() {
 		await axios
-			.post(
-				"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/create-volunteer/accept",
-				{
-					id: id,
-					teamLeader: teamLeader,
-				}
-			)
+			.post(`http://localhost:3000/admin/create-volunteer/accept`, {
+				id: id,
+				teamLeader: teamLeader,
+			})
 			.then((res) => {
 				navigate("/create-volunteer");
 			})

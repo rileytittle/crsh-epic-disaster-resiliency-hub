@@ -1,4 +1,5 @@
 node_modules
 dist/
+api/index.js
 .env
-index.js
+

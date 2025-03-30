@@ -1,31 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../../App.css";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
-function VolLogin() {
-	const location = useLocation();
+import { useNavigate } from "react-router-dom";
 
+function VolLogin() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [message, setMessage] = useState("");
 	const navigate = useNavigate();
 
 	async function login(e) {
 		e.preventDefault();
-		let userData = {
-			email: email,
-			password: password,
-		};
+		let userData = { email, password };
 		let basicAuthHeader = btoa(`${email}:${password}`);
+
 		try {
-			let headers = {
-				Authorization: `Basic ${basicAuthHeader}`,
-			};
+			let headers = { Authorization: `Basic ${basicAuthHeader}` };
 			await axios
-				.post(
-					"http://localhost:3000/volunteer/login", //https://crsh-epic-disaster-resiliency-hub-server.vercel.app
-					userData,
-					{ headers }
-				)
+				.post(`http://localhost:3000/volunteer/login`, userData, {
+					headers,
+				})
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "volunteer");
@@ -33,13 +27,19 @@ function VolLogin() {
 					sessionStorage.setItem("justLoggedIn", true);
 					navigate("/volunteer-dashboard");
 				})
-				.catch((error) => {
-					console.log("error logging in");
+				.catch(() => {
+					console.log("Error logging in");
 				});
 		} catch (err) {
 			console.log("If checks for status codes here");
 		}
 	}
+
+	// Navigate to the request-reset page instead of sending a request
+	function handleForgotPassword() {
+		navigate("/volunteer/request-reset");
+	}
+
 	return (
 		<>
 			<div style={{ textAlign: "center" }}>
@@ -59,6 +59,13 @@ function VolLogin() {
 					/>
 					<button onClick={login}>GO</button>
 				</form>
+				<button
+					onClick={handleForgotPassword}
+					style={{ marginTop: "10px" }}
+				>
+					Forgot Password?
+				</button>
+				{message && <p>{message}</p>}
 			</div>
 		</>
 	);

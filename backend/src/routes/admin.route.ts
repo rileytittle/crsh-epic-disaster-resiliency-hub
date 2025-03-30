@@ -2,23 +2,40 @@ import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
+import { helpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
 import { Authchecker } from "../utils/auth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+const ExcelJS = require("exceljs");
+const fs = require("fs");
+const path = require("path");
 let saltRounds = 10;
 require('dotenv').config();
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
+const IN_DEVELOPMENT = true;
+let pool: Pool;
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
+
 let app = Router();
 //enter your api key below
 // let emailAPIKey = "";
@@ -139,6 +156,7 @@ app.post("/login", async (req, res) => {
 		}
 	} catch (e) {
 		res.status(500).send(e);
+		console.log(e);
 	}
 });
 app.post("/create-volunteer/accept", async (req, res) => {
@@ -155,7 +173,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			[
 				application.rows[0].email,
 				application.rows[0].first_name[0] +
-					application.rows[0].last_name,
+				application.rows[0].last_name,
 				null,
 				application.rows[0].first_name,
 				application.rows[0].last_name,
@@ -401,10 +419,69 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 
 app.get("/homeowner-requests", async (req, res) => {
 	try {
-		let requests = await pool.query(
-			"SELECT request_id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
-		);
-		res.status(200).send(requests.rows);
+		let requests = await pool.query("SELECT * FROM request;");
+		let requestList: helpRequest[] = [];
+		for (let request of requests.rows) {
+			let id = request.id;
+			let firstName = request.first_name;
+			let lastName = request.last_name;
+			let email = request.email;
+			let phoneNumber = request.phone_number;
+			let streetAddress1 = request.street_address_1;
+			let streetAddress2 = request.street_address_2;
+			let city = request.city;
+			let state = request.state;
+			let zipCode = request.zip_code;
+			let county = request.county;
+			let status = request.status;
+			let reasonRejected = request.reason_rejected;
+			let helpType: string[] = [];
+			if (request.yard_cleanup) {
+				helpType.push("Yard cleanup");
+			}
+			if (request.interior_cleanup) {
+				helpType.push("Interior Cleanup");
+			}
+			if (request.emotional_support) {
+				helpType.push("Emotional Support");
+			}
+			if (request.cleaning_supplies) {
+				helpType.push("Cleaning supplies");
+			}
+			if (request.clean_water) {
+				helpType.push("Clean water");
+			}
+			if (request.emergency_food) {
+				helpType.push("Emergency food");
+			}
+
+			let other = request.other;
+			let description = request.description;
+			let dateCreated = request.date_created;
+			let timeCreated = request.time_created;
+			let newRequest = new helpRequest(
+				id,
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				streetAddress1,
+				streetAddress2,
+				city,
+				state,
+				zipCode,
+				county,
+				status,
+				reasonRejected,
+				helpType,
+				other,
+				description,
+				dateCreated,
+				timeCreated
+			);
+			requestList.push(newRequest);
+		}
+		res.status(200).send(requestList);
 	} catch (e) {
 		res.send(e);
 	}
@@ -418,5 +495,118 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
+app.post("/reports", async (req, res) => {
+	let queryString = "SELECT * FROM request";
+	let queryConditions: string[] = [];
+	let year = parseInt(req.body.year);
+	let month = parseInt(req.body.month);
+	let county = req.body.county;
+	let zipCode = parseInt(req.body.zipCode);
+	let status = req.body.status;
 
+	if (req.body.year && req.body.year != "0") {
+		queryConditions.push(`EXTRACT(YEAR FROM date_created) = ${year}`);
+	}
+	if (req.body.month && req.body.month != "0") {
+		queryConditions.push(`EXTRACT(MONTH FROM date_created) = ${month}`);
+	}
+	if (req.body.county && req.body.county != "empty") {
+		queryConditions.push(`county = '${county}'`);
+	}
+	if (req.body.zipCode && req.body.zipCode != "0") {
+		queryConditions.push(`zip_code = '${zipCode}'`);
+	}
+	if (req.body.status && req.body.status != "empty") {
+		queryConditions.push(`status = '${status}'`);
+	}
+	if (queryConditions.length > 0) {
+		queryString += " WHERE " + queryConditions.join(" AND ");
+	}
+	console.log(queryString);
+	let queryResult = await pool.query(queryString);
+	let queryRows = queryResult.rows;
+	// console.log(queryRows);
+	if (queryRows.length > 0) {
+		// Create a new workbook and worksheet
+		const workbook = new ExcelJS.Workbook();
+		const worksheet = workbook.addWorksheet("Report");
+
+		// console.log(queryRows);
+
+		// Add column headers
+		worksheet.columns = [
+			{ header: "ID", key: "request_id", width: 10 },
+			{ header: "First Name", key: "first_name", width: 20 },
+			{ header: "Last Name", key: "last_name", width: 20 },
+			{ header: "Phone Number", key: "phone_number", width: 15 },
+			{ header: "email", key: "email", width: 20 },
+			{ header: "Street Address 1", key: "street_address_1", width: 30 },
+			{ header: "Street Address 2", key: "street_address_2", width: 30 },
+			{ header: "City", key: "city", width: 20 },
+			{ header: "County", key: "county", width: 15 },
+			{ header: "Zip Code", key: "zip_code", width: 10 },
+			{ header: "Yard Cleanup", key: "yard_cleanup", width: 15 },
+			{ header: "Interior Cleanup", key: "interior_cleanup", width: 15 },
+			{
+				header: "Emotional Support",
+				key: "emotional_support",
+				width: 20,
+			},
+			{
+				header: "Cleaning Supplies",
+				key: "cleaning_supplies",
+				width: 20,
+			},
+			{ header: "Clean Water", key: "clean_water", width: 15 },
+			{ header: "Emergency Food", key: "emergency_food", width: 15 },
+			{ header: "Other", key: "other", width: 30 },
+			{ header: "Date Created", key: "date_created", width: 15 },
+			{ header: "Time Created", key: "time_created", width: 20 },
+			{ header: "Status", key: "status", width: 10 },
+			{ header: "Reason Rejected", key: "reason_rejected", width: 30 },
+		];
+
+		// Add rows
+		for (let row of queryRows) {
+			worksheet.addRow({
+				request_id: row.request_id,
+				first_name: row.first_name,
+				last_name: row.last_name,
+				phone_number: row.phone_number,
+				email: row.email,
+				street_address_1: row.street_address_1,
+				city: row.city,
+				county: row.county,
+				zip_code: row.zip_code,
+				yard_cleanup: row.yard_cleanup,
+				interior_cleanup: row.interior_cleanup,
+				emotional_support: row.emotional_support,
+				cleaning_supplies: row.cleaning_supplies,
+				clean_water: row.clean_water,
+				emergency_food: row.emergency_food,
+				other: row.other,
+				date_created: row.date_created.toISOString().split("T")[0], // Format year as a date string (YYYY-MM-DD)
+				time_created: row.time_created,
+				status: row.status,
+				reason_rejected: row.reason_rejected,
+			});
+		}
+
+		// Set the response headers for file download
+		res.setHeader(
+			"Content-Type",
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+		);
+		res.setHeader(
+			"Content-Disposition",
+			"attachment; filename=example.xlsx"
+		);
+
+		// Write the workbook to the response object (this sends the file directly to the client)
+		await workbook.xlsx.write(res);
+		res.end(); // Make sure to end the response
+	} else {
+		res.status(400).send({ message: "No records found" });
+	}
+});
 export { app };

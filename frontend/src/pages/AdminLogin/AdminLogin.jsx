@@ -20,12 +20,11 @@ function AdminLogin() {
 			let headers = {
 				Authorization: `Basic ${basicAuthHeader}`,
 			};
+			//console.log(`backend URL: ${import.meta.env.VITE_BACKEND_URL}/admin/login`);
 			await axios
-				.post(
-					"https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/login",
-					userData,
-					{ headers }
-				)
+				.post(`http://localhost:3000/admin/login`, userData, {
+					headers,
+				})
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "admin");
@@ -35,6 +34,7 @@ function AdminLogin() {
 				})
 				.catch((error) => {
 					console.log("error logging in");
+					console.log(error);
 				});
 		} catch (err) {
 			console.log("If checks for status codes here");

@@ -6,19 +6,27 @@ function RequestCard({
 	firstName,
 	lastName,
 	email,
-	address,
+	phoneNumber,
+	streetAddress1,
+	streetAddress2,
 	city,
 	state,
 	zip,
+	county,
+	status,
+	reasonRejected,
+	helpType,
+	other,
+	description,
+	dateCreated,
+	timeCreated,
 }) {
 	return (
 		<div className="card" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
 				<h5 className="card-title">{firstName + " " + lastName}</h5>
 				<h6 className="card-subtitle mb-2 text-body-secondary">
-					{email}
-					<br></br>
-					{address + ", " + city + ", " + state + " " + zip}
+					{helpType}
 				</h6>
 				<Link
 					to="/homeowner-requests/request-details"
@@ -28,10 +36,20 @@ function RequestCard({
 						firstName,
 						lastName,
 						email,
-						address,
+						phoneNumber,
+						streetAddress1,
+						streetAddress2,
 						city,
 						state,
 						zip,
+						county,
+						status,
+						reasonRejected,
+						helpType,
+						other,
+						description,
+						dateCreated,
+						timeCreated,
 					}}
 				>
 					More info

@@ -13,7 +13,7 @@ const JobsOffered = () => {
       try {
         setLoading(true);
         setError('');
-        const response = await axios.get("https://crsh-epic-disaster-resiliency-hub-client.vercel.app /volunteer/job/offered");//https://crsh-epic-disaster-resiliency-hub-client.vercel.app http://localhost:3000
+        const response = await axios.get("https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/job/offered");//https://crsh-epic-disaster-resiliency-hub-client.vercel.app http://localhost:3000
         if (Array.isArray(response.data)) {
           setJobs(response.data);
         } else {
@@ -34,7 +34,7 @@ const JobsOffered = () => {
       try {
         setLoading(true);
         setError('');
-        const response = await axios.get("https://crsh-epic-disaster-resiliency-hub-client.vercel.app /volunteer/job/schedule");
+        const response = await axios.get("https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/job/schedule");
         setSchedule(response.data);
       } catch (error) {
         setError("Error fetching schedule");

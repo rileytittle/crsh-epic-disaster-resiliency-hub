@@ -1,44 +1,61 @@
 export class HomeownerApplication {
     id: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phone: number;
-    address_1: string;
-    address_2: string;
+    phone_number: number;
+    street_address_1: string;
+    street_address_2: string;
     city: string;
     state: string;
-    zipCode: number;
-    helpTypes: string[];
-    other: string;
-    evaluated: boolean = false;
-    rejected: boolean = false;
-    reasonRejected: string = "";
+    county: string;
+    zip_code: number;
+    status: string = "pending";
+    reason_rejected: string = "";
+    yard_cleanup: boolean;
+    interior_cleanup: boolean;
+    emotional_support: boolean;
+    cleaning_supplies: boolean;
+    clean_water: boolean;
+    emergency_food: boolean;
+    other: string = "";
     constructor(
         id: number,
-        firstName: string,
-        lastName: string,
+        first_name: string,
+        last_name: string,
         email: string,
-        phone: number,
-        address_1: string,
-        address_2: string,
+        phone_number: number,
+        street_address_1: string,
+        street_address_2: string,
         city: string,
         state: string,
-        zipCode: number,
-        helpTypes: string[],
-        other: string
+        county: string,
+        zip_code: number,
+        yard_cleanup: boolean,
+        interior_cleanup: boolean,
+        emotional_support: boolean,
+        cleaning_supplies: boolean,
+        clean_water: boolean,
+        emergency_food: boolean,
+        other: string,
     ) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.email = email;
-        this.address_1 = address_1;
-        this.address_2 = address_2;
+        this.phone_number = phone_number;
+        this.street_address_1 = street_address_1;
+        this.street_address_2 = street_address_2;
         this.city = city;
         this.state = state;
-        this.zipCode = zipCode;
-        this.helpTypes = helpTypes;
+        this.county = county;
+        this.zip_code = zip_code;
+        this.yard_cleanup = yard_cleanup;
+        this.interior_cleanup = interior_cleanup;
+        this.emotional_support = emotional_support;
+        this.cleaning_supplies = cleaning_supplies;
+        this.clean_water = clean_water;
+        this.emergency_food = emergency_food;
         this.other = other;
     }
 }
