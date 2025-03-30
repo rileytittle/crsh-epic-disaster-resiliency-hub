@@ -17,6 +17,7 @@ function RequestCard({
 	reasonRejected,
 	helpType,
 	other,
+	description,
 	dateCreated,
 	timeCreated,
 }) {
@@ -46,6 +47,7 @@ function RequestCard({
 						reasonRejected,
 						helpType,
 						other,
+						description,
 						dateCreated,
 						timeCreated,
 					}}

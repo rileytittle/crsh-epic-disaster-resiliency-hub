@@ -437,6 +437,7 @@ app.get("/homeowner-requests", async (req, res) => {
 			}
 
 			let other = request.other;
+			let description = request.description;
 			let dateCreated = request.date_created;
 			let timeCreated = request.time_created;
 			let newRequest = new helpRequest(
@@ -455,6 +456,7 @@ app.get("/homeowner-requests", async (req, res) => {
 				reasonRejected,
 				helpType,
 				other,
+				description,
 				dateCreated,
 				timeCreated
 			);

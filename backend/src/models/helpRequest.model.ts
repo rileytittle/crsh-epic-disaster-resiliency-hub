@@ -16,6 +16,7 @@ export class helpRequest {
 	reasonRejected: string;
 	helpType: string[];
 	other: string | undefined = undefined;
+	description: string;
 	dateCreated: Date;
 	timeCreated: string;
 	constructor(
@@ -34,6 +35,7 @@ export class helpRequest {
 		reasonRejected: string,
 		helpType: string[],
 		other: string | undefined,
+		description: string,
 		dateCreated: Date,
 		timeCreated: string
 	) {
@@ -56,6 +58,7 @@ export class helpRequest {
 		if (other) {
 			this.other = other;
 		}
+		this.description = description;
 		this.dateCreated = dateCreated;
 		this.timeCreated = timeCreated;
 	}

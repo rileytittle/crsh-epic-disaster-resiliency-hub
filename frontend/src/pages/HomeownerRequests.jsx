@@ -10,7 +10,7 @@ function HomeownerRequests() {
 			.then((res) => {
 				// console.log(res.data);
 				setRequests(res.data);
-				// console.log(res.data.zip_code);
+				console.log(res.data.description, res.data.firstName);
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);
@@ -38,6 +38,7 @@ function HomeownerRequests() {
 							reasonRejected={request.reasonRejected}
 							helpType={request.helpType}
 							other={request.other}
+							description={request.description}
 							dateCreated={request.dateCreated}
 							timeCreated={request.timeCreated}
 						></RequestCard>

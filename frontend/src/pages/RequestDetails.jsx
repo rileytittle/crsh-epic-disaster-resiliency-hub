@@ -19,6 +19,7 @@ function RequestDetails() {
 		reasonRejected,
 		helpType,
 		other,
+		description,
 		dateCreated,
 		timeCreated,
 	} = location.state;
@@ -79,7 +80,7 @@ function RequestDetails() {
 						</ul>
 					</div>
 					<h4>Description:</h4>
-					<></>
+					<p>{description}</p>
 					<p>Pictures should go here</p>
 					<br></br>
 					<button
