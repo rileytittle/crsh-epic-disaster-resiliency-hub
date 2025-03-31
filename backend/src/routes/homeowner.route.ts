@@ -1,6 +1,6 @@
 import { Router, application } from "express";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
-import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
+import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";

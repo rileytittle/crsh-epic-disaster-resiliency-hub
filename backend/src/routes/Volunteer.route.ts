@@ -485,7 +485,11 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 
 app.get("/user-details", async (req, res) => {
 	try {
+
+		
 		const userToken = req.query.userToken as string;
+
+		console.log("userToken:", userToken);
 
 		if (!userToken) {
 			return res.status(400).send({ message: "User token is required" });
@@ -498,6 +502,9 @@ app.get("/user-details", async (req, res) => {
 				.status(400)
 				.send({ message: "Invalid token: email missing" });
 		}
+
+		console.log("Decoded Token:", decodedToken);
+
 
 		const queryResult = await pool.query(
 			"SELECT * FROM Volunteer WHERE email = $1",
@@ -525,8 +532,8 @@ app.get("/user-details", async (req, res) => {
 			row.last_name,
 			row.phone_number,
 			row.email,
-			row.street_address1,
-			row.street_address2,   
+			row.street_address_1,
+			row.street_address_2,   
 			row.city,
 			row.state,
 			row.zip_code,
