@@ -17,8 +17,8 @@ if (IN_DEVELOPMENT) {
 	pool = new Pool({
 		user: "postgres",
 		host: "localhost",
-		database: "postgres",
-		password: "pass",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
 		port: 5432,
 	});
 } else {
