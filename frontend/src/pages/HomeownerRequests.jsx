@@ -5,8 +5,11 @@ import RequestCard from "../components/RequestCard";
 function HomeownerRequests() {
 	const [requests, setRequests] = useState([]);
 	useEffect(() => {
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+		};
 		axios
-			.get(`http://localhost:3000/admin/homeowner-requests`)
+			.get(`http://localhost:3000/admin/homeowner-requests`, {headers})
 			.then((res) => {
 				// console.log(res.data);
 				setRequests(res.data);

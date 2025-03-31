@@ -4,7 +4,7 @@ import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
 import { helpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
-import { Authchecker } from "../utils/auth.utils";
+import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
@@ -134,7 +134,13 @@ app.post("/login", async (req, res) => {
 						});
 						if (result) {
 							let token = jwt.sign(
-								{ email: user.email, isAdmin: true },
+								{ 
+									email: user.email, 
+									isAdmin: true,
+									userType: "admin",
+									firstName: user.first_name,
+									lastName: user.last_name
+								},
 								SECRET_KEY
 							);
 							res.status(200).send({ token: token });

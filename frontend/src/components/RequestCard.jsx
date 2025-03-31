@@ -25,9 +25,10 @@ function RequestCard({
 		<div className="card" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
 				<h5 className="card-title">{firstName + " " + lastName}</h5>
-				<h6 className="card-subtitle mb-2 text-body-secondary">
+				<h6>{status}</h6>
+				<h7 className="card-subtitle mb-2 text-body-secondary">
 					{helpType}
-				</h6>
+				</h7>
 				<Link
 					to="/homeowner-requests/request-details"
 					className="card-link"

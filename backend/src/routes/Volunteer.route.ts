@@ -136,6 +136,9 @@ app.post("/login", async (req, res) => {
 								{
 									email: user.email,
 									isVolunteer: true,
+									userType: "volunteer",
+									firstName: user.first_name,
+									lastName: user.last_name,
 									assignment: user.assignment,
 								},
 								SECRET_KEY
@@ -204,18 +207,21 @@ app.post("/create", async (req: Request, res: Response): Promise<any> => {
 
   try {
     // Insert the volunteer data into the database
+	const currentDate = new Date().toISOString().split("T")[0];
+	const now = new Date();
+	const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
     let result = await pool.query(
       `INSERT INTO "volunteerapplications" 
-      (email, first_name, last_name, phone_number, street_address_1, street_address_2, 
+      (first_name, last_name, phone_number, email, street_address_1, street_address_2, 
        city, state, zip_code, admin_team, hospitality, logistic_tracking, 
-       community_outreach, community_helpers, status)
+       community_outreach, community_helpers, status, reason_rejected, date_created, time_created)
       VALUES 
-      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
       [
-        newVolunteer.email,
         newVolunteer.firstName,
         newVolunteer.lastName,
         newVolunteer.phoneNumber,
+		newVolunteer.email,
         newVolunteer.streetAddress1,
         newVolunteer.streetAddress2,
         newVolunteer.city,
@@ -226,7 +232,10 @@ app.post("/create", async (req: Request, res: Response): Promise<any> => {
         newVolunteer.areasOfHelp.includes("Logistic Tracking Team"),
         newVolunteer.areasOfHelp.includes("Community Outreach Team"),
         newVolunteer.areasOfHelp.includes("Community Helpers Team"),
-        "Not Evaluated", 
+        "Unevaluated",
+		null,
+		currentDate, 
+		currentTime
       ]
     );
 
