@@ -22,7 +22,7 @@ function HomeownerRequests() {
 	return (
 		<>
 			<div className="card">
-				<div className="card-body">
+				<div className="card-body row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5">
 					{requests.map((request) => (
 						<RequestCard
 							key={request.id}
