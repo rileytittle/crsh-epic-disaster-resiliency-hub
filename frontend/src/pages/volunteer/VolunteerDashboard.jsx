@@ -21,12 +21,20 @@ function VolunteerDashboard() {
 
 		async function fetchData() {
 			try {
+
+				let headers = {
+					Authorization: `Bearer ${sessionStorage.getItem("userToken")}`, // Fixed template literal syntax
+				};
+
 				const [userRes, jobsRes] = await Promise.all([
+
 					axios.get("http://localhost:3000/volunteer/user-details", {
 						params: { userToken },
+						headers: headers
 					}),
 					axios.get("http://localhost:3000/volunteer/jobs", {
 						params: { userToken },
+						headers: headers
 					}),
 				]);
 
@@ -50,12 +58,19 @@ function VolunteerDashboard() {
 			return;
 		}
 
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`, // Fixed template literal syntax
+		};
+
 		axios
+	
 			.post("http://localhost:3000/volunteer/job-accept", {
 				offered: offered.id,
 				action,
 				id: user.id,
-			})
+			},
+			{ headers }
+		)
 			.then((response) => {
 				console.log(response.data);
 				if (action === "accept") {

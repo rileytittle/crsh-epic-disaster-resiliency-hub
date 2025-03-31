@@ -18,10 +18,16 @@ function VolunteerAccountSettings() {
 
 	useEffect(() => {
 		function fetchUserData() {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`, // Fixed template literal syntax
+			};
+
 			axios
 				.get("http://localhost:3000/volunteer/user-details", {
-					params: { userToken: userToken },
-				})
+					params: { userToken },
+					headers, 
+				},
+			)
 				.then((response) => {
 					console.log("User data:", response.data);
 					const user = response.data;

@@ -28,12 +28,15 @@ function ChangeAccountDetails(props) {
 
 	const handleClick = () => {
 		const updatedDetails = { email: props.email, ...formData };
-
+	
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+		};
+	
 		axios
-			.post(
-				"http://localhost:3000/volunteer/update-user-details",
-				updatedDetails
-			)
+			.post("http://localhost:3000/volunteer/update-user-details", updatedDetails, {
+				headers: headers,
+			})
 			.then((response) => {
 				console.log("Update Successful:", response.data);
 				alert("User details updated successfully!");
