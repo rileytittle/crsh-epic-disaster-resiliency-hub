@@ -37,59 +37,7 @@ if (IN_DEVELOPMENT) {
 }
 
 let app = Router();
-//enter your api key below
-// let emailAPIKey = "";
-// sgMail.setApiKey(emailAPIKey);
 
-//Dummy data below
-//*******************************
-
-let jobs: Job[] = [];
-let requests: HomeownerRequest[] = [
-	{
-		id: 1,
-		firstName: "Riley",
-		lastName: "Tittle",
-		email: "fakeemail@email.com",
-		address: "1234 Main Street",
-		city: "Jacksonville",
-		state: "FL",
-		zip: 32256,
-		helpType: ["Yard cleanup"],
-		evaluation: undefined,
-	},
-];
-let volunteerApplications: VolunteerApplication[] = [];
-// let firstApplication = new VolunteerApplication(
-// 	0,
-// 	"Riley",
-// 	"Tittle",
-// 	9047352653,
-// 	"rileytittle02@gmail.com",
-// 	"7816 Southside Blvd",
-// 	"Jacksonville",
-// 	"FL",
-// 	32256,
-// 	["Logistic Tracking Team"]
-// );
-// let secondApplication = new VolunteerApplication(
-// 	1,
-// 	"Coleman",
-// 	"George",
-// 	9047352653,
-// 	"fake@email.com",
-// 	"7816 Southside Blvd",
-// 	"Jacksonville",
-// 	"FL",
-// 	32256,
-// 	["Logistic Tracking Team", "Community Outreach Team"]
-// );
-// volunteerApplications.push(firstApplication);
-// volunteerApplications.push(secondApplication);
-
-let volunteers: Volunteer[] = [];
-
-//*******************************
 app.post("/create-account", async (req, res) => {
 	try {
 		//write some logic here
@@ -205,7 +153,6 @@ app.post("/create-volunteer/accept", async (req, res) => {
 		res.status(400).send(e);
 	}
 });
-
 app.post("/create-volunteer/reject", async (req, res) => {
 	try {
 		let result = await pool.query(
@@ -217,7 +164,6 @@ app.post("/create-volunteer/reject", async (req, res) => {
 		res.status(400).send("Problem rejected application");
 	}
 });
-
 app.get("/create-volunteer/applications", async (req, res) => {
 	try {
 		let result = await pool.query(
@@ -227,7 +173,6 @@ app.get("/create-volunteer/applications", async (req, res) => {
 	} catch (e) {
 		res.status(400).send("Something went wrong");
 	}
-	res.status(200).send();
 });
 app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 	try {
@@ -240,39 +185,27 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 		res.status(500).send({ message: "There was an error in the server" });
 	}
 });
-app.post("/homeowner-requests/accept", (req, res) => {
+app.post("/homeowner-requests/accept", async (req, res) => {
 	try {
-		//write some logic here
-		let foundRequest: HomeownerRequest | undefined = undefined;
 		if (req.body.id) {
-			for (let request of requests) {
-				if (request.id == parseInt(req.body.id)) {
-					foundRequest = request;
-					break;
+			let result = await pool.query(
+				"UPDATE request SET status = 'Accepted' WHERE request_id = $1",
+				[parseInt(req.body.id)]
+			);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send("Success");
+				} else {
+					res.status(404).send("Could not find request");
 				}
-			}
-			if (foundRequest) {
-				let newJob = new Job(
-					foundRequest.id,
-					foundRequest.firstName,
-					foundRequest.lastName,
-					foundRequest.email,
-					foundRequest.address,
-					foundRequest.city,
-					foundRequest.state,
-					foundRequest.zip,
-					foundRequest.helpType,
-					"HELP ME"
-				);
-				foundRequest.evaluation = "accepted";
-				jobs.push(newJob);
-				res.status(200).send("Success");
 			} else {
-				res.status(404).send("Could not find request");
+				res.status(400).send({
+					message: "The query failed to execute",
+				});
 			}
 		}
 	} catch (e) {
-		res.send("bad");
+		res.status(500).send({ message: "Internal server error" });
 	}
 });
 app.get("/assign-volunteer/list", async (req, res) => {
@@ -354,30 +287,29 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.post("/homeowner-requests/reject", (req, res) => {
+app.post("/homeowner-requests/reject", async (req, res) => {
 	try {
-		let foundRequest: HomeownerRequest | undefined = undefined;
 		if (req.body.id) {
-			for (let request of requests) {
-				if (request.id == parseInt(req.body.id)) {
-					foundRequest = request;
-					break;
+			let result = await pool.query(
+				"UPDATE request SET status = 'Rejected' WHERE request_id = $1",
+				[parseInt(req.body.id)]
+			);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send("Success");
+				} else {
+					res.status(404).send("Could not find request");
 				}
-			}
-			if (foundRequest) {
-				foundRequest.evaluation = "rejected";
 			} else {
-				res.status(404).send("Could not find request");
+				res.status(400).send({
+					message: "The query failed to execute",
+				});
 			}
-		} else {
-			res.status(400).send("Must supply id");
 		}
-		res.status(200).send("Success");
 	} catch (e) {
-		res.send("Bad");
+		res.status(500).send({ message: "Internal server error" });
 	}
 });
-
 app.delete("/volunteers/volunteer-details", async (req, res) => {
 	try {
 		let areaToChange = "";
@@ -432,7 +364,6 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-
 app.get("/homeowner-requests", async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
@@ -502,7 +433,6 @@ app.get("/homeowner-requests", async (req, res) => {
 		res.send(e);
 	}
 });
-
 app.get("/volunteers", async (req, res) => {
 	try {
 		let volunteers = await pool.query("SELECT * FROM volunteer");
