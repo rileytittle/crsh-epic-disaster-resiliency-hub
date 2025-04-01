@@ -11,7 +11,7 @@ const ResetPassword = () => {
 	const handleResetPassword = async () => {
 		try {
 			const response = await axios.post(
-				"http://localhost:3000/mailgun/reset-password",
+				`${import.meta.env.VITE_API_URL}/mailgun/reset-password`,
 				{ token, newPassword: password }
 			);
 			setMessage(response.data.message);

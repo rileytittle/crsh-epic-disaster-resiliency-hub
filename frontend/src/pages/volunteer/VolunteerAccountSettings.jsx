@@ -23,11 +23,10 @@ function VolunteerAccountSettings() {
 			};
 
 			axios
-				.get("http://localhost:3000/volunteer/user-details", {
+				.get(`${import.meta.env.VITE_API_URL}/volunteer/user-details`, {
 					params: { userToken },
-					headers, 
-				},
-			)
+					headers,
+				})
 				.then((response) => {
 					console.log("User data:", response.data);
 					const user = response.data;

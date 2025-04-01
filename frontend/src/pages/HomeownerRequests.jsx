@@ -9,7 +9,9 @@ function HomeownerRequests() {
 			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 		};
 		axios
-			.get(`http://localhost:3000/admin/homeowner-requests`, {headers})
+			.get(`${import.meta.env.VITE_API_URL}/admin/homeowner-requests`, {
+				headers,
+			})
 			.then((res) => {
 				// console.log(res.data);
 				setRequests(res.data);

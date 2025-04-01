@@ -45,7 +45,7 @@ const VolunteerForm = () => {
 
 		try {
 			const response = await fetch(
-				`http://localhost:3000/volunteer/create`,
+				`${import.meta.env.VITE_API_URL}/volunteer/create`,
 				{
 					method: "POST",
 					headers: {
@@ -57,11 +57,10 @@ const VolunteerForm = () => {
 
 			const result = await response.json();
 			console.log(result);
-			if(response.ok){
+			if (response.ok) {
 				navigate("/thank-you");
-			}
-			else{
-				alert("submission failed")
+			} else {
+				alert("submission failed");
 			}
 		} catch (error) {
 			console.error("Error:", error);
@@ -142,17 +141,17 @@ const VolunteerForm = () => {
 				required
 			/>
 			<select
-						id="county"
-						name="county"
-						className={styles.volunteerInput}
-						placeholder="Choose..."
-						value={formData.county}
-						onChange={handleChange}
-						required
-					>
-						<option>Choose...</option>
-						<option>Charlotte</option>
-						<option>Sarasota</option>
+				id="county"
+				name="county"
+				className={styles.volunteerInput}
+				placeholder="Choose..."
+				value={formData.county}
+				onChange={handleChange}
+				required
+			>
+				<option>Choose...</option>
+				<option>Charlotte</option>
+				<option>Sarasota</option>
 			</select>
 			<input
 				className={styles.volunteerInput}

@@ -13,10 +13,13 @@ function ConfirmVolunteer() {
 	}
 	async function createVolunteer() {
 		await axios
-			.post(`http://localhost:3000/admin/create-volunteer/accept`, {
-				id: id,
-				teamLeader: teamLeader,
-			})
+			.post(
+				`${import.meta.env.VITE_API_URL}/admin/create-volunteer/accept`,
+				{
+					id: id,
+					teamLeader: teamLeader,
+				}
+			)
 			.then((res) => {
 				navigate("/create-volunteer");
 			})

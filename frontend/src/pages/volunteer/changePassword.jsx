@@ -24,16 +24,16 @@ function PasswordChange() {
 		else if (passwordData.currentPassword == passwordData.newPassword)
 			alert("new password must not match old password");
 		else {
-
-
 			try {
 				const response = await fetch(
-					`http://localhost:3000/volunteer/changePassword`,
+					`${import.meta.env.VITE_API_URL}/volunteer/changePassword`,
 					{
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+							Authorization: `Bearer ${sessionStorage.getItem(
+								"userToken"
+							)}`,
 						},
 						body: JSON.stringify(passwordData),
 					}
