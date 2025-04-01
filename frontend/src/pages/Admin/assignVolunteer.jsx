@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './assignVolunteers.css';
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./assignVolunteers.css";
 
 const AssignVolunteer = () => {
   const [requests, setRequests] = useState([]);
@@ -23,20 +23,22 @@ const AssignVolunteer = () => {
     fetchRequests();
   }, []);
 
-  const fetchRequests = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/homeowner/viewRequests');
-      const data = await response.json();
-      if (Array.isArray(data)) {
-        setRequests(data);
-      } else {
-        console.error("Unexpected response format:", data);
-        alert("Failed to load requests.");
-      }
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-    }
-  };
+	const fetchRequests = async () => {
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/homeowner/viewRequests`
+			);
+			const data = await response.json();
+			if (Array.isArray(data)) {
+				setRequests(data);
+			} else {
+				console.error("Unexpected response format:", data);
+				alert("Failed to load requests.");
+			}
+		} catch (error) {
+			console.error("Error fetching requests:", error);
+		}
+	};
 
   const handleSelectRequest = (request) => {
     setSelectedRequest(request); // Update selectedRequest with the chosen request
@@ -58,32 +60,34 @@ const AssignVolunteer = () => {
       // Add volunteer to selected list
       setSelectedVolunteerIds([...selectedVolunteerIds, volunteer.id]);
     }
-  };
 
-  const handleAssignButtonClick = () => {
-    setShowAssignMenu(true);
-  };
+	const handleAssignButtonClick = () => {
+		setShowAssignMenu(true);
+	};
 
-  const handleTeamButtonClick = async (team) => {
-    setSelectedTeam(team); // Set the selected team when a button is clicked
-    try {
-      const response = await fetch('http://localhost:3000/admin/assign-volunteer/list', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
+	const handleTeamButtonClick = async (team) => {
+		setSelectedTeam(team); // Set the selected team when a button is clicked
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/admin/assign-volunteer/list`,
+				{
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				}
+			);
 
-      const data = await response.json();
-      console.log('Fetched Volunteers:', data); // Log the raw response data
+			const data = await response.json();
+			console.log("Fetched Volunteers:", data); // Log the raw response data
 
-      if (Array.isArray(data)) {
-        setVolunteers(data); // Directly assign the array to the state
-      } else {
-        console.error('Invalid data format:', data);
-      }
-    } catch (error) {
-      console.error('Error fetching volunteers:', error);
-    }
-  };
+			if (Array.isArray(data)) {
+				setVolunteers(data); // Directly assign the array to the state
+			} else {
+				console.error("Invalid data format:", data);
+			}
+		} catch (error) {
+			console.error("Error fetching volunteers:", error);
+		}
+	};
 
   const handleAssignVolunteer = async () => {
     if (!selectedRequest?.id || selectedVolunteerIds.length === 0) {
@@ -148,24 +152,34 @@ const AssignVolunteer = () => {
     <div className="container mt-5 assign-volunteer-page">
       <h1>Current Homeowner Requests</h1>
 
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search Requests by Name or ID"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
 
-      <div className="mb-3">
-        <select className="form-select" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="">All Help Types</option>
-          {[...new Set(requests.flatMap(req => req.helpType))].map((type, index) => (
-            <option key={index} value={type}>{type}</option>
-          ))}
-        </select>
-      </div>
+			<div className="mb-3">
+				<input
+					type="text"
+					className="form-control"
+					placeholder="Search Requests by Name or ID"
+					value={searchTerm}
+					onChange={(e) => setSearchTerm(e.target.value)}
+				/>
+			</div>
+
+			<div className="mb-3">
+				<select
+					className="form-select"
+					value={filterType}
+					onChange={(e) => setFilterType(e.target.value)}
+				>
+					<option value="">All Help Types</option>
+					{[...new Set(requests.flatMap((req) => req.helpType))].map(
+						(type, index) => (
+							<option key={index} value={type}>
+								{type}
+							</option>
+						)
+					)}
+				</select>
+			</div>
+
 
       {requestsToDisplay.length > 0 ? (
         <table className="table table-striped">
@@ -243,28 +257,67 @@ const AssignVolunteer = () => {
         </div>
       )}
 
-      {showAssignMenu && (
-        <div className="card mt-4 p-3">
-          <h3>Select a Team for {selectedRequest?.firstName} {selectedRequest?.lastName}</h3>
-          <div className="btn-group mb-3" role="group">
-            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Admin Team')}>Admin Team</button>
-            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Hospitality')}>Hospitality</button>
-            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Logistics')}>Logistics</button>
-            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Community Outreach')}>Community Outreach</button>
-            <button className="btn btn-outline-primary" onClick={() => handleTeamButtonClick('Community Helpers')}>Community Helpers</button>
-            <button className="btn btn-outline-danger" onClick={() => setShowAssignMenu(false)}>Close</button>
-          </div>
+			{showAssignMenu && (
+				<div className="card mt-4 p-3">
+					<h3>
+						Select a Team for {selectedRequest?.firstName}{" "}
+						{selectedRequest?.lastName}
+					</h3>
+					<div className="btn-group mb-3" role="group">
+						<button
+							className="btn btn-outline-primary"
+							onClick={() => handleTeamButtonClick("Admin Team")}
+						>
+							Admin Team
+						</button>
+						<button
+							className="btn btn-outline-primary"
+							onClick={() => handleTeamButtonClick("Hospitality")}
+						>
+							Hospitality
+						</button>
+						<button
+							className="btn btn-outline-primary"
+							onClick={() => handleTeamButtonClick("Logistics")}
+						>
+							Logistics
+						</button>
+						<button
+							className="btn btn-outline-primary"
+							onClick={() =>
+								handleTeamButtonClick("Community Outreach")
+							}
+						>
+							Community Outreach
+						</button>
+						<button
+							className="btn btn-outline-primary"
+							onClick={() =>
+								handleTeamButtonClick("Community Helpers")
+							}
+						>
+							Community Helpers
+						</button>
+						<button
+							className="btn btn-outline-danger"
+							onClick={() => setShowAssignMenu(false)}
+						>
+							Close
+						</button>
+					</div>
 
-          {/* Volunteer Search Bar */}
-          <div className="mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search Volunteers by Name or ID"
-              value={volunteerSearchTerm}
-              onChange={(e) => setVolunteerSearchTerm(e.target.value)}
-            />
-          </div>
+					{/* Volunteer Search Bar */}
+					<div className="mb-3">
+						<input
+							type="text"
+							className="form-control"
+							placeholder="Search Volunteers by Name or ID"
+							value={volunteerSearchTerm}
+							onChange={(e) =>
+								setVolunteerSearchTerm(e.target.value)
+							}
+						/>
+					</div>
 
           {selectedTeam && volunteersToDisplay.length === 0 ? (
             <p>No volunteers available for this team.</p>

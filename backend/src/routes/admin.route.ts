@@ -4,7 +4,7 @@ import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
 import { helpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
-import { Authchecker } from "../utils/auth.utils";
+import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
@@ -13,10 +13,10 @@ const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
 let saltRounds = 10;
-require('dotenv').config();
+require("dotenv").config();
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
-const IN_DEVELOPMENT = true;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -134,7 +134,13 @@ app.post("/login", async (req, res) => {
 						});
 						if (result) {
 							let token = jwt.sign(
-								{ email: user.email, isAdmin: true },
+								{
+									email: user.email,
+									isAdmin: true,
+									userType: "admin",
+									firstName: user.first_name,
+									lastName: user.last_name,
+								},
 								SECRET_KEY
 							);
 							res.status(200).send({ token: token });
@@ -173,7 +179,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			[
 				application.rows[0].email,
 				application.rows[0].first_name[0] +
-				application.rows[0].last_name,
+					application.rows[0].last_name,
 				null,
 				application.rows[0].first_name,
 				application.rows[0].last_name,
@@ -263,10 +269,10 @@ app.get("/assign-volunteer/list", async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
 		const result = await pool.query('SELECT * FROM "volunteer"');
-		
+
 		// Map the results to Volunteer instances
 		const volunteers = result.rows.map((row) => {
-		  const areasOfHelp = [];
+			let areasOfHelp: string[] = [];
 		  if (row.admin_team) areasOfHelp.push('Admin Team');
 		  if (row.hospitality) areasOfHelp.push('Hospitality');
 		  if (row.logistic_tracking) areasOfHelp.push('Logistics');
@@ -289,14 +295,14 @@ app.get("/assign-volunteer/list", async (req, res) => {
 			row.password
 		  );
 		});
-	
+
 		// Return the array of Volunteer instances
 		res.json(volunteers);
-	  } catch (err) {
-		console.error('Error fetching volunteers:', err);
-		res.status(500).json({ error: 'Failed to fetch volunteers' });
-	  }
-	});
+	} catch (err) {
+		console.error("Error fetching volunteers:", err);
+		res.status(500).json({ error: "Failed to fetch volunteers" });
+	}
+});
 app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
 		

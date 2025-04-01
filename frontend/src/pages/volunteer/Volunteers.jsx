@@ -9,11 +9,11 @@ let table = new DataTable("#myTable", {
 });
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
-	//`http://localhost:3000
-	//http://localhost:3000
+	//`${import.meta.env.VITE_API_URL}
+	//${import.meta.env.VITE_API_URL}
 	useEffect(() => {
 		axios
-			.get(`http://localhost:3000/admin/volunteers`)
+			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`)
 			.then((res) => {
 				// Transform data to include areas of help
 				const transformedData = res.data.map((volunteer) => ({

@@ -6,10 +6,15 @@ function VolunteerDetails() {
 	function addArea() {
 		console.log("Clicked: ", selectedArea);
 		axios
-			.patch(`http://localhost:3000/admin/volunteers/volunteer-details`, {
-				id: id,
-				selectedArea: selectedArea,
-			})
+			.patch(
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/volunteers/volunteer-details`,
+				{
+					id: id,
+					selectedArea: selectedArea,
+				}
+			)
 			.then((res) => {
 				const activeAreas = [];
 
@@ -37,7 +42,9 @@ function VolunteerDetails() {
 		console.log("Clicked: ", area);
 		await axios
 			.delete(
-				`http://localhost:3000/admin/volunteers/volunteer-details`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/volunteers/volunteer-details`,
 				{
 					data: {
 						id: id,
@@ -77,7 +84,9 @@ function VolunteerDetails() {
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:3000/admin/volunteers/volunteer-details/${id}`
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/volunteers/volunteer-details/${id}`
 			)
 			.then((res) => {
 				const activeAreas = [];
