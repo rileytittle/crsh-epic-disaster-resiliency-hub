@@ -300,7 +300,7 @@ function ApplicationStatus() {
 													<th></th>
 												</tr>
 												<tr>
-													<td colspan="2" className="px-1 align-bottom text-start">{helpResults.description}</td>
+													<td colspan="2" className="px-1 align-bottom text-center">{helpResults.description}</td>
 												</tr>
 											</tbody>
 										</table>
