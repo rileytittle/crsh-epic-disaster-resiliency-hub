@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 function RequestDetails() {
 	const location = useLocation();
@@ -109,6 +110,13 @@ function RequestDetails() {
 										{volunteer.last_name}:{" "}
 										{volunteer.phone_number} -{" "}
 										{volunteer.email}
+										{" - "}
+										<Link
+											to="/volunteers/volunteer-details"
+											state={volunteer}
+										>
+											PROFILE
+										</Link>
 									</p>
 								</div>
 							))}

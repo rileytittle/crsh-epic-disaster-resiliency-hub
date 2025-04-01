@@ -264,11 +264,19 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 		// Update the volunteer record
 		const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
 		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
-		let result2 = await pool.query(
-			"SELECT * FROM volunteer WHERE id = $1",
-			[parseInt(req.body.id)]
-		);
-		res.status(200).send(result2.rows[0]);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				res.status(200).send({
+					message: "Successfully updated record",
+				});
+			} else {
+				res.status(404).send({
+					message: "Could not find a record to update.",
+				});
+			}
+		} else {
+			res.status(500).send({ message: "Internal server error" });
+		}
 	} catch (e) {
 		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
@@ -313,7 +321,7 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 app.delete("/volunteers/volunteer-details", async (req, res) => {
 	try {
 		let areaToChange = "";
-		if (req.body.selectedArea === "Hospitality") {
+		if (req.body.selectedArea === "Hospitality Team") {
 			areaToChange = "hospitality";
 		} else if (req.body.selectedArea === "Community Helpers") {
 			areaToChange = "community_helpers";
@@ -344,11 +352,19 @@ app.delete("/volunteers/volunteer-details", async (req, res) => {
 		// Update the volunteer record
 		const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
 		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
-		let result2 = await pool.query(
-			"SELECT * FROM volunteer WHERE id = $1",
-			[parseInt(req.body.id)]
-		);
-		res.status(200).send(result2.rows[0]);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				res.status(200).send({
+					message: "Successfully updated record",
+				});
+			} else {
+				res.status(404).send({
+					message: "Could not find a record to update.",
+				});
+			}
+		} else {
+			res.status(500).send({ message: "Internal server error" });
+		}
 	} catch (e) {
 		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
@@ -359,7 +375,60 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 			"SELECT * FROM volunteer WHERE id = $1",
 			[parseInt(req.params.id)]
 		);
-		res.status(200).send(volunteer.rows[0]);
+		if (volunteer.rowCount === 0) {
+			return res.status(404).send({ message: "Volunteer not found" });
+		}
+
+		const volunteerData = volunteer.rows[0];
+
+		// Assigning each column value to a local constant
+		let id = volunteerData.id;
+		let firstName = volunteerData.first_name;
+		let lastName = volunteerData.last_name;
+		let phoneNumber = volunteerData.phone_number;
+		let email = volunteerData.email;
+		let streetAddress1 = volunteerData.street_address_1;
+		let streetAddress2 = volunteerData.street_address_2;
+		let city = volunteerData.city;
+		let state = volunteerData.state;
+		let zipCode = volunteerData.zip_code;
+		let areasOfHelp: string[] = [];
+		if (volunteerData.admin_team) {
+			areasOfHelp.push("Volunteer Management and Administration Team");
+		}
+		if (volunteerData.hospitality) {
+			areasOfHelp.push("Hospitality Team");
+		}
+		if (volunteerData.logistic_tracking) {
+			areasOfHelp.push("Logistic Tracking");
+		}
+		if (volunteerData.community_outreach) {
+			areasOfHelp.push("Community Outreach");
+		}
+		if (volunteerData.community_helpers) {
+			areasOfHelp.push("Community Helpers");
+		}
+		let teamLeader = volunteerData.team_leader;
+		let password = volunteerData.password;
+
+		// Passing the variables into the constructor
+		let volunteerDetails = new Volunteer(
+			id,
+			firstName,
+			lastName,
+			phoneNumber,
+			email,
+			streetAddress1,
+			streetAddress2,
+			city,
+			state,
+			zipCode,
+			areasOfHelp,
+			teamLeader,
+			password
+		);
+
+		res.status(200).send(volunteerDetails);
 	} catch (e) {
 		res.status(500).send(e);
 	}
