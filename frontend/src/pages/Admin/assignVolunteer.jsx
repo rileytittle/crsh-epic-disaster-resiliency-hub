@@ -7,11 +7,17 @@ const AssignVolunteer = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showAssignMenu, setShowAssignMenu] = useState(false);
   const [volunteers, setVolunteers] = useState([]);
-  const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [selectedVolunteerIds, setSelectedVolunteerIds] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [volunteerSearchTerm, setVolunteerSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('');
   const [selectedTeam, setSelectedTeam] = useState('');
+
+  // Pagination state
+  const [requestPage, setRequestPage] = useState(1);
+  const [volunteerPage, setVolunteerPage] = useState(1);
+  const requestsPerPage = 5; // Number of requests per page
+  const volunteersPerPage = 5; // Number of volunteers per page
 
   useEffect(() => {
     fetchRequests();
@@ -33,15 +39,25 @@ const AssignVolunteer = () => {
   };
 
   const handleSelectRequest = (request) => {
-    setSelectedRequest(request);
-    setShowAssignMenu(false); // Reset assign menu when switching requests
+    setSelectedRequest(request); // Update selectedRequest with the chosen request
+    setShowAssignMenu(true); // Show the assignment menu when a request is selected
   };
-
   const handleDeselectRequest = () => {
     setSelectedRequest(null);
     setShowAssignMenu(false);
     setVolunteers([]);
-    setSelectedVolunteer(null);
+    setSelectedVolunteerIds(null);
+  };
+  const handleVolunteerSelect = (volunteer) => {
+    const isSelected = selectedVolunteerIds.includes(volunteer.id);
+
+    if (isSelected) {
+      // Remove volunteer from selected list if already selected
+      setSelectedVolunteerIds(selectedVolunteerIds.filter(id => id !== volunteer.id));
+    } else {
+      // Add volunteer to selected list
+      setSelectedVolunteerIds([...selectedVolunteerIds, volunteer.id]);
+    }
   };
 
   const handleAssignButtonClick = () => {
@@ -70,27 +86,32 @@ const AssignVolunteer = () => {
   };
 
   const handleAssignVolunteer = async () => {
-    if (!selectedRequest?.id || !selectedVolunteer) {
-      alert('Please select a request and a volunteer.');
+    if (!selectedRequest?.id || selectedVolunteerIds.length === 0) {
+      alert('Please select a request and at least one volunteer.');
       return;
     }
 
     try {
+      // Send all selected volunteers in the body
       const response = await fetch('http://localhost:3000/admin/assign-volunteer/updateAssignment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ assignment: selectedRequest.id, id: selectedVolunteer.id }),
+        body: JSON.stringify({
+          assignment: selectedRequest.id,
+          volunteerIds: selectedVolunteerIds, // Array of selected volunteer IDs
+        }),
       });
 
       const data = await response.json();
       alert(data.message);
       handleDeselectRequest();
     } catch (error) {
-      console.error('Error assigning volunteer:', error);
-      alert('Failed to assign volunteer.');
+      console.error('Error assigning volunteers:', error);
+      alert('Failed to assign volunteers.');
     }
   };
 
+  // Pagination: Slice the filtered requests based on the current page
   const filteredRequests = requests.filter((request) => {
     const fullName = `${request.firstName} ${request.lastName}`.toLowerCase();
     return (
@@ -99,7 +120,12 @@ const AssignVolunteer = () => {
     ) && (filterType ? request.helpType.includes(filterType) : true);
   });
 
-  // Filter volunteers by search term, selected team, and volunteerSearchTerm
+  const requestsToDisplay = filteredRequests.slice(
+    (requestPage - 1) * requestsPerPage,
+    requestPage * requestsPerPage
+  );
+
+  // Pagination: Slice the filtered volunteers based on the current page
   const filteredVolunteers = volunteers.filter((volunteer) => {
     const fullName = `${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
     return (
@@ -109,8 +135,17 @@ const AssignVolunteer = () => {
     );
   });
 
+  const volunteersToDisplay = filteredVolunteers.slice(
+    (volunteerPage - 1) * volunteersPerPage,
+    volunteerPage * volunteersPerPage
+  );
+
+  // Pagination controls
+  const totalRequestsPages = Math.ceil(filteredRequests.length / requestsPerPage);
+  const totalVolunteersPages = Math.ceil(filteredVolunteers.length / volunteersPerPage);
+
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 assign-volunteer-page">
       <h1>Current Homeowner Requests</h1>
 
       <div className="mb-3">
@@ -132,7 +167,7 @@ const AssignVolunteer = () => {
         </select>
       </div>
 
-      {filteredRequests.length > 0 ? (
+      {requestsToDisplay.length > 0 ? (
         <table className="table table-striped">
           <thead>
             <tr>
@@ -145,8 +180,8 @@ const AssignVolunteer = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRequests.map((request, index) => (
-              <tr key={request.id || index} onClick={() => handleSelectRequest(request)}>
+            {requestsToDisplay.map((request, index) => (
+              <tr key={request.id || index}>
                 <td>{request.id}</td>
                 <td>{request.firstName} {request.lastName}</td>
                 <td>{request.email}</td>
@@ -177,6 +212,25 @@ const AssignVolunteer = () => {
       ) : (
         <p>No matching requests found.</p>
       )}
+
+      {/* Pagination Controls for Requests */}
+      <div className="pagination">
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => setRequestPage((prev) => Math.max(prev - 1, 1))}
+        >
+          Previous
+        </button>
+        <span className="mx-2">
+          Page {requestPage} of {totalRequestsPages}
+        </span>
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => setRequestPage((prev) => Math.min(prev + 1, totalRequestsPages))}
+        >
+          Next
+        </button>
+      </div>
 
       {selectedRequest && (
         <div className="card mt-4 p-3">
@@ -212,43 +266,69 @@ const AssignVolunteer = () => {
             />
           </div>
 
-          {filteredVolunteers.length > 0 ? (
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Address</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredVolunteers.map((volunteer) => (
-                  <tr key={volunteer.id}>
-                    <td>{volunteer.id}</td>
-                    <td>{volunteer.firstName} {volunteer.lastName}</td>
-                    <td>{volunteer.email}</td>
-                    <td>{volunteer.phoneNumber}</td>
-                    <td>{volunteer.streetAddress1} {volunteer.streetAddress2}, {volunteer.city}, {volunteer.state} {volunteer.zipCode}</td>
-                    <td>
-                      <input
-                        type="radio"
-                        name="volunteer"
-                        checked={selectedVolunteer?.id === volunteer.id}
-                        onChange={() => setSelectedVolunteer(volunteer)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
+          {selectedTeam && volunteersToDisplay.length === 0 ? (
             <p>No volunteers available for this team.</p>
+          ) : (
+            volunteersToDisplay.length > 0 && (
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Select</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {volunteersToDisplay.map((volunteer) => (
+                    <tr key={volunteer.id}>
+                      <td>{volunteer.id}</td>
+                      <td>{volunteer.firstName} {volunteer.lastName}</td>
+                      <td>{volunteer.email}</td>
+                      <td>{volunteer.phoneNumber}</td>
+                      <td>
+                        {volunteer.streetAddress1 || "N/A"}
+                        {volunteer.streetAddress2 ? `, ${volunteer.streetAddress2}` : ""},
+                        {volunteer.city || "N/A"},
+                        {volunteer.state || "N/A"},
+                        {volunteer.zipCode || "N/A"}
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedVolunteerIds.includes(volunteer.id)}
+                          onChange={() => handleVolunteerSelect(volunteer)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )
           )}
 
-          <button className="btn btn-success" onClick={handleAssignVolunteer}>Assign</button>
+          {/* Pagination Controls for Volunteers */}
+          <div className="pagination">
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => setVolunteerPage((prev) => Math.max(prev - 1, 1))}
+            >
+              Previous
+            </button>
+            <span className="mx-2">
+              Page {volunteerPage} of {totalVolunteersPages}
+            </span>
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => setVolunteerPage((prev) => Math.min(prev + 1, totalVolunteersPages))}
+            >
+              Next
+            </button>
+          </div>
+
+          <button className="btn btn-success" onClick={handleAssignVolunteer}>Assign Volunteer(s)</button>
         </div>
       )}
     </div>

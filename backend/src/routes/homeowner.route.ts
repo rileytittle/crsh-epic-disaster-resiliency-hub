@@ -6,7 +6,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = true;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -94,7 +94,7 @@ app.get("/viewRequests", async (req, res) => {
   
 		
 		const newJob = new Job(
-		  row.id, 
+		  row.request_id, 
 		  row.first_name,  
 		  row.last_name,  
 		  row.email,  
