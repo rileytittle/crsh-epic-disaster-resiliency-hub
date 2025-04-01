@@ -1,5 +1,5 @@
 import { Router, application } from "express";
-import { HelpRequest } from "../models/helpRequest.model";
+import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
 import { Authchecker } from "../utils/auth.utils";
 import { Pool } from "pg";
@@ -28,14 +28,14 @@ if (IN_DEVELOPMENT) {
 }
 let app = Router();
 
-let HomeownerApplications: HelpRequest[] = []; // database
+let HomeownerApplications: helpRequest[] = []; // database
 
 app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
 });
-let requests: HelpRequest[] = [];
+let requests: helpRequest[] = [];
 requests.push(
-	new HelpRequest(
+	new helpRequest(
 		999,
 		"Hayden",
 		"O'Neill",
