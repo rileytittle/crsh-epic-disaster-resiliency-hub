@@ -2,7 +2,6 @@ import { Router, application } from "express";
 
 import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
-import { Authchecker } from "../utils/auth.utils";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
@@ -157,7 +156,7 @@ app.get("/viewRequests", async (req, res) => {
 		} else {
 			res.status(404).json({ message: "No requests found." });
 		}
-	} catch (e) {
+	} catch(e) {
 		console.error("Error querying database", e);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
