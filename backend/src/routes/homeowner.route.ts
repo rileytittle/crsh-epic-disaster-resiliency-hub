@@ -208,12 +208,11 @@ app.post("/requestHelp", async (req, res) => {
 
 app.get("/requestHelp/status", async (req, res) => {
 	const { first_name, last_name, street_address_1, street_address_2 } = req.query;
-	const null_address_2 = street_address_2 == "NULL" ? null : street_address_2; // Set to null if "NULL"
 	try {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created
 			FROM request
-			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND (street_address_2 ILIKE '${null_address_2}' OR street_address_2 IS ${null_address_2});
+			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND (street_address_2 ILIKE '${street_address_2}' OR (street_address_2 IS NULL AND '${street_address_2}' = 'NULL'));
 		`);
 
 		if (requests.rows.length === 0) {
@@ -221,7 +220,7 @@ app.get("/requestHelp/status", async (req, res) => {
 		}
 
 		let request = requests.rows[0]
-		console.log(request);
+		//console.log(request);
 		let status = request.status;
 		let reasonRejected = request.reason_rejected;
 		let helpType: string[] = [];
@@ -229,10 +228,10 @@ app.get("/requestHelp/status", async (req, res) => {
 			helpType.push("Yard cleanup");
 		}
 		if (request.interior_cleanup) {
-			helpType.push("Interior Cleanup");
+			helpType.push("Interior cleanup");
 		}
 		if (request.emotional_support) {
-			helpType.push("Emotional Support");
+			helpType.push("Emotional support");
 		}
 		if (request.cleaning_supplies) {
 			helpType.push("Cleaning supplies");
