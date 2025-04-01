@@ -9,13 +9,11 @@ let table = new DataTable("#myTable", {
 });
 function Volunteers() {
 	const [volunteers, setVolunteers] = useState([]);
-	//`https://crsh-epic-disaster-resiliency-hub-server.vercel.app
-	//https://crsh-epic-disaster-resiliency-hub-server.vercel.app
+	//`${import.meta.env.VITE_API_URL}
+	//${import.meta.env.VITE_API_URL}
 	useEffect(() => {
 		axios
-			.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/volunteers`
-			)
+			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`)
 			.then((res) => {
 				// Transform data to include areas of help
 				const transformedData = res.data.map((volunteer) => ({

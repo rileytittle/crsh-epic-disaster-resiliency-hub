@@ -26,11 +26,14 @@ function PasswordChange() {
 		else {
 			try {
 				const response = await fetch(
-					`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/changePassword`,
+					`${import.meta.env.VITE_API_URL}/volunteer/changePassword`,
 					{
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${sessionStorage.getItem(
+								"userToken"
+							)}`,
 						},
 						body: JSON.stringify(passwordData),
 					}

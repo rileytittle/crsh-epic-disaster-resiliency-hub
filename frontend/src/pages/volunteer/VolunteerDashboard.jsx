@@ -1,201 +1,166 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import JobCard from "../../components/JobCard";
 
 function VolunteerDashboard() {
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
-	const [assignedData, setAssignedData] = useState(null); // State to store job data
-	const [offeredData, setOfferedData] = useState(null);
-	const [loading, setLoading] = useState(true); // State for loading indicator
-	const [error, setError] = useState(null); // State to handle any errors
+	const userToken = sessionStorage.getItem("userToken");
 
-	const firstName = sessionStorage.getItem("firstName");
-	const lastName = sessionStorage.getItem("lastName");
+	const [user, setUser] = useState("");
+	const [assigned, setAssigned] = useState("");
+	const [offered, setOffered] = useState("");
 
-	const userId = sessionStorage.getItem("id");
-	const userToken = sessionStorage.getItem("userToken"); // Assuming this token is used for authentication
-
-	// Use state for assignment and offered
-	const [assignment, setAssignment] = useState(
-		parseInt(sessionStorage.getItem("assignment")) || "No Assigned Jobs"
-	);
-	const [offered, setOffered] = useState(
-		parseInt(sessionStorage.getItem("offered")) || "No Offered Jobs"
-	);
-
-	// Function to fetch assigned jobs
-	const fetchAssigned = async () => {
-		try {
-			const response = await axios.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/assigned`,
-				{
-					headers: {
-						Authorization: `Bearer ${userToken}`,
-					},
-					params: {
-						assignment: assignment,
-					},
-				}
-			);
-			setAssignedData(response.data);
-		} catch (err) {
-			setError("Failed to load assigned job data.");
-		}
-	};
-
-	// Function to fetch offered jobs
-	const fetchOffered = async () => {
-		try {
-			const response = await axios.get(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/offered`,
-				{
-					headers: {
-						Authorization: `Bearer ${userToken}`,
-					},
-					params: {
-						offered: offered,
-					},
-				}
-			);
-			setOfferedData(response.data);
-		} catch (err) {
-			setError("Failed to load offered job data.");
-		}
-	};
-
-	// Function to fetch both assigned and offered data
-	const fetchData = async () => {
-		setLoading(true); // Start loading
-
-		if (assignment !== "No Assigned Jobs") {
-			await fetchAssigned();
-		}
-
-		if (offered !== "No Offered Jobs") {
-			await fetchOffered();
-		}
-
-		setLoading(false); // Set loading to false after both calls are made
-	};
-
-	// Fetch data on component mount or when relevant state changes
 	useEffect(() => {
-		fetchData();
-	}, [userToken, assignment, offered]);
+		if (!userToken) return;
 
-	// Function to accept a job
-	const acceptJob = async (action) => {
-		setLoading(true); // Set loading to true while the job is being accepted
+		async function fetchData() {
+			try {
+				let headers = {
+					Authorization: `Bearer ${sessionStorage.getItem(
+						"userToken"
+					)}`, // Fixed template literal syntax
+				};
 
-		try {
-			const response = await axios.post(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/job-accept`,
-				{
-					offered: offered, // Send assignment in the body
-					action: action, // Send action in the body
-					id: userId, // Send user ID in the body
-				},
-				{
-					headers: {
-						Authorization: `Bearer ${userToken}`, // Authorization header
-					},
-				}
-			);
+				const [userRes, jobsRes] = await Promise.all([
+					axios.get(
+						`${
+							import.meta.env.VITE_API_URL
+						}/volunteer/user-details`,
+						{
+							params: { userToken },
+							headers: headers,
+						}
+					),
+					axios.get(
+						`${import.meta.env.VITE_API_URL}/volunteer/jobs`,
+						{
+							params: { userToken },
+							headers: headers,
+						}
+					),
+				]);
 
-			console.log("Job accepted:", response.data);
-
-			// After accepting the job, update the state and sessionStorage accordingly
-			if (action === "accept") {
-				setAssignment(offered); // Move the job to assigned
-				setOffered(null); // Clear the offered job by setting it to null
-				sessionStorage.setItem("assignment", offered);
-				sessionStorage.setItem("offered", "No Offered Jobs");
-			} else {
-				setOffered(null); // Clear the offered job if rejected
-				sessionStorage.setItem("offered", "No Offered Jobs");
+				setUser(userRes.data);
+				setAssigned(jobsRes.data[0]);
+				setOffered(jobsRes.data[1]);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				setError("Failed to load data.");
+			} finally {
+				setLoading(false);
 			}
-
-			fetchData(); // Re-fetch data to update the UI
-		} catch (err) {
-			console.error("Error accepting job:", err);
-			setError("Failed to accept job.");
-		} finally {
-			setLoading(false); // Set loading to false after the action is completed
 		}
+
+		fetchData();
+	}, [userToken]);
+
+	const answerOffer = (action) => {
+		if (!offered || !user.id) {
+			console.error("Invalid offer or user ID");
+			return;
+		}
+
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`, // Fixed template literal syntax
+		};
+
+		axios
+
+			.post(
+				`${import.meta.env.VITE_API_URL}/volunteer/job-accept`,
+				{
+					offered: offered.id,
+					action,
+					id: user.id,
+				},
+				{ headers }
+			)
+			.then((response) => {
+				console.log(response.data);
+				if (action === "accept") {
+					setAssigned(offered);
+				}
+				setOffered(0);
+			})
+			.catch((error) => {
+				console.error("Error processing job action:", error);
+			});
 	};
 
-	// Display loading state or error message if needed
-	if (loading) {
-		return <div>Loading...</div>;
+	if (
+		!sessionStorage.getItem("isLoggedIn") ||
+		sessionStorage.getItem("userType") !== "volunteer"
+	) {
+		return <h1 className="text-center text-danger mt-5">Please Login</h1>;
 	}
 
 	return (
-		<>
-			{sessionStorage.getItem("isLoggedIn") &&
-			sessionStorage.getItem("userType") === "volunteer" ? (
-				<>
-					<h1>Volunteer Dashboard</h1>
-					<p>
-						Welcome, {firstName} {lastName}!
-					</p>
-					{/* Display job data from API response */}
-					{assignedData ? (
-						<div>
-							<p>Current Assignment:</p>
-							<ul>
-								{assignedData.map((job, index) => {
-									return (
-										<li key={index}>
-											| {job.request_id} |{" "}
-											{job.street_address_1} |
-										</li>
-									);
-								})}
-							</ul>
-						</div>
-					) : (
-						<p>No job assignment available.</p>
-					)}
+		<div className="container mt-4">
+			<div className="card shadow-sm">
+				<div className="card-body text-center">
+					<h1 className="text-dark fw-bold">Volunteer Dashboard</h1>
+					<h2 className="fw-semibold">
+						{user.firstName} {user.lastName}
+					</h2>
 
-					{offeredData && offeredData.length > 0 ? (
-						<div>
-							<p>Job Offers:</p>
-							<ul>
-								{offeredData.map((job, index) => {
-									return (
-										<li key={index}>
-											| {job.request_id} |{" "}
-											{job.street_address_1} |
+					{loading ? (
+						<p className="text-muted mt-3">Loading...</p>
+					) : error ? (
+						<p className="text-danger mt-3">{error}</p>
+					) : (
+						<>
+							<div className="mt-4">
+								<h4 className="fw-bold">Current Job</h4>
+								{assigned !== 0 ? (
+									<JobCard job={assigned} />
+								) : (
+									<p className="text-muted">
+										Nothing assigned
+									</p>
+								)}
+							</div>
+
+							<div className="mt-4">
+								<h4 className="fw-bold">Current Offer</h4>
+								{offered !== 0 ? (
+									<>
+										<JobCard job={offered} />
+										<div className="btn-group mt-3">
 											<button
+												className="btn btn-success px-4"
 												onClick={() =>
-													acceptJob("accept")
+													answerOffer("accept")
 												}
-												style={{ margin: "10px" }}
 											>
 												Accept
 											</button>
 											<button
+												className="btn btn-danger px-4 ms-2"
 												onClick={() =>
-													acceptJob("reject")
+													answerOffer("reject")
 												}
-												style={{ margin: "10px" }}
 											>
 												Reject
 											</button>
-										</li>
-									);
-								})}
-							</ul>
-						</div>
-					) : (
-						<p>No job offers available.</p>
+										</div>
+									</>
+								) : (
+									<p className="text-muted">
+										Nothing offered
+									</p>
+								)}
+							</div>
+						</>
 					)}
-				</>
-			) : (
-				<></>
-			)}
-		</>
+				</div>
+			</div>
+		</div>
 	);
 }
 

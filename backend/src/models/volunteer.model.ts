@@ -9,7 +9,8 @@ export class Volunteer extends VolunteerApplication {
 		lastName: string,
 		phoneNumber: number,
 		email: string,
-		streetAddress: string,
+		streetAddress1: string,
+		streetAddress2: string,
 		city: string,
 		state: string,
 		zipCode: number,
@@ -23,9 +24,10 @@ export class Volunteer extends VolunteerApplication {
 			lastName,
 			phoneNumber,
 			email,
-			streetAddress,
-			state,
+			streetAddress1,
+			streetAddress2,
 			city,
+			state,
 			zipCode,
 			areasOfHelp
 		);

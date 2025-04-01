@@ -1,78 +1,38 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
-function PasswordReset() {
-	const [passwordData, setPasswordData] = useState({
-		username: "",
-	});
+const ResetPassword = () => {
+	const [searchParams] = useSearchParams();
+	const token = searchParams.get("token");
+	const [password, setPassword] = useState("");
+	const [message, setMessage] = useState("");
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setPasswordData({
-			...passwordData,
-			[name]: value,
-		});
-	};
-
-	const formSubmitted = async (e) => {
-		e.preventDefault();
-
+	const handleResetPassword = async () => {
 		try {
-			const response = await fetch(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/volunteer/resetPassword`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(passwordData),
-				}
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_URL}/mailgun/reset-password`,
+				{ token, newPassword: password }
 			);
-
-			const result = await response.json();
-			console.log(result);
-			alert(result.message);
+			setMessage(response.data.message);
 		} catch (error) {
-			console.error("Error:", error);
+			setMessage("Error resetting password");
 		}
 	};
 
 	return (
-		<>
-			<center>
-				<h3>Reset your Password</h3> <br />
-				<div>
-					<form onSubmit={formSubmitted} className="row g-3">
-						<div className="row-2">
-							<div className="col-md-3">
-								<label
-									htmlFor="username"
-									className="form-label"
-								>
-									Username
-								</label>
-								<input
-									type="text"
-									className="form-control"
-									name="username"
-									id="username"
-									value={passwordData.username}
-									onChange={handleChange}
-									required
-								/>
-							</div>
-						</div>
-
-						<div className="col-12">
-							<button type="submit" className="btn btn-primary">
-								Reset Password
-							</button>
-						</div>
-					</form>
-				</div>
-			</center>
-		</>
+		<div>
+			<h2>Reset Your Password</h2>
+			<input
+				type="password"
+				value={password}
+				onChange={(e) => setPassword(e.target.value)}
+				placeholder="New password"
+			/>
+			<button onClick={handleResetPassword}>Reset Password</button>
+			<p>{message}</p>
+		</div>
 	);
-}
+};
 
-export default PasswordReset;
+export default ResetPassword;

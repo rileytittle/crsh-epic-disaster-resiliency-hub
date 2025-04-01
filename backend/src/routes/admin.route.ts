@@ -2,8 +2,9 @@ import { Router, application } from "express";
 import { VolunteerApplication } from "../models/volunteerApplication.model";
 import { Volunteer } from "../models/volunteer.model";
 import { HomeownerRequest } from "../models/homeownerRequest.model";
+import { helpRequest } from "../models/helpRequest.model";
 import { Job } from "../models/job.model";
-import { Authchecker } from "../utils/auth.utils";
+import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
 import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
@@ -12,15 +13,28 @@ const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
 let saltRounds = 10;
+require("dotenv").config();
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
+const IN_DEVELOPMENT = false;
+let pool: Pool;
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+if (IN_DEVELOPMENT) {
+	pool = new Pool({
+		user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432,
+	});
+} else {
+	pool = new Pool({
+		connectionString: process.env.DATABASE_URL,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
+}
 
 let app = Router();
 //enter your api key below
@@ -120,7 +134,13 @@ app.post("/login", async (req, res) => {
 						});
 						if (result) {
 							let token = jwt.sign(
-								{ email: user.email, isAdmin: true },
+								{
+									email: user.email,
+									isAdmin: true,
+									userType: "admin",
+									firstName: user.first_name,
+									lastName: user.last_name,
+								},
 								SECRET_KEY
 							);
 							res.status(200).send({ token: token });
@@ -142,6 +162,7 @@ app.post("/login", async (req, res) => {
 		}
 	} catch (e) {
 		res.status(500).send(e);
+		console.log(e);
 	}
 });
 app.post("/create-volunteer/accept", async (req, res) => {
@@ -231,7 +252,7 @@ app.post("/homeowner-requests/accept", (req, res) => {
 					foundRequest.state,
 					foundRequest.zip,
 					foundRequest.helpType,
-					"Test Team"
+					"HELP ME"
 				);
 				foundRequest.evaluation = "accepted";
 				jobs.push(newJob);
@@ -244,25 +265,43 @@ app.post("/homeowner-requests/accept", (req, res) => {
 		res.send("bad");
 	}
 });
-app.post("/assign-volunteer/list", async (req, res) => {
-	const { team } = req.body;
+app.get("/assign-volunteer/list", async (req, res) => {
+	try {
+		// Query the VolunteerAccount table
+		const result = await pool.query('SELECT * FROM "volunteer"');
 
-	let filteredVolunteers = await pool.query(
-		`SELECT id, first_name, last_name, email, phone_number FROM "volunteer" WHERE "${team}" = TRUE`
-	);
+		// Map the results to Volunteer instances
+		const volunteers = result.rows.map((row) => {
+			let areasOfHelp: string[] = [];
+			if (row.admin_team) areasOfHelp.push("Admin Team");
+			if (row.hospitality) areasOfHelp.push("Hospitality");
+			if (row.logistic_tracking) areasOfHelp.push("Logistics");
+			if (row.community_outreach) areasOfHelp.push("Community Outreach");
+			if (row.community_helpers) areasOfHelp.push("Community Helpers");
 
-	res.status(200).json({
-		volunteers: filteredVolunteers.rows.map((volunteer) => ({
-			id: volunteer.id,
-			first_name: volunteer.first_name,
-			last_name: volunteer.last_name,
-			email: volunteer.email,
-			phone_number: volunteer.phone_number,
-		})),
-		message: filteredVolunteers.rowCount
-			? `${filteredVolunteers.rowCount} volunteer(s) found for the ${team} team.`
-			: "No volunteers found for this team.",
-	});
+			return new Volunteer(
+				row.id,
+				row.first_name,
+				row.last_name,
+				row.phone_number,
+				row.email,
+				row.street_address,
+				row.street_address2,
+				row.city,
+				row.state,
+				row.zip_code,
+				areasOfHelp,
+				row.team_leader, // Assuming team_leader is a boolean column in your table
+				row.password
+			);
+		});
+
+		// Return the array of Volunteer instances
+		res.json(volunteers);
+	} catch (err) {
+		console.error("Error fetching volunteers:", err);
+		res.status(500).json({ error: "Failed to fetch volunteers" });
+	}
 });
 app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
@@ -386,10 +425,69 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 
 app.get("/homeowner-requests", async (req, res) => {
 	try {
-		let requests = await pool.query(
-			"SELECT request_id, first_name, last_name, email, street_address_1, city, state, zip_code, status FROM request;"
-		);
-		res.status(200).send(requests.rows);
+		let requests = await pool.query("SELECT * FROM request;");
+		let requestList: helpRequest[] = [];
+		for (let request of requests.rows) {
+			let id = request.id;
+			let firstName = request.first_name;
+			let lastName = request.last_name;
+			let email = request.email;
+			let phoneNumber = request.phone_number;
+			let streetAddress1 = request.street_address_1;
+			let streetAddress2 = request.street_address_2;
+			let city = request.city;
+			let state = request.state;
+			let zipCode = request.zip_code;
+			let county = request.county;
+			let status = request.status;
+			let reasonRejected = request.reason_rejected;
+			let helpType: string[] = [];
+			if (request.yard_cleanup) {
+				helpType.push("Yard cleanup");
+			}
+			if (request.interior_cleanup) {
+				helpType.push("Interior Cleanup");
+			}
+			if (request.emotional_support) {
+				helpType.push("Emotional Support");
+			}
+			if (request.cleaning_supplies) {
+				helpType.push("Cleaning supplies");
+			}
+			if (request.clean_water) {
+				helpType.push("Clean water");
+			}
+			if (request.emergency_food) {
+				helpType.push("Emergency food");
+			}
+
+			let other = request.other;
+			let description = request.description;
+			let dateCreated = request.date_created;
+			let timeCreated = request.time_created;
+			let newRequest = new helpRequest(
+				id,
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				streetAddress1,
+				streetAddress2,
+				city,
+				state,
+				zipCode,
+				county,
+				status,
+				reasonRejected,
+				helpType,
+				other,
+				description,
+				dateCreated,
+				timeCreated
+			);
+			requestList.push(newRequest);
+		}
+		res.status(200).send(requestList);
 	} catch (e) {
 		res.send(e);
 	}

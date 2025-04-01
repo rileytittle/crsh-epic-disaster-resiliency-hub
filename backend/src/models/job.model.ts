@@ -1,7 +1,8 @@
 import { HomeownerRequest } from "./homeownerRequest.model";
 
 export class Job extends HomeownerRequest {
-	assignedTeam: string;
+	assignedTeam: number[] = [];
+	other:string;
 	constructor(
 		id: number,
 		firstName: string,
@@ -12,7 +13,7 @@ export class Job extends HomeownerRequest {
 		state: string,
 		zip: number,
 		helpType: string[],
-		assignedTeam: string
+		other:string
 	) {
 		super(
 			id,
@@ -25,6 +26,7 @@ export class Job extends HomeownerRequest {
 			zip,
 			helpType
 		);
-		this.assignedTeam = assignedTeam;
+		this.other=other
+		
 	}
 }

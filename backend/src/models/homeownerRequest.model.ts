@@ -1,4 +1,4 @@
-export class HomeownerRequest {
+export class HomeownerRequest { //probably delete this and get anything its referencing to the other one
 	id: number;
 	firstName: string;
 	lastName: string;
@@ -9,7 +9,7 @@ export class HomeownerRequest {
 	zip: number;
 	helpType: string[];
 	evaluation: string | undefined = undefined;
-	constructor(
+	constructor( // probably delete this
 		id: number,
 		firstName: string,
 		lastName: string,
@@ -19,7 +19,7 @@ export class HomeownerRequest {
 		state: string,
 		zip: number,
 		helpType: string[]
-	) {
+	) { // probably delete this
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;

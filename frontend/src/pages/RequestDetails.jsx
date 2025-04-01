@@ -8,18 +8,29 @@ function RequestDetails() {
 		firstName,
 		lastName,
 		email,
-		address,
+		phoneNumber,
+		streetAddress1,
+		streetAddress2,
 		city,
 		state,
 		zip,
+		county,
+		status,
+		reasonRejected,
 		helpType,
+		other,
+		description,
+		dateCreated,
+		timeCreated,
 	} = location.state;
 	const navigate = useNavigate();
 
 	async function acceptRequest() {
 		await axios
 			.post(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests/accept`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/homeowner-requests/accept`,
 				{
 					id: id,
 				}
@@ -34,7 +45,9 @@ function RequestDetails() {
 	async function rejectRequest() {
 		await axios
 			.post(
-				`https://crsh-epic-disaster-resiliency-hub-server.vercel.app/admin/homeowner-requests/reject`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/homeowner-requests/reject`,
 				{
 					id: id,
 				}
@@ -51,16 +64,33 @@ function RequestDetails() {
 			<div className="card">
 				<div className="card-body">
 					<h1>{firstName + " " + lastName}</h1>
+					<h2>Contact Information</h2>
+					<p>{phoneNumber}</p>
 					<p>{email}</p>
+					<h2>Address</h2>
 					<p>
-						Location:{" "}
-						{address + ", " + city + ", " + state + " " + zip}
+						{streetAddress1 +
+							(streetAddress2 ? " " + streetAddress2 : "") +
+							", " +
+							city +
+							", " +
+							state +
+							" " +
+							zip}
 					</p>
-					<p>
-						{helpType.map((area, index) => (
-							<li key={index}>{area}</li>
-						))}
-					</p>
+					<p>{county} County</p>
+					<h2>Details</h2>
+					<h4>Help Area:</h4>
+					<div>
+						<ul>
+							{helpType.map((area, index) => (
+								<li key={index}>{area}</li>
+							))}
+							{other ? <li>{other}</li> : <></>}
+						</ul>
+					</div>
+					<h4>Description:</h4>
+					<p>{description}</p>
 					<p>Pictures should go here</p>
 					<br></br>
 					<button

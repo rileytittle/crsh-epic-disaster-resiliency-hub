@@ -20,7 +20,7 @@ function ApplicationStatus() {
 
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/volunteer/status`,
+				`${import.meta.env.VITE_BACKEND_URL}/volunteer/status`,
 				{
 					method: "POST",
 					headers: {
