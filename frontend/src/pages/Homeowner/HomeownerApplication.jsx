@@ -192,7 +192,7 @@ const HomeownerApply = () => {
 			console.log(`validated: ${isFormValid}`, formData);
 			try {
 				const response = await fetch(
-					`http://localhost:3000/homeowner/requestHelp`,
+					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp`,
 					{
 						method: "POST",
 						headers: {

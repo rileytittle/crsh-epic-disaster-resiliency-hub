@@ -1,13 +1,17 @@
 import { Router, application } from "express";
+
 import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
 import { Authchecker } from "../utils/auth.utils";
+
+import { HomeownerApplication } from "../models/homeownerApplication.model";
+import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = true;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -62,36 +66,34 @@ app.get("/viewRequests", async (req, res) => {
 	try {
 		// Query to get rows with the "Active" status
 		const result = await pool.query(
-			'SELECT * FROM request WHERE status = $1',
-			['Active']
+			"SELECT * FROM request WHERE status = $1",
+			["Active"]
 		);
 
 		// Define the columns with boolean values representing help types
 		const helpTypeColumns = [
-			'emotional_support',
-			'cleaning_supplies',
-			'clean_water',
-			'emergency_food',
-			'yard_cleanup',
-			'interior_cleanup',
-
+			"emotional_support",
+			"cleaning_supplies",
+			"clean_water",
+			"emergency_food",
+			"yard_cleanup",
+			"interior_cleanup",
 		];
 
 		// Map the result rows to an array of Job objects
-		result.rows.forEach(row => {
+		result.rows.forEach((row) => {
 			const helpType: string[] = [];
 
-
-			helpTypeColumns.forEach(column => {
+			helpTypeColumns.forEach((column) => {
 				if (row[column]) {
-
 					const label = column
-						.replace(/_/g, ' ')  // Replace underscores with spaces
-						.replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
+						.replace(/_/g, " ") // Replace underscores with spaces
+						.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
 
 					helpType.push(label);
 				}
 			});
+
 
 
 			const newJob = new Job(
@@ -109,15 +111,14 @@ app.get("/viewRequests", async (req, res) => {
 			sendRequests.push(newJob);
 		});
 
-
 		if (sendRequests.length > 0) {
 			res.status(200).json(sendRequests);
 		} else {
 			res.status(404).json({ message: "No requests found." });
 		}
 	} catch (e) {
-		console.error('Error querying database', e);
-		res.status(500).json({ message: 'Internal Server Error' });
+		console.error("Error querying database", e);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 });
 

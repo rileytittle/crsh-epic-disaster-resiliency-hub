@@ -18,9 +18,14 @@ function VolunteerAccountSettings() {
 
 	useEffect(() => {
 		function fetchUserData() {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`, // Fixed template literal syntax
+			};
+
 			axios
-				.get("http://localhost:3000/volunteer/user-details", {
-					params: { userToken: userToken },
+				.get(`${import.meta.env.VITE_API_URL}/volunteer/user-details`, {
+					params: { userToken },
+					headers,
 				})
 				.then((response) => {
 					console.log("User data:", response.data);
