@@ -12,8 +12,7 @@ function HomeownerRequests() {
 			.get(`http://localhost:3000/admin/homeowner-requests`, {headers})
 			.then((res) => {
 				// console.log(res.data);
-				setRequests(res.data);
-				console.log(res.data.description, res.data.firstName);
+				setRequests(res.data.filter((request) => request.status == "Unevaluated"));
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);

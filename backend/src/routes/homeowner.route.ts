@@ -61,8 +61,8 @@ app.get("/viewRequests", async (req, res) => {
 	try {
 	  // Query to get rows with the "Active" status
 	  const result = await pool.query(
-		'SELECT * FROM request WHERE status = $1',
-		['Active']
+		'SELECT * FROM request WHERE status IN ($1, $2);',
+		['Accepted', 'Active']
 	  );
   
 	  // Define the columns with boolean values representing help types

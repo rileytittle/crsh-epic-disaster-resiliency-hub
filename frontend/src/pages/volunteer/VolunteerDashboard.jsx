@@ -21,12 +21,17 @@ function VolunteerDashboard() {
 
 		async function fetchData() {
 			try {
+				let headers = {
+					Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+				};
 				const [userRes, jobsRes] = await Promise.all([
 					axios.get("http://localhost:3000/volunteer/user-details", {
 						params: { userToken },
+						headers: headers
 					}),
 					axios.get("http://localhost:3000/volunteer/jobs", {
 						params: { userToken },
+						headers: headers
 					}),
 				]);
 

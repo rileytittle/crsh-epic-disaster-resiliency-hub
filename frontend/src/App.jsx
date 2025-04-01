@@ -36,6 +36,7 @@ import VolunteerJobs from "./pages/volunteer/jobsOffered";
 import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings";
 import ThankYouPage from "./pages/pVolunteer/ThankYouPage";
 import GenerateReports from "./pages/Admin/GenerateReports";
+import ActiveRequests from "./pages/Admin/ActiveRequests";
 
 
 const router = createBrowserRouter(
@@ -63,6 +64,8 @@ const router = createBrowserRouter(
 				path="/homeowner-requests"
 				element={<HomeownerRequests />}
 			></Route>
+			<Route path="/requests-in-progress"
+			element={<ActiveRequests/>}></Route>
 			<Route
 				path="/homeowner-requests/request-details"
 				element={<RequestDetails />}

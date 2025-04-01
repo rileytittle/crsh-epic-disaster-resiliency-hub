@@ -12,8 +12,11 @@ function Volunteers() {
 	//`http://localhost:3000
 	//http://localhost:3000
 	useEffect(() => {
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+		};
 		axios
-			.get(`http://localhost:3000/admin/volunteers`)
+			.get(`http://localhost:3000/admin/volunteers`, { headers })
 			.then((res) => {
 				// Transform data to include areas of help
 				const transformedData = res.data.map((volunteer) => ({

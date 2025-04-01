@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 function RequestDetails() {
 	const location = useLocation();
+	const [assignedVolunteers, setAssignedVolunteers] = useState([]);
 	const {
 		id,
 		firstName,
@@ -49,6 +51,20 @@ function RequestDetails() {
 				console.error("Error fetching applications:", error);
 			});
 	}
+	useEffect(() => {
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+		};
+		axios
+			.get(
+				`http://localhost:3000/admin/homeowner-requests/assigned-volunteers/${id}`,
+				{ headers }
+			)
+			.then((res) => {
+				console.log(res.data);
+				setAssignedVolunteers(res.data);
+			});
+	}, []);
 	return (
 		<>
 			<div className="card">
@@ -83,20 +99,38 @@ function RequestDetails() {
 					<p>{description}</p>
 					<p>Pictures should go here</p>
 					<br></br>
-					<button
-						type="button"
-						className="btn btn-primary"
-						onClick={acceptRequest}
-					>
-						Accept Request
-					</button>
-					<button
-						type="button"
-						className="btn"
-						onClick={rejectRequest}
-					>
-						Reject Request
-					</button>
+					{status == "Active" ? (
+						<div>
+							<h4>Assigned Volunteers:</h4>
+							{assignedVolunteers.map((volunteer) => (
+								<div>
+									<p>
+										{volunteer.first_name}{" "}
+										{volunteer.last_name}:{" "}
+										{volunteer.phone_number} -{" "}
+										{volunteer.email}
+									</p>
+								</div>
+							))}
+						</div>
+					) : (
+						<>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={acceptRequest}
+							>
+								Accept Request
+							</button>
+							<button
+								type="button"
+								className="btn"
+								onClick={rejectRequest}
+							>
+								Reject Request
+							</button>
+						</>
+					)}
 				</div>
 			</div>
 		</>
