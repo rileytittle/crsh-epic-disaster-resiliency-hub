@@ -215,7 +215,7 @@ app.get("/assign-volunteer/list", async (req, res) => {
 
 		// Map the results to Volunteer instances
 		const volunteers = result.rows.map((row) => {
-			const areasOfHelp = [];
+			const areasOfHelp: string[] = [];
 			if (row.admin_team) areasOfHelp.push("Admin Team");
 			if (row.hospitality) areasOfHelp.push("Hospitality");
 			if (row.logistic_tracking) areasOfHelp.push("Logistics");
