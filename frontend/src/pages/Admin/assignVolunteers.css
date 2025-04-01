@@ -50,3 +50,17 @@
   .assign-btn:hover {
     background-color: #218838;
   }
+  .assign-volunteer-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Makes sure the page takes at least full screen height */
+  }
+  
+  .assign-volunteer-page .content {
+    flex-grow: 1; /* Makes the content section grow to take the available space */
+  }
+  
+  .assign-volunteer-page .footer-safe-area {
+    margin-top: auto; /* Pushes the footer area to the bottom */
+    padding-bottom: 30px; /* Adjust the padding for bottom space */
+  }

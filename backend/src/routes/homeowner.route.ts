@@ -64,10 +64,51 @@ requests.push(
 app.get("/viewRequests", async (req, res) => {
 	let sendRequests: Job[] = [];
 	try {
-		// Query to get rows with the "Active" status
-		const result = await pool.query(
-			"SELECT * FROM request WHERE status = $1",
-			["Active"]
+	  // Query to get rows with the "Active" status
+	  const result = await pool.query(
+		'SELECT * FROM request WHERE status = $1',
+		['Accepted']
+	  );
+  
+	  // Define the columns with boolean values representing help types
+	  const helpTypeColumns = [
+		'emotional_support',
+		'cleaning_supplies',
+		'clean_water',
+		'emergency_food',
+		'yard_cleanup',
+		'interior_cleanup',
+		
+	  ];
+  
+	  // Map the result rows to an array of Job objects
+	  result.rows.forEach(row => {
+		const helpType: string[] = [];
+  
+		
+		helpTypeColumns.forEach(column => {
+		  if (row[column]) {
+			
+			const label = column
+			  .replace(/_/g, ' ')  // Replace underscores with spaces
+			  .replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
+  
+			helpType.push(label);
+		  }
+		});
+  
+		
+		const newJob = new Job(
+		  row.request_id, 
+		  row.first_name,  
+		  row.last_name,  
+		  row.email,  
+		  row.street_address_1,  
+		  row.city,  
+		  row.state,  
+		  row.zip_code,  
+		  helpType,
+		  row.other  
 		);
 
 		// Define the columns with boolean values representing help types

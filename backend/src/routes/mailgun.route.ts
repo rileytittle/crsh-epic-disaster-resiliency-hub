@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { Pool } from "pg";
+import { Request, Response } from "express";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ const mg = mailgun({
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Change this in production!
 
 //Request Password Reset (Generate JWT & Send Email)
-router.post("/request-password-reset", async (req, res) => {
+router.post("/request-password-reset", async (req:Request, res:Response): Promise<any> => {
 	const { email } = req.body;
 
 	try {
@@ -81,7 +82,7 @@ router.post("/request-password-reset", async (req, res) => {
 });
 
 //actually resets the password
-router.post("/reset-password", async (req, res) => {
+router.post("/reset-password", async (req:Request, res:Response): Promise<any> => {
 	const { token, newPassword } = req.body;
 
 	try {
