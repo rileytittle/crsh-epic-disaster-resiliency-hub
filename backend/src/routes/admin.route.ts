@@ -518,7 +518,11 @@ app.post("/reports", async (req, res) => {
 	let county = req.body.county;
 	let zipCode = parseInt(req.body.zipCode);
 	let status = req.body.status;
-
+	let uniqueHomes = req.body.uniqueHomes;
+	if (req.body.uniqueHomes && req.body.uniqueHomes == true) {
+		queryString =
+			"SELECT DISTINCT ON (street_address_1, street_address_2) * FROM request";
+	}
 	if (req.body.year && req.body.year != "0") {
 		queryConditions.push(`EXTRACT(YEAR FROM date_created) = ${year}`);
 	}
@@ -590,6 +594,7 @@ app.post("/reports", async (req, res) => {
 				phone_number: row.phone_number,
 				email: row.email,
 				street_address_1: row.street_address_1,
+				street_address_2: row.street_address_2,
 				city: row.city,
 				county: row.county,
 				zip_code: row.zip_code,
