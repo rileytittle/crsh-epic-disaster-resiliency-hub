@@ -37,7 +37,7 @@ import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings
 import ThankYouPage from "./pages/pVolunteer/ThankYouPage";
 import GenerateReports from "./pages/Admin/GenerateReports";
 import ActiveRequests from "./pages/Admin/ActiveRequests";
-
+import Resources from "./pages/Resources";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -64,8 +64,10 @@ const router = createBrowserRouter(
 				path="/homeowner-requests"
 				element={<HomeownerRequests />}
 			></Route>
-			<Route path="/requests-in-progress"
-			element={<ActiveRequests/>}></Route>
+			<Route
+				path="/requests-in-progress"
+				element={<ActiveRequests />}
+			></Route>
 			<Route
 				path="/homeowner-requests/request-details"
 				element={<RequestDetails />}
@@ -78,14 +80,8 @@ const router = createBrowserRouter(
 				path="/volunteer-dashboard"
 				element={<VolunteerDashboard />}
 			></Route>
-			<Route 
-			path="/applyVolunteer" 
-			element={<VolunteerForm />}>
-			</Route>
-			 <Route 
-			 path="/thank-you" 
-			 element={<ThankYouPage />} 
-			 />
+			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
+			<Route path="/thank-you" element={<ThankYouPage />} />
 			<Route
 				path="/applyVolunteer/status"
 				element={<VolunteerApplicationStatus />}
@@ -121,6 +117,7 @@ const router = createBrowserRouter(
 				path="/generate-reports"
 				element={<GenerateReports />}
 			></Route>
+			<Route path="/more-resources" element={<Resources />}></Route>
 		</Route>
 	)
 );
