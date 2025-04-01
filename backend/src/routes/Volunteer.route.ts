@@ -10,7 +10,7 @@ import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
 require("dotenv").config();
 
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -343,7 +343,7 @@ app.post("/status", (req, res) => {
  * assignment is index 0
  * offered is index 1
  */
-app.get("/jobs", async (req:Request, res:Response): Promise<any> =>{
+app.get("/jobs", async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
 
@@ -479,7 +479,7 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.get("/user-details", async (req:Request, res:Response): Promise<any> => {
+app.get("/user-details", async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
 

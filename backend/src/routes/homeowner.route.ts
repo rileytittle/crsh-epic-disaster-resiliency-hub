@@ -10,7 +10,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -52,7 +52,14 @@ requests.push(
 		"Sarasota",
 		"Active",
 		"",
-		['emotional_support', 'cleaning_supplies', 'clean_water', 'emergency_food', 'yard_cleanup', 'interior_cleanup'],
+		[
+			"emotional_support",
+			"cleaning_supplies",
+			"clean_water",
+			"emergency_food",
+			"yard_cleanup",
+			"interior_cleanup",
+		],
 		"",
 		"I NEED SO MUCH HELP PLEASE SEND HELP",
 		new Date("2024-03-30"),
@@ -63,51 +70,10 @@ requests.push(
 app.get("/viewRequests", async (req, res) => {
 	let sendRequests: Job[] = [];
 	try {
-	  // Query to get rows with the "Active" status
-	  const result = await pool.query(
-		'SELECT * FROM request WHERE status = $1',
-		['Accepted']
-	  );
-  
-	  // Define the columns with boolean values representing help types
-	  const helpTypeColumns = [
-		'emotional_support',
-		'cleaning_supplies',
-		'clean_water',
-		'emergency_food',
-		'yard_cleanup',
-		'interior_cleanup',
-		
-	  ];
-  
-	  // Map the result rows to an array of Job objects
-	  result.rows.forEach(row => {
-		const helpType: string[] = [];
-  
-		
-		helpTypeColumns.forEach(column => {
-		  if (row[column]) {
-			
-			const label = column
-			  .replace(/_/g, ' ')  // Replace underscores with spaces
-			  .replace(/\b\w/g, char => char.toUpperCase());  // Capitalize each word
-  
-			helpType.push(label);
-		  }
-		});
-  
-		
-		const newJob = new Job(
-		  row.request_id, 
-		  row.first_name,  
-		  row.last_name,  
-		  row.email,  
-		  row.street_address_1,  
-		  row.city,  
-		  row.state,  
-		  row.zip_code,  
-		  helpType,
-		  row.other  
+		// Query to get rows with the "Active" status
+		const result = await pool.query(
+			"SELECT * FROM request WHERE status = $1",
+			["Accepted"]
 		);
 
 		// Define the columns with boolean values representing help types
@@ -134,10 +100,8 @@ app.get("/viewRequests", async (req, res) => {
 				}
 			});
 
-
-
 			const newJob = new Job(
-				row.id,
+				row.request_id,
 				row.first_name,
 				row.last_name,
 				row.email,
@@ -156,7 +120,7 @@ app.get("/viewRequests", async (req, res) => {
 		} else {
 			res.status(404).json({ message: "No requests found." });
 		}
-	} catch(e) {
+	} catch (e) {
 		console.error("Error querying database", e);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
@@ -248,7 +212,8 @@ app.post("/requestHelp", async (req, res) => {
 });
 
 app.get("/requestHelp/status", async (req, res) => {
-	const { first_name, last_name, street_address_1, street_address_2 } = req.query;
+	const { first_name, last_name, street_address_1, street_address_2 } =
+		req.query;
 	try {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created
@@ -260,7 +225,7 @@ app.get("/requestHelp/status", async (req, res) => {
 			return res.status(404).json({ message: "No data matches query" }); // Return 404 if no rows are found
 		}
 
-		let request = requests.rows[0]
+		let request = requests.rows[0];
 		//console.log(request);
 		let status = request.status;
 		let reasonRejected = request.reason_rejected;
@@ -302,7 +267,7 @@ app.get("/requestHelp/status", async (req, res) => {
 		res.status(200).send(statusInformation);
 	} catch (e) {
 		res.status(500).send({ message: "Something went wrong" });
-	console.log(e);
+		console.log(e);
 	}
 });
 
