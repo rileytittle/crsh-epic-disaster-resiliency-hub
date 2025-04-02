@@ -296,11 +296,11 @@ function ApplicationStatus() {
 													<td className="px-1 align-bottom text-start">{helpResults.helpType.join(", ")}</td>
 												</tr>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold text-decoration-underline">Description:</th>
+													<th colSpan="2" className="px-1 align-top text-center fw-bold text-decoration-underline">Description</th>
 													<th></th>
 												</tr>
 												<tr>
-													<td colspan="2" className="px-1 align-bottom text-center">{helpResults.description}</td>
+													<td colSpan="2" className="px-1 align-bottom text-center">{helpResults.description}</td>
 												</tr>
 											</tbody>
 										</table>
