@@ -13,7 +13,7 @@ function ApplicationStatus() {
 		timeCreated: "",
 
 		helpType: [],
-		description: ""
+		description: "",
 	});
 	const [formData, setFormData] = useState({
 		first_name: "",
@@ -75,7 +75,10 @@ function ApplicationStatus() {
 			last_name: formData.last_name.trim() !== "",
 			street_address_1: formData.street_address_1.trim() != "",
 		};
-		const null_address_2 = formData.street_address_2.trim() === "" ? "NULL" : formData.street_address_2; // Set to NULL if empty
+		const null_address_2 =
+			formData.street_address_2.trim() === ""
+				? "NULL"
+				: formData.street_address_2; // Set to NULL if empty
 
 		setFormValidity(newFormValidity);
 
@@ -89,10 +92,18 @@ function ApplicationStatus() {
 		} else {
 			try {
 				const response = await fetch(
-					`http://localhost:3000/homeowner/requestHelp/status?first_name=${encodeURIComponent(formData.first_name)}&last_name=${encodeURIComponent(formData.last_name)}&street_address_1=${encodeURIComponent(formData.street_address_1)}&street_address_2=${encodeURIComponent(null_address_2)}`,
+					`${
+						import.meta.env.VITE_API_URL
+					}/homeowner/requestHelp/status?first_name=${encodeURIComponent(
+						formData.first_name
+					)}&last_name=${encodeURIComponent(
+						formData.last_name
+					)}&street_address_1=${encodeURIComponent(
+						formData.street_address_1
+					)}&street_address_2=${encodeURIComponent(null_address_2)}`,
 					{
 						method: "GET",
-						headers: { "Content-Type": "application/json", },
+						headers: { "Content-Type": "application/json" },
 					}
 				);
 				const result = await response.json();
@@ -104,7 +115,7 @@ function ApplicationStatus() {
 					//alert(response.statusText);
 					validReturn = true;
 
-					let isRejected = false
+					let isRejected = false;
 					if (result.status == "Rejected") {
 						isRejected = true;
 					}
@@ -124,7 +135,7 @@ function ApplicationStatus() {
 						description: result.description,
 					});
 				}
-				toggleInformation()
+				toggleInformation();
 			} catch (error) {
 				console.error("Error:", error);
 			}
@@ -144,7 +155,9 @@ function ApplicationStatus() {
 						onSubmit={formSubmitted}
 						className="row g-3 needs-validation"
 					>
-						<div className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}>
+						<div
+							className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}
+						>
 							<div
 								className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
 							>
@@ -154,12 +167,14 @@ function ApplicationStatus() {
 											<input
 												placeholder="First Name"
 												type="text"
-												className={`form-control ${formValidity.first_name === null
-													? ""
-													: formValidity.first_name
+												className={`form-control ${
+													formValidity.first_name ===
+													null
+														? ""
+														: formValidity.first_name
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="first_name"
 												id="first_name"
 												value={formData.first_name}
@@ -174,12 +189,14 @@ function ApplicationStatus() {
 											<input
 												placeholder="Last Name"
 												type="text"
-												className={`form-control ${formValidity.last_name === null
-													? ""
-													: formValidity.last_name
+												className={`form-control ${
+													formValidity.last_name ===
+													null
+														? ""
+														: formValidity.last_name
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="last_name"
 												id="last_name"
 												value={formData.last_name}
@@ -191,7 +208,6 @@ function ApplicationStatus() {
 											</div>
 										</div>
 									</div>
-
 								</div>
 							</div>
 							<div
@@ -208,17 +224,20 @@ function ApplicationStatus() {
 											</label>
 											<input
 												type="text"
-												className={`form-control ${formValidity.street_address_1 ===
+												className={`form-control ${
+													formValidity.street_address_1 ===
 													null
-													? ""
-													: formValidity.street_address_1
+														? ""
+														: formValidity.street_address_1
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="street_address_1"
 												id="street_address_1"
 												placeholder="1234 Main St"
-												value={formData.street_address_1}
+												value={
+													formData.street_address_1
+												}
 												onChange={handleChange}
 												required
 											/>
@@ -239,7 +258,9 @@ function ApplicationStatus() {
 												name="street_address_2"
 												id="street_address_2"
 												placeholder="Apartment, studio, or floor"
-												value={formData.street_address_2}
+												value={
+													formData.street_address_2
+												}
 												onChange={handleChange}
 											/>
 										</div>
@@ -247,7 +268,10 @@ function ApplicationStatus() {
 								</div>
 							</div>
 							<div className="mb-3">
-								<button type="submit" className="btn btn-primary">
+								<button
+									type="submit"
+									className="btn btn-primary"
+								>
 									Check
 								</button>
 							</div>
@@ -258,49 +282,89 @@ function ApplicationStatus() {
 							id="statusBox"
 							style={{ display: "none" }}
 						>
-							<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}>
+							<div
+								className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+							>
 								<div className="card-body d-flex justify-content-center">
 									<div className="">
 										<table className="table table-light table-sm mb-0">
 											<tbody>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold">Status:</th>
-													<td className="px-1 align-top text-start">{helpResults.status}</td>
+													<th className="px-1 align-top text-end fw-bold">
+														Status:
+													</th>
+													<td className="px-1 align-top text-start">
+														{helpResults.status}
+													</td>
 												</tr>
 												<tr>
 													<th
 														className="px-1 align-top text-end fw-bold"
 														name="rejectedTitle"
 														id="rejectedTitle"
-														style={{ display: "none" }}>
+														style={{
+															display: "none",
+														}}
+													>
 														Reason Rejected:
 													</th>
 													<td
 														className="px-1 align-bottom text-start"
 														name="rejectedText"
 														id="rejectedText"
-														style={{ display: "none" }}>
-														{helpResults.reasonRejected ?? "N/A"}
+														style={{
+															display: "none",
+														}}
+													>
+														{helpResults.reasonRejected ??
+															"N/A"}
 													</td>
 												</tr>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold">Date Created:</th>
-													<td className="px-1 align-bottom text-start">{helpResults.dateCreated}</td>
+													<th className="px-1 align-top text-end fw-bold">
+														Date Created:
+													</th>
+													<td className="px-1 align-bottom text-start">
+														{
+															helpResults.dateCreated
+														}
+													</td>
 												</tr>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold">Time Created:</th>
-													<td className="px-1 align-bottom text-start">{helpResults.timeCreated}</td>
+													<th className="px-1 align-top text-end fw-bold">
+														Time Created:
+													</th>
+													<td className="px-1 align-bottom text-start">
+														{
+															helpResults.timeCreated
+														}
+													</td>
 												</tr>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold">Help Types:</th>
-													<td className="px-1 align-bottom text-start">{helpResults.helpType.join(", ")}</td>
+													<th className="px-1 align-top text-end fw-bold">
+														Help Types:
+													</th>
+													<td className="px-1 align-bottom text-start">
+														{helpResults.helpType.join(
+															", "
+														)}
+													</td>
 												</tr>
 												<tr>
-													<th className="px-1 align-top text-end fw-bold text-decoration-underline">Description:</th>
+													<th className="px-1 align-top text-end fw-bold text-decoration-underline">
+														Description:
+													</th>
 													<th></th>
 												</tr>
 												<tr>
-													<td colspan="2" className="px-1 align-bottom text-center">{helpResults.description}</td>
+													<td
+														colspan="2"
+														className="px-1 align-bottom text-center"
+													>
+														{
+															helpResults.description
+														}
+													</td>
 												</tr>
 											</tbody>
 										</table>

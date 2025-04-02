@@ -68,7 +68,9 @@ function RequestDetails() {
 		};
 		axios
 			.get(
-				`http://localhost:3000/admin/homeowner-requests/assigned-volunteers/${id}`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/homeowner-requests/assigned-volunteers/${id}`,
 				{ headers }
 			)
 			.then((res) => {
