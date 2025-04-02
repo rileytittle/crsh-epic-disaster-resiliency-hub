@@ -17,7 +17,7 @@ let cors = require("cors");
 let app = express();
 const IN_DEVELOPMENT = false;
 let vercelURL = "https://crsh-epic-disaster-resiliency-hub-client.vercel.app";
-let localURL = "http://localhost:5173";
+let localURL = "http://localhost:3000";
 
 app.use(express.json());
 
