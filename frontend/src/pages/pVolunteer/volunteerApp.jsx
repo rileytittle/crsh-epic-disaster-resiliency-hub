@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./volunteerApp.module.css";
 
@@ -156,7 +156,7 @@ const VolunteerForm = () => {
 		}
 
 		try {
-			const response = await fetch(`http://localhost:3000/volunteer/create`, {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

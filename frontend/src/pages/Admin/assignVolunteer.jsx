@@ -28,8 +28,8 @@ const AssignVolunteer = () => {
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				"http://localhost:3000/homeowner/viewRequests",
-				{
+				`${import.meta.env.VITE_API_URL}/homeowner/viewRequests`, 
+        {
 					method: "GET",
 					headers: headers,
 				}
@@ -78,7 +78,7 @@ const AssignVolunteer = () => {
 		setSelectedTeam(team); // Set the selected team when a button is clicked
 		try {
 			const response = await fetch(
-				"http://localhost:3000/admin/assign-volunteer/list",
+				`${import.meta.env.VITE_API_URL}/admin/assign-volunteer/list`,
 				{
 					method: "GET",
 					headers: {
@@ -112,7 +112,9 @@ const AssignVolunteer = () => {
 		try {
 			// Send all selected volunteers in the body
 			const response = await fetch(
-				"http://localhost:3000/admin/assign-volunteer/updateAssignment",
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/assign-volunteer/updateAssignment`,
 				{
 					method: "POST",
 					headers: {
@@ -207,7 +209,6 @@ const AssignVolunteer = () => {
 					)}
 				</select>
 			</div>
-
 			{requestsToDisplay.length > 0 ? (
 				<table className="table table-striped">
 					<thead>

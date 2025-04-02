@@ -22,7 +22,7 @@ let AdminAuthChecker = (req: Request, res: Response, next: NextFunction) => {
 			}
 		} else if (header.includes("Basic") && req.url == "/login") {
 			next();
-		} else {
+		} else 
 			res.status(401).send({ message: "Unauthorized 3" });
 		}
 	} else {
