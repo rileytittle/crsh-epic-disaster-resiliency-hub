@@ -10,7 +10,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = true;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -48,6 +48,7 @@ requests.push(
 		"",
 		"Jacksonville",
 		"florida",
+		"Sarasota",
 		43325,
 		"Sarasota",
 		"Active",

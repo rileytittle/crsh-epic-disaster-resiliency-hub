@@ -86,6 +86,7 @@ const HomeownerApply = () => {
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
+
 		//console.log(`name: ${name}, value: ${value}, checked: ${checked}`);
 		if (type === "checkbox") {
 			setFormData({

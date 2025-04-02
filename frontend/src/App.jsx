@@ -39,11 +39,18 @@ import GenerateReports from "./pages/Admin/GenerateReports";
 import ActiveRequests from "./pages/Admin/ActiveRequests";
 import Resources from "./pages/Resources";
 
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
 			<Route index element={<Navigate to="/home" replace />} />
 			<Route path="/home" element={<Homepage />}></Route>
+
+			<Route path="/request-help" element={<HomeownerForm />}></Route>
+			<Route
+				path="/request-help/status"
+				element={<HomeownerApplicationStatus />}
+			></Route>
 
 			<Route
 				path="/request-help"
@@ -105,14 +112,16 @@ const router = createBrowserRouter(
 				element={<VolunteerApplicationStatus />}
 			></Route>
 			<Route
+				path="/applyVolunteer/status"
+				element={<VolunteerApplicationStatus />}
+			></Route>
+
+			<Route
 				path="/assignVolunteers"
 				element={<AssignVolunteer />}
 			></Route>
 
-			<Route
-				path="/volunteer/jobs"
-				element={<VolunteerJobs />}
-			></Route>
+			<Route path="/volunteer/jobs" element={<VolunteerJobs />}></Route>
 			<Route
 				path="/volunteer/changePassword"
 				element={<VolunteerPasswordChange />}
