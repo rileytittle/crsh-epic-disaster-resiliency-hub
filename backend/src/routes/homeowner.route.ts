@@ -145,7 +145,7 @@ app.post("/requestHelp", async (req, res) => {
 		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
 		//console.log(currentTime); // Example: "14:35:45"
 
-		let result = pool.query(
+		let result = await pool.query(
 			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created)
 			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)`,
 			[
@@ -176,7 +176,6 @@ app.post("/requestHelp", async (req, res) => {
 		res.status(200).send({
 			success: true,
 			message: "Request succcessfully Submitted",
-			data: await result
 		});
 		//console.log(await result);
 	} catch (e) {
