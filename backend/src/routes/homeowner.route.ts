@@ -36,37 +36,6 @@ let HomeownerApplications: helpRequest[] = []; // database
 app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
 });
-let requests: helpRequest[] = [];
-requests.push(
-	new helpRequest(
-		999,
-		"Hayden",
-		"O'Neill",
-		"haydeno221@outlook.com",
-		9045555555,
-		"9274 Real Street",
-		"",
-		"Jacksonville",
-		"florida",
-		"Sarasota",
-		43325,
-		"Sarasota",
-		"Active",
-		"",
-		[
-			"emotional_support",
-			"cleaning_supplies",
-			"clean_water",
-			"emergency_food",
-			"yard_cleanup",
-			"interior_cleanup",
-		],
-		"",
-		"I NEED SO MUCH HELP PLEASE SEND HELP",
-		new Date("2024-03-30"),
-		"14:30"
-	)
-); //
 
 app.get("/viewRequests", async (req, res) => {
 	let sendRequests: Job[] = [];

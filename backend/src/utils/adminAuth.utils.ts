@@ -9,12 +9,11 @@ let AdminAuthChecker = (req: Request, res: Response, next: NextFunction) => {
 			let token = header.split(" ")[1];
 			try {
 				let payload = jwt.verify(token, SECRET_KEY) as any;
-				if(payload.userType == "admin"){
+				if (payload.userType == "admin") {
 					res.setHeader("loggedinuser", payload.email);
 					next();
-				}
-				else{
-					res.status(401).send({ message:"Unauthorized 1" });
+				} else {
+					res.status(401).send({ message: "Unauthorized 1" });
 				}
 			} catch (e) {
 				console.log(e);
@@ -22,9 +21,7 @@ let AdminAuthChecker = (req: Request, res: Response, next: NextFunction) => {
 			}
 		} else if (header.includes("Basic") && req.url == "/login") {
 			next();
-		} else 
-			res.status(401).send({ message: "Unauthorized 3" });
-		}
+		} else res.status(401).send({ message: "Unauthorized 3" });
 	} else {
 		res.status(401).send({ message: "Unauthorized - no header" });
 	}
