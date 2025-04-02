@@ -36,6 +36,8 @@ import VolunteerJobs from "./pages/volunteer/jobsOffered";
 import VolunteerAccountSettings from "./pages/volunteer/VolunteerAccountSettings";
 import ThankYouPage from "./pages/pVolunteer/ThankYouPage";
 import GenerateReports from "./pages/Admin/GenerateReports";
+import ActiveRequests from "./pages/Admin/ActiveRequests";
+import Resources from "./pages/Resources";
 
 
 const router = createBrowserRouter(
@@ -45,6 +47,15 @@ const router = createBrowserRouter(
 			<Route path="/home" element={<Homepage />}></Route>
 
 			<Route path="/request-help" element={<HomeownerForm />}></Route>
+			<Route
+				path="/request-help/status"
+				element={<HomeownerApplicationStatus />}
+			></Route>
+
+			<Route
+				path="/request-help"
+				element={<HomeownerForm />}
+			></Route>
 			<Route
 				path="/request-help/status"
 				element={<HomeownerApplicationStatus />}
@@ -64,29 +75,47 @@ const router = createBrowserRouter(
 				element={<HomeownerRequests />}
 			></Route>
 			<Route
+				path="/requests-in-progress"
+				element={<ActiveRequests />}
+			></Route>
+			<Route
 				path="/homeowner-requests/request-details"
 				element={<RequestDetails />}
 			></Route>
-			<Route path="/admin-login" element={<AdminLogin />}></Route>
-			<Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
+			<Route
+				path="/admin-login"
+				element={<AdminLogin />}
+			></Route>
+			<Route
+				path="/admin-dashboard"
+				element={<AdminDashboard />}
+			></Route>
 
-			<Route path="/vol-login" element={<VolLogin />}></Route>
+			<Route
+				path="/vol-login"
+				element={<VolLogin />}
+			></Route>
 			<Route
 				path="/volunteer-dashboard"
 				element={<VolunteerDashboard />}
 			></Route>
-			<Route 
-			path="/applyVolunteer" 
-			element={<VolunteerForm />}>
+			<Route
+				path="/applyVolunteer"
+				element={<VolunteerForm />}>
 			</Route>
-			 <Route 
-			 path="/thank-you" 
-			 element={<ThankYouPage />} 
-			 />
+			<Route
+				path="/thank-you"
+				element={<ThankYouPage />}
+			/>
 			<Route
 				path="/applyVolunteer/status"
 				element={<VolunteerApplicationStatus />}
 			></Route>
+			<Route
+				path="/applyVolunteer/status"
+				element={<VolunteerApplicationStatus />}
+			></Route>
+
 			<Route
 				path="/assignVolunteers"
 				element={<AssignVolunteer />}
@@ -105,7 +134,10 @@ const router = createBrowserRouter(
 				path="/volunteer/request-reset"
 				element={<VolunteerRequestReset />}
 			></Route>
-			<Route path="/volunteers" element={<Volunteers />}></Route>
+			<Route
+				path="/volunteers"
+				element={<Volunteers />}
+			></Route>
 			<Route
 				path="/volunteers/volunteer-details"
 				element={<VolunteerDetails />}
@@ -118,6 +150,7 @@ const router = createBrowserRouter(
 				path="/generate-reports"
 				element={<GenerateReports />}
 			></Route>
+			<Route path="/more-resources" element={<Resources />}></Route>
 		</Route>
 	)
 );

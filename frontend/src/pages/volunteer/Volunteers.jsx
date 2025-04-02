@@ -12,8 +12,11 @@ function Volunteers() {
 	//`${import.meta.env.VITE_API_URL}
 	//${import.meta.env.VITE_API_URL}
 	useEffect(() => {
+		let headers = {
+			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+		};
 		axios
-			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`)
+			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`, { headers })
 			.then((res) => {
 				// Transform data to include areas of help
 				const transformedData = res.data.map((volunteer) => ({

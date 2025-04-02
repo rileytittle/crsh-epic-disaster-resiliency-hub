@@ -123,4 +123,151 @@ button:hover {
   color: white; 
   border-color: #007bff;
 }
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.volunteerInput.error {
+  border: 2px solid red;
+}
+
+.checkboxInput.error {
+  border: 2px solid red;
+}
+.stateWrapper {
+  position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: max-content;
+  margin-top: 5px;
+  z-index: 10;
+}
+
+.stateWrapper:hover .tooltip {
+  visibility: visible;
+}
+.volunteerInput:disabled {
+  width: 100%; /* Ensure the disabled input takes full width */
+  background-color: #f0f0f0; /* Optional: Change background color to indicate it's disabled */
+}
+.areasOfHelpWrapper {
+  margin-bottom: 20px;
+}
+
+.areasOfHelpLabel {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.areasOfHelpContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust to fit space */
+  gap: 15px;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.volunteerLabel {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.checkboxInput {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+
+
+.areasOfHelpWrapper {
+  margin-bottom: 20px;
+}
+
+.areasOfHelpLabel {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.areasOfHelpContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust to fit space */
+  gap: 15px;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  position: relative; /* Necessary for positioning the tooltip */
+}
+
+.volunteerLabel {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.checkboxInput {
+  margin-right: 10px; /* Space between checkbox and label */
+}
+
+
+
+.checkboxWrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+
+/* Show tooltip on hover */
+.checkboxWrapper:hover .tooltip {
+  display: block;
+}
+.checkboxWrapper {
+  position: relative;
+  display: inline-block;
+}
+.tooltipTextBlock {
+  height: 200px; /* Adjust this based on the size of your tooltip */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  transition: opacity 0.3s ease-in-out; /* Optional: adds a fade-in effect */
+}
+
+.tooltipTextBlock p {
+  margin: 0; /* Ensure no margin is affecting the layout */
+}
+
 

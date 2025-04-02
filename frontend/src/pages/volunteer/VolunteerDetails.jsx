@@ -2,36 +2,25 @@ import React, { act } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./VolunteerDetails.css";
 function VolunteerDetails() {
+	let headers = {
+		Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+	};
 	function addArea() {
 		console.log("Clicked: ", selectedArea);
 		axios
 			.patch(
 				`${
 					import.meta.env.VITE_API_URL
-				}/admin/volunteers/volunteer-details`,
+				}/volunteers/volunteer-details`,
 				{
 					id: id,
 					selectedArea: selectedArea,
-				}
+				},
+				{ headers }
 			)
 			.then((res) => {
-				const activeAreas = [];
-
-				// Check each area and add it to the array if true
-				if (res.data.hospitality) activeAreas.push("Hospitality");
-				if (res.data.community_helpers)
-					activeAreas.push("Community Helpers");
-				if (res.data.community_outreach)
-					activeAreas.push("Community Outreach");
-				if (res.data.admin_team)
-					activeAreas.push(
-						"Volunteer Management and Administration Team"
-					);
-				if (res.data.logistic_tracking)
-					activeAreas.push("Logistic Tracking");
-				setAreasOfHelp(activeAreas);
-				setVolunteer(res.data);
 				setSelectedArea("");
 			})
 			.catch((error) => {
@@ -39,6 +28,7 @@ function VolunteerDetails() {
 			});
 	}
 	async function deleteArea(area) {
+		setSelectedArea(area);
 		console.log("Clicked: ", area);
 		await axios
 			.delete(
@@ -50,25 +40,10 @@ function VolunteerDetails() {
 						id: id,
 						selectedArea: area,
 					},
+					headers: headers,
 				}
 			)
 			.then((res) => {
-				const activeAreas = [];
-
-				// Check each area and add it to the array if true
-				if (res.data.hospitality) activeAreas.push("Hospitality");
-				if (res.data.community_helpers)
-					activeAreas.push("Community Helpers");
-				if (res.data.community_outreach)
-					activeAreas.push("Community Outreach");
-				if (res.data.admin_team)
-					activeAreas.push(
-						"Volunteer Management and Administration Team"
-					);
-				if (res.data.logistic_tracking)
-					activeAreas.push("Logistic Tracking");
-				setAreasOfHelp(activeAreas);
-				setVolunteer(res.data);
 				setSelectedArea("");
 			})
 			.catch((error) => {
@@ -76,7 +51,6 @@ function VolunteerDetails() {
 			});
 	}
 	const [volunteer, setVolunteer] = useState({});
-	const [areasOfHelp, setAreasOfHelp] = useState({});
 	const [selectedArea, setSelectedArea] = useState(""); // State to track selected area
 	const location = useLocation();
 	const { id } = location.state;
@@ -86,31 +60,18 @@ function VolunteerDetails() {
 			.get(
 				`${
 					import.meta.env.VITE_API_URL
-				}/admin/volunteers/volunteer-details/${id}`
+				}/admin/volunteers/volunteer-details/${id}`,
+        { headers }
 			)
 			.then((res) => {
-				const activeAreas = [];
-
-				// Check each area and add it to the array if true
-				if (res.data.hospitality) activeAreas.push("Hospitality");
-				if (res.data.community_helpers)
-					activeAreas.push("Community Helpers");
-				if (res.data.community_outreach)
-					activeAreas.push("Community Outreach");
-				if (res.data.admin_team)
-					activeAreas.push(
-						"Volunteer Management and Administration Team"
-					);
-				if (res.data.logistic_tracking)
-					activeAreas.push("Logistic Tracking");
-				setAreasOfHelp(activeAreas);
+				console.log(res.data);
 				setVolunteer(res.data);
 				//console.log(res.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching volunteers:", error);
 			});
-	}, [id]);
+	}, [id, selectedArea]);
 	const navigate = useNavigate();
 	//console.log(location.state);
 	if (!volunteer) {
@@ -119,28 +80,42 @@ function VolunteerDetails() {
 	return (
 		<div className="card">
 			<div className="card-body">
-				<h1>{volunteer.first_name + " " + volunteer.last_name}</h1>
+				<h1>{volunteer.firstName + " " + volunteer.lastName}</h1>
+				<h2>Contact Information</h2>
+				<p>{volunteer.phoneNumber}</p>
 				<p>{volunteer.email}</p>
-				<p>{volunteer.phone_number}</p>
+				<h2>Address</h2>
 				<p>
-					{volunteer.street_address +
+					{volunteer.streetAddress1 +
+						(volunteer.streetAddress2
+							? " " + volunteer.streetAddress2
+							: "") +
 						", " +
 						volunteer.city +
 						", " +
 						volunteer.state +
 						" " +
-						volunteer.zip_code}
+						volunteer.zipCode}
 				</p>
-				<p>
+				<div>
 					{/* Check if areasOfHelp is defined before mapping */}
-					{areasOfHelp && areasOfHelp.length > 0 ? (
+					<h2>Areas of Help</h2>
+					{volunteer.areasOfHelp &&
+					volunteer.areasOfHelp.length > 0 ? (
 						<ul>
-							{areasOfHelp.map((area, index) => (
-								<li key={index}>
+							{volunteer.areasOfHelp.map((area, index) => (
+								<li
+									key={index}
+									style={{
+										display: "flex",
+										alignItems: "center",
+										gap: "10px",
+									}}
+								>
 									{area}
 									<button
 										type="button"
-										class="btn btn-danger"
+										className="btn btn-danger"
 										onClick={() => deleteArea(area)}
 									>
 										Delete
@@ -151,22 +126,22 @@ function VolunteerDetails() {
 					) : (
 						<p>No areas of help specified.</p>
 					)}
-					<div class="input-group mb-3">
+					<div className="input-group mb-3 w-auto">
 						<button
-							class="btn btn-outline-secondary"
+							className="btn btn-outline-secondary"
 							type="button"
 							onClick={addArea}
 						>
 							Add
 						</button>
 						<select
-							class="form-select"
+							className="form-select custom-select"
 							id="inputGroupSelect03"
 							aria-label="Example select with button addon"
 							value={selectedArea} // Set the value of the select to the state variable
 							onChange={(e) => setSelectedArea(e.target.value)} // Update the state when an option is selected
 						>
-							<option selected>Choose...</option>
+							<option>Choose...</option>
 							<option value="admin_team">
 								Volunteer Management and Administration Team
 							</option>
@@ -184,7 +159,7 @@ function VolunteerDetails() {
 							</option>
 						</select>
 					</div>
-				</p>
+				</div>
 			</div>
 		</div>
 	);

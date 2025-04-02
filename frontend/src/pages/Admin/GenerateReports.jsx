@@ -6,6 +6,7 @@ function GenerateReports() {
 	const [county, setCounty] = useState("empty");
 	const [zipCode, setZipCode] = useState("0");
 	const [status, setStatus] = useState("empty");
+	const [uniqueHomes, setUniqueHomes] = useState(false);
 	const [queryResponse, setQueryResponse] = useState(null);
 	// async function testFunction() {
 	// 	console.log("year: " + year);
@@ -16,6 +17,9 @@ function GenerateReports() {
 	// }
 	async function generateReport() {
 		try {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+			};
 			const response = await axios.post(
 				`${import.meta.env.VITE_API_URL}/admin/reports`,
 				{
@@ -24,9 +28,11 @@ function GenerateReports() {
 					county: county,
 					zipCode: zipCode,
 					status: status,
+					uniqueHomes: uniqueHomes,
 				},
 				{
 					responseType: "blob", // Make sure you're getting a blob response
+					headers: headers,
 				}
 			);
 
@@ -49,13 +55,31 @@ function GenerateReports() {
 			<div className="card">
 				<div className="card-body">
 					<h1>Generate Reports</h1>
+					<div className="form-check">
+						<input
+							className="form-check-input"
+							type="checkbox"
+							checked={uniqueHomes}
+							onChange={(e) => {
+								setUniqueHomes(e.target.checked);
+							}}
+							id="flexCheckDefault"
+						/>
+						<label
+							className="form-check-label"
+							htmlFor="flexCheckDefault"
+						>
+							Only include each address ONCE
+						</label>
+					</div>
+
 					<label htmlFor="year" className="form-label">
 						Year
 					</label>
 					<select
 						id="year"
 						name="year"
-						className="form-select"
+						className="form-select w-auto"
 						placeholder="Choose..."
 						value={year}
 						onChange={(e) => {
@@ -81,7 +105,7 @@ function GenerateReports() {
 					<select
 						id="month"
 						name="month"
-						className="form-select"
+						className="form-select w-auto"
 						placeholder="Choose..."
 						value={month}
 						onChange={(e) => {
@@ -108,7 +132,7 @@ function GenerateReports() {
 					<select
 						id="country"
 						name="country"
-						className="form-select"
+						className="form-select w-auto"
 						placeholder="Choose..."
 						value={county}
 						onChange={(e) => {
@@ -125,7 +149,7 @@ function GenerateReports() {
 					<select
 						id="zip-code"
 						name="zip-code"
-						className="form-select"
+						className="form-select w-auto"
 						placeholder="Choose..."
 						value={zipCode}
 						onChange={(e) => {
@@ -145,7 +169,7 @@ function GenerateReports() {
 					<select
 						id="status"
 						name="status"
-						className="form-select"
+						className="form-select w-auto"
 						placeholder="Choose..."
 						value={status}
 						onChange={(e) => {

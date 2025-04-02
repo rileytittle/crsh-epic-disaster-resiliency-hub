@@ -86,13 +86,14 @@ const HomeownerApply = () => {
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
+
+		//console.log(`name: ${name}, value: ${value}, checked: ${checked}`);
 		if (type === "checkbox") {
 			setFormData({
 				...formData,
 				[e.target.id]: e.target.checked,
 			});
 		} else {
-			//console.log({ name, value, checked });
 			setFormData({
 				...formData,
 				[name]: value,
@@ -214,489 +215,487 @@ const HomeownerApply = () => {
 	};
 	return (
 		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
-		<div className="container mt-4">
-			<form
-				noValidate
-				id="homeownerForm"
-				onSubmit={formSubmitted}
-				className="row g-3 needs-validation"
-			>
-				<div
-					className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}
+		<div>
+			<div className="text-center text-decoration-underline">
+				<h2 className="fw-bold">Request Help</h2>
+			</div>
+			<div className="container mt-4">
+				<div className="text-center my-3">
+					<a href="/request-help/status">
+						<button className="btn btn-info">Check the Status of your Application</button>
+					</a>
+				</div>
+				<form
+					noValidate
+					id="homeownerForm"
+					onSubmit={formSubmitted}
+					className="row g-3 needs-validation"
 				>
 					<div
-						className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+						className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}
 					>
-						<div className="card-body">
-							<div className="row">
-								<div className="col">
-									<input
-										placeholder="First Name"
-										type="text"
-										className={`form-control ${
-											formValidity.first_name === null
+						<div
+							className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+						>
+							<div className="card-body">
+								<div className="row">
+									<div className="col">
+										<input
+											placeholder="First Name"
+											type="text"
+											className={`form-control ${formValidity.first_name === null
 												? ""
 												: formValidity.first_name
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="first_name"
-										id="first_name"
-										value={formData.first_name}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a First Name
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="first_name"
+											id="first_name"
+											value={formData.first_name}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a First Name
+										</div>
 									</div>
-								</div>
-								<div className="col">
-									<input
-										placeholder="Last Name"
-										type="text"
-										className={`form-control ${
-											formValidity.last_name === null
+									<div className="col">
+										<input
+											placeholder="Last Name"
+											type="text"
+											className={`form-control ${formValidity.last_name === null
 												? ""
 												: formValidity.last_name
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="last_name"
-										id="last_name"
-										value={formData.last_name}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a Last Name
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="last_name"
+											id="last_name"
+											value={formData.last_name}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a Last Name
+										</div>
 									</div>
 								</div>
-							</div>
 
-							<div className="row mt-2">
-								<div className="col">
-									<input
-										placeholder="E-Mail"
-										type="email"
-										className={`form-control ${
-											formValidity.email === null
+								<div className="row mt-2">
+									<div className="col">
+										<input
+											placeholder="E-Mail"
+											type="email"
+											className={`form-control ${formValidity.email === null
 												? ""
 												: formValidity.email
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="email"
-										id="email"
-										value={formData.email}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a valid E-mail
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="email"
+											id="email"
+											value={formData.email}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a valid E-mail
+										</div>
 									</div>
-								</div>
-								<div className="col">
-									<input
-										placeholder="Phone Number"
-										type="tel"
-										className={`form-control ${
-											formValidity.phone_number === null
+									<div className="col">
+										<input
+											placeholder="Phone Number"
+											type="tel"
+											className={`form-control ${formValidity.phone_number === null
 												? ""
 												: formValidity.phone_number
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="phone_number"
-										id="phone_number"
-										value={formData.phone_number}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a valid Phone Number.
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="phone_number"
+											id="phone_number"
+											value={formData.phone_number}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a valid Phone Number.
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div
-						className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
-					>
-						<div className="card-body">
-							<div className="row">
-								<div className="col-12">
-									<label
-										htmlFor="address_1"
-										className="form-label"
-									>
-										Address
-									</label>
-									<input
-										type="text"
-										className={`form-control ${
-											formValidity.street_address_1 ===
-											null
+						<div
+							className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+						>
+							<div className="card-body">
+								<div className="row">
+									<div className="col-12">
+										<label
+											htmlFor="address_1"
+											className="form-label"
+										>
+											Address
+										</label>
+										<input
+											type="text"
+											className={`form-control ${formValidity.street_address_1 ===
+												null
 												? ""
 												: formValidity.street_address_1
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="street_address_1"
-										id="street_address_1"
-										placeholder="1234 Main St"
-										value={formData.street_address_1}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a valid address.
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="street_address_1"
+											id="street_address_1"
+											placeholder="1234 Main St"
+											value={formData.street_address_1}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a valid address.
+										</div>
 									</div>
-								</div>
-								<div className="col-12">
-									<label
-										htmlFor="street_address_2"
-										className="form-label"
-									>
-										Address 2
-									</label>
-									<input
-										type="text"
-										className="form-control"
-										name="street_address_2"
-										id="street_address_2"
-										placeholder="Apartment, studio, or floor"
-										value={formData.street_address_2}
-										onChange={handleChange}
-									/>
-								</div>
-								<div className="col-md-5">
-									<label
-										htmlFor="city"
-										className="form-label"
-									>
-										City
-									</label>
-									<input
-										type="text"
-										className={`form-control ${
-											formValidity.city === null
+									<div className="col-12">
+										<label
+											htmlFor="street_address_2"
+											className="form-label"
+										>
+											Address 2
+										</label>
+										<input
+											type="text"
+											className="form-control"
+											name="street_address_2"
+											id="street_address_2"
+											placeholder="Apartment, studio, or floor"
+											value={formData.street_address_2}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="col-md-5">
+										<label
+											htmlFor="city"
+											className="form-label"
+										>
+											City
+										</label>
+										<input
+											type="text"
+											className={`form-control ${formValidity.city === null
 												? ""
 												: formValidity.city
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="city"
-										id="city"
-										value={formData.city}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a valid city.
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="city"
+											id="city"
+											value={formData.city}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a valid city.
+										</div>
 									</div>
-								</div>
-								<div className="col-md-2">
-									<label
-										htmlFor="state"
-										className="form-label"
-									>
-										State
-									</label>
-									<select
-										data-tooltip-id="stateTooltip"
-										disabled={true}
-										id="state"
-										name="state"
-										className="form-select"
-										placeholder="Florida"
-										value={formData.state}
-										onChange={handleChange}
-										required
-									>
-										<option>Florida</option>
-									</select>
-									<Tooltip
-										id="stateTooltip"
-										place="top"
-										effect="solid"
-									>
-										Florida is the only supported State
-									</Tooltip>
-								</div>
-								<div className="col-md-2">
-									<label
-										htmlFor="zip_code"
-										className="form-label"
-									>
-										Zip
-									</label>
-									<input
-										type="number"
-										className={`form-control ${
-											formValidity.zip_code === null
+									<div className="col-md-2">
+										<label
+											htmlFor="state"
+											className="form-label"
+										>
+											State
+										</label>
+										<select
+											data-tooltip-id="stateTooltip"
+											disabled={true}
+											id="state"
+											name="state"
+											className="form-select"
+											placeholder="Florida"
+											value={formData.state}
+											onChange={handleChange}
+											required
+										>
+											<option>Florida</option>
+										</select>
+										<Tooltip
+											id="stateTooltip"
+											place="top"
+											effect="solid"
+										>
+											Florida is the only supported State
+										</Tooltip>
+									</div>
+									<div className="col-md-2">
+										<label
+											htmlFor="zip_code"
+											className="form-label"
+										>
+											Zip
+										</label>
+										<input
+											type="number"
+											className={`form-control ${formValidity.zip_code === null
 												? ""
 												: formValidity.zip_code
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										name="zip_code"
-										id="zip_code"
-										value={formData.zip_code}
-										onChange={handleChange}
-										required
-									/>
-									<div className="invalid-feedback">
-										Please enter a valid zip code.
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											name="zip_code"
+											id="zip_code"
+											value={formData.zip_code}
+											onChange={handleChange}
+											required
+										/>
+										<div className="invalid-feedback">
+											Please enter a valid zip code.
+										</div>
 									</div>
-								</div>
-								<div className="col-md-3">
-									<label
-										htmlFor="county"
-										className="form-label"
-									>
-										County
-									</label>
-									<select
-										required
-										id="county"
-										name="county"
-										className={`form-select ${
-											formValidity.county === null
+									<div className="col-md-3">
+										<label
+											htmlFor="county"
+											className="form-label"
+										>
+											County
+										</label>
+										<select
+											required
+											id="county"
+											name="county"
+											className={`form-select ${formValidity.county === null
 												? ""
 												: formValidity.county
-												? "is-valid"
-												: "is-invalid"
-										}`}
-										placeholder="Choose..."
-										value={formData.county}
-										onChange={handleChange}
-									>
-										<option>Choose...</option>
-										<option>Charlotte</option>
-										<option>Sarasota</option>
-									</select>
-									<div className="invalid-feedback">
-										Please select a county.
+													? "is-valid"
+													: "is-invalid"
+												}`}
+											placeholder="Choose..."
+											value={formData.county}
+											onChange={handleChange}
+										>
+											<option>Choose...</option>
+											<option>Charlotte</option>
+											<option>Sarasota</option>
+										</select>
+										<div className="invalid-feedback">
+											Please select a county.
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div
-						className={`${
-							styles.cardParent1
-						} card rounded-3 shadow-sm m-2 ${
-							formValidity.help === null
-								? ""
-								: formValidity.help
-								? "is-valid"
-								: "is-invalid"
-						}`}
-					>
-						<div className="card-header">I need help with...</div>
-						<div className="card-body">
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpExterior"
-									type="checkbox"
-									name="helpExterior"
-									value={formData.helpExterior}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpExterior"
-								>
-									Yard Cleanup
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpInterior"
-									type="checkbox"
-									name="helpInterior"
-									value={formData.helpInterior}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpInterior"
-								>
-									Interior Cleanup
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpEmotional"
-									type="checkbox"
-									name="helpEmotional"
-									value={formData.helpEmotional}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpEmotional"
-								>
-									Emotional Support
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpSupplies"
-									type="checkbox"
-									name="helpSupplies"
-									value={formData.helpSupplies}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpSupplies"
-								>
-									Cleaning Supplies
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpWater"
-									type="checkbox"
-									name="helpWater"
-									value={formData.helpWater}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpWater"
-								>
-									Clean Water
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpFood"
-									type="checkbox"
-									name="helpFood"
-									value={formData.helpFood}
-									onChange={handleChange}
-								/>
-								<label
-									className="form-check-label"
-									htmlFor="helpFood"
-								>
-									Emergency Food
-								</label>
-							</div>
-							<div className="form-check">
-								<input
-									className="form-check-input"
-									id="helpOther"
-									value="other"
-									checked={formData.helpOther}
-									type="checkbox"
-									name="helpOther"
-									onChange={handleChange}
-									onClick={toggleOther}
-								/>
-								<label
-									id="otherLabel"
-									className="form-check-label"
-									htmlFor="other"
-								>
-									Other
-								</label>
-								<input
-									className={`${
-										formValidity.other === null
-											? ""
-											: formValidity.other
-											? "is-valid"
-											: "is-invalid"
-									}`}
-									type="text"
-									name="other"
-									id="other"
-									style={{ display: "none" }}
-									placeholder="Other"
-									value={formData.other}
-									onChange={handleChange}
-								/>
-								<span
-									className={`${styles.counter}`}
-									name="otherCount"
-									id="otherCount"
-									style={{ display: "none" }}
-								>
-									&ensp;
-									{formData.other.trim().length} / 100
-								</span>
-								<div className="invalid-feedback">
-									Please enter an other area of help. <br />
-									Other must be less than 100 characters.
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="invalid-feedback text-center mb-3">
-						Please select a help type.
-					</div>
-					<div
-						className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
-					>
-						<div className="card-header">
-							Description
-							<span className={`${styles.counter}`}>
-								&ensp; {formData.description.trim().length} /
-								500
-							</span>
-						</div>
-						<div className="card-body">
-							<textarea
-								required
-								rows="3"
-								name="description"
-								id="description"
-								value={formData.description}
-								onChange={handleChange}
-								className={`form-control ${
-									formValidity.description === null
-										? ""
-										: formValidity.description
+						<div
+							className={`${styles.cardParent1
+								} card rounded-3 shadow-sm m-2 ${formValidity.help === null
+									? ""
+									: formValidity.help
 										? "is-valid"
 										: "is-invalid"
 								}`}
-							></textarea>
-							<div className="invalid-feedback text-center">
-								Please enter a brief description of the help
-								needed. <br />
-								Description must be less than 500 characters
+						>
+							<div className="card-header">I need help with...</div>
+							<div className="card-body">
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpExterior"
+										type="checkbox"
+										name="helpExterior"
+										value={formData.helpExterior}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpExterior"
+									>
+										Yard Cleanup
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpInterior"
+										type="checkbox"
+										name="helpInterior"
+										value={formData.helpInterior}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpInterior"
+									>
+										Interior Cleanup
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpEmotional"
+										type="checkbox"
+										name="helpEmotional"
+										value={formData.helpEmotional}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpEmotional"
+									>
+										Emotional Support
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpSupplies"
+										type="checkbox"
+										name="helpSupplies"
+										value={formData.helpSupplies}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpSupplies"
+									>
+										Cleaning Supplies
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpWater"
+										type="checkbox"
+										name="helpWater"
+										value={formData.helpWater}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpWater"
+									>
+										Clean Water
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpFood"
+										type="checkbox"
+										name="helpFood"
+										value={formData.helpFood}
+										onChange={handleChange}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor="helpFood"
+									>
+										Emergency Food
+									</label>
+								</div>
+								<div className="form-check">
+									<input
+										className="form-check-input"
+										id="helpOther"
+										value="other"
+										checked={formData.helpOther}
+										type="checkbox"
+										name="helpOther"
+										onChange={handleChange}
+										onClick={toggleOther}
+									/>
+									<label
+										id="otherLabel"
+										className="form-check-label"
+										htmlFor="other"
+									>
+										Other
+									</label>
+									<input
+										className={`${formValidity.other === null
+											? ""
+											: formValidity.other
+												? "is-valid"
+												: "is-invalid"
+											}`}
+										type="text"
+										name="other"
+										id="other"
+										style={{ display: "none" }}
+										placeholder="Other"
+										value={formData.other}
+										onChange={handleChange}
+									/>
+									<span
+										className={`${styles.counter}`}
+										name="otherCount"
+										id="otherCount"
+										style={{ display: "none" }}
+									>
+										&ensp;
+										{formData.other.trim().length} / 100
+									</span>
+									<div className="invalid-feedback">
+										Please enter an other area of help. <br />
+										Other must be less than 100 characters.
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
+						<div className="invalid-feedback text-center mb-3">
+							Please select a help type.
+						</div>
+						<div
+							className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+						>
+							<div className="card-header">
+								Description
+								<span className={`${styles.counter}`}>
+									&ensp; {formData.description.trim().length} /
+									500
+								</span>
+							</div>
+							<div className="card-body">
+								<textarea
+									required
+									rows="3"
+									name="description"
+									id="description"
+									value={formData.description}
+									onChange={handleChange}
+									className={`form-control ${formValidity.description === null
+										? ""
+										: formValidity.description
+											? "is-valid"
+											: "is-invalid"
+										}`}
+								></textarea>
+								<div className="invalid-feedback text-center">
+									Please enter a brief description of the help
+									needed. <br />
+									Description must be less than 500 characters
+								</div>
+							</div>
+						</div>
 
-					<div className={`collapse`}>
-						<label htmlFor="inputImages" className="form-label">
-							Upload photos of the help area
-						</label>
-						<input
-							className="form-control"
-							type="file"
-							accept="image/*"
-							id="inputImages"
-							multiple
-						/>
+						<div className={`collapse`}>
+							<label htmlFor="inputImages" className="form-label">
+								Upload photos of the help area
+							</label>
+							<input
+								className="form-control"
+								type="file"
+								accept="image/*"
+								id="inputImages"
+								multiple
+							/>
+						</div>
+						<div className="text-center my-3">
+							<button type="submit" className="btn btn-primary">
+								Submit
+							</button>
+						</div>
 					</div>
-					<div className="text-center my-3">
-						<button type="submit" className="btn btn-primary">
-							Submit
-						</button>
-					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
 	); //
 };

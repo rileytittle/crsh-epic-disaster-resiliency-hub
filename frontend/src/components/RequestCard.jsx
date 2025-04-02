@@ -22,7 +22,7 @@ function RequestCard({
 	timeCreated,
 }) {
 	return (
-		<div className="card" style={{ width: 20 + "rem" }}>
+		<div className="card mb-3" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
 				<h5 className="card-title">{firstName + " " + lastName}</h5>
 				<h6>{status}</h6>
