@@ -1,6 +1,6 @@
 import { Router, application } from "express";
 
-import { helpRequest } from "../models/helpRequest.model";
+import { HelpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
@@ -31,7 +31,7 @@ if (IN_DEVELOPMENT) {
 }
 let app = Router();
 
-let HomeownerApplications: helpRequest[] = []; // database
+let HomeownerApplications: HelpRequest[] = []; // database
 
 app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
@@ -140,20 +140,21 @@ app.post("/requestHelp", async (req, res) => {
 
 	try {
 		const currentDate = new Date().toISOString().split("T")[0];
-		console.log(currentDate); // Example: "2025-03-28"
+		//console.log(currentDate); // Example: "2025-03-28"
 		const now = new Date();
 		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
-		console.log(currentTime); // Example: "14:35:45"
+		//console.log(currentTime); // Example: "14:35:45"
 
 		let result = await pool.query(
-			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)`,
+			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)`,
 			[
 				first_name,
 				last_name,
 				email,
 				phone_number,
 				street_address_1,
+        street_address_2,
 				city,
 				state,
 				zip_code,
@@ -184,20 +185,26 @@ app.post("/requestHelp", async (req, res) => {
 			res.status(400).send({ message: "Error adding request" });
 		}
 	} catch (e) {
-		res.status(500).send({ message: "Something went wrong" });
+		res.status(500).send({
+			success: false,
+			message: "Something went wrong"
+		});
 		console.log(e);
 	}
 	// Add the new volunteer to the list
 });
 
 app.get("/requestHelp/status", async (req, res) => {
-	const { first_name, last_name, street_address_1, street_address_2 } =
+	let { first_name, last_name, street_address_1, street_address_2 } =
 		req.query;
+		if (street_address_2 == "NULL") {
+			street_address_2 = ""
+		}
 	try {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created
 			FROM request
-			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND (street_address_2 ILIKE '${street_address_2}' OR (street_address_2 IS NULL AND '${street_address_2}' = 'NULL'));
+			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND street_address_2 ILIKE '${street_address_2}';
 		`);
 
 		if (requests.rows.length === 0) {

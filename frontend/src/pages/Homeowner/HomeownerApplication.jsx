@@ -25,11 +25,11 @@ const HomeownerApply = () => {
 		email: "",
 		phone_number: "",
 		street_address_1: "",
-		street_address_2: undefined,
+		street_address_2: "",
 		city: "",
 		state: "Florida",
 		zip_code: "",
-		county: "",
+		county: "Choose...",
 		helpExterior: false,
 		helpInterior: false,
 		helpEmotional: false,
@@ -113,10 +113,10 @@ const HomeownerApply = () => {
 						validation = emailRegEx.test(value.trim());
 						break;
 					case "phone_number":
-						validation = value.trim().length == 10;
+						validation = value.trim() >= 1000000000 && value.trim() <= 9999999999;
 						break;
 					case "zip_code":
-						validation = value.trim().length == 5;
+						validation = value.trim() >= 10000 && value.trim() <= 99999;
 						break;
 					case "county":
 						validation =
@@ -155,10 +155,10 @@ const HomeownerApply = () => {
 			first_name: formData.first_name.trim() !== "",
 			last_name: formData.last_name.trim() !== "",
 			email: emailRegEx.test(formData.email.trim()),
-			phone_number: formData.phone_number.trim().length == 10,
+			phone_number: formData.phone_number.trim() >= 1000000000 && formData.phone_number.trim() <= 9999999999,
 			street_address_1: formData.street_address_1.trim() != "",
 			city: formData.city.trim() != "",
-			zip_code: formData.zip_code.trim().length == 5,
+			zip_code: formData.zip_code.trim() >= 10000 && formData.zip_code.trim() <= 99999,
 			county:
 				formData.county.trim() != "Choose..." &&
 				formData.county.trim() != "",
@@ -211,6 +211,42 @@ const HomeownerApply = () => {
 			} catch (error) {
 				console.error("Error:", error);
 			}
+			setFormData({
+				first_name: "",
+				last_name: "",
+				email: "",
+				phone_number: "",
+				street_address_1: "",
+				street_address_2: "",
+				city: "",
+				state: "Florida",
+				zip_code: "",
+				county: "Choose...",
+				helpExterior: false,
+				helpInterior: false,
+				helpEmotional: false,
+				helpSupplies: false,
+				helpWater: false,
+				helpFood: false,
+				helpOther: false,
+				other: "",
+				description: "",
+			});
+
+			setFormValidity({
+				first_name: null,
+				last_name: null,
+				email: null,
+				phone_number: null,
+				street_address_1: null,
+				city: null,
+				zip_code: null,
+				county: null,
+				help: null,
+				other: null,
+				description: null,
+			});
+
 		}
 		setValidated(true);
 	};
@@ -517,7 +553,7 @@ const HomeownerApply = () => {
 										id="helpExterior"
 										type="checkbox"
 										name="helpExterior"
-										value={formData.helpExterior}
+										checked={formData.helpExterior}
 										onChange={handleChange}
 									/>
 									<label
@@ -533,7 +569,7 @@ const HomeownerApply = () => {
 										id="helpInterior"
 										type="checkbox"
 										name="helpInterior"
-										value={formData.helpInterior}
+										checked={formData.helpInterior}
 										onChange={handleChange}
 									/>
 									<label
@@ -549,7 +585,7 @@ const HomeownerApply = () => {
 										id="helpEmotional"
 										type="checkbox"
 										name="helpEmotional"
-										value={formData.helpEmotional}
+										checked={formData.helpEmotional}
 										onChange={handleChange}
 									/>
 									<label
@@ -565,7 +601,7 @@ const HomeownerApply = () => {
 										id="helpSupplies"
 										type="checkbox"
 										name="helpSupplies"
-										value={formData.helpSupplies}
+										checked={formData.helpSupplies}
 										onChange={handleChange}
 									/>
 									<label
@@ -581,7 +617,7 @@ const HomeownerApply = () => {
 										id="helpWater"
 										type="checkbox"
 										name="helpWater"
-										value={formData.helpWater}
+										checked={formData.helpWater}
 										onChange={handleChange}
 									/>
 									<label
@@ -597,7 +633,7 @@ const HomeownerApply = () => {
 										id="helpFood"
 										type="checkbox"
 										name="helpFood"
-										value={formData.helpFood}
+										checked={formData.helpFood}
 										onChange={handleChange}
 									/>
 									<label

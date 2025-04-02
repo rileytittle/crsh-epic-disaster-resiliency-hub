@@ -14,8 +14,8 @@ const JobsOffered = () => {
 				setLoading(true);
 				setError("");
 				const response = await axios.get(
-					"https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/job/offered"
-				); //https://crsh-epic-disaster-resiliency-hub-client.vercel.app ${import.meta.env.VITE_API_URL}
+					`${import.meta.env.VITE_API_URL}/volunteer/job/offered`
+				);
 				if (Array.isArray(response.data)) {
 					setJobs(response.data);
 				} else {
@@ -37,7 +37,7 @@ const JobsOffered = () => {
 				setLoading(true);
 				setError("");
 				const response = await axios.get(
-					"https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/job/schedule"
+					`${import.meta.env.VITE_API_URL}/volunteer/job/schedule`
 				);
 				setSchedule(response.data);
 			} catch (error) {
@@ -55,7 +55,7 @@ const JobsOffered = () => {
 	const acceptJob = async (jobId) => {
 		try {
 			const response = await axios.post(
-				"https://crsh-epic-disaster-resiliency-hub-client.vercel.app /volunteer/job/accept",
+				`${import.meta.env.VITE_API_URL}/volunteer/job/accept`,
 				{ jobId }
 			);
 			if (response.status === 200) {
@@ -74,7 +74,7 @@ const JobsOffered = () => {
 	const rejectJob = async (jobId) => {
 		try {
 			const response = await axios.post(
-				"https://crsh-epic-disaster-resiliency-hub-client.vercel.app /volunteer/job/reject",
+				`${import.meta.env.VITE_API_URL}/volunteer/job/reject`,
 				{ jobId }
 			);
 			if (response.status === 200) {
@@ -90,7 +90,7 @@ const JobsOffered = () => {
 	const completeJob = async (jobId) => {
 		try {
 			const response = await axios.post(
-				"https://crsh-epic-disaster-resiliency-hub-client.vercel.app /volunteer/job/job-completed",
+				`${import.meta.env.VITE_API_URL}/volunteer/job/job-completed`,
 				{
 					jobId,
 					details,
