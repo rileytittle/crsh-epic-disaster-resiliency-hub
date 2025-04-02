@@ -159,7 +159,7 @@ app.post("/requestHelp", async (req, res) => {
 				state,
 				zip_code,
 				county,
-				"Pending",
+				"Unevaluated",
 				null,
 				yard_cleanup,
 				interior_cleanup,
