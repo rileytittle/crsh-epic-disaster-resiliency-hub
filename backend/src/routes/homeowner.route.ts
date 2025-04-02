@@ -1,6 +1,6 @@
 import { Router, application } from "express";
 
-import { helpRequest } from "../models/helpRequest.model";
+import { HelpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
@@ -31,7 +31,7 @@ if (IN_DEVELOPMENT) {
 }
 let app = Router();
 
-let HomeownerApplications: helpRequest[] = []; // database
+let HomeownerApplications: HelpRequest[] = []; // database
 
 app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
