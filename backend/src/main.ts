@@ -15,9 +15,9 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 let cors = require("cors");
 let app = express();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let vercelURL = "https://crsh-epic-disaster-resiliency-hub-client.vercel.app";
-let localURL = "http://localhost:3000";
+let localURL = "http://localhost:5173";
 
 app.use(express.json());
 

@@ -10,7 +10,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -140,10 +140,10 @@ app.post("/requestHelp", async (req, res) => {
 
 	try {
 		const currentDate = new Date().toISOString().split("T")[0];
-		console.log(currentDate); // Example: "2025-03-28"
+		//console.log(currentDate); // Example: "2025-03-28"
 		const now = new Date();
 		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
-		console.log(currentTime); // Example: "14:35:45"
+		//console.log(currentTime); // Example: "14:35:45"
 
 		let result = pool.query(
 			`INSERT INTO request (first_name, last_name, email, phone_number, street_address_1, street_address_2, city, state, zip_code, county, status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created)
@@ -173,9 +173,17 @@ app.post("/requestHelp", async (req, res) => {
 				currentTime,
 			]
 		);
-		res.status(200).send({ message: "Request succcessfully Submitted" });
+		res.status(200).send({
+			success: true,
+			message: "Request succcessfully Submitted",
+			data: await result
+		});
+		//console.log(await result);
 	} catch (e) {
-		res.status(500).send({ message: "Something went wrong" });
+		res.status(500).send({
+			success: false,
+			message: "Something went wrong"
+		});
 		console.log(e);
 	}
 	// Add the new volunteer to the list
