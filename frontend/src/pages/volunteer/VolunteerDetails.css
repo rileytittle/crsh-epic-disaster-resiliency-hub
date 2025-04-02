@@ -1,0 +1,4 @@
+.custom-select {
+	width: auto; /* Allows the select to take up only the necessary space */
+	max-width: 300px; /* Optional: Limits the max width */
+}

@@ -12,7 +12,7 @@ const MainLayout = () => {
 	}
 	return (
 		<>
-			<nav className="navbar navbar-expand-lg bg-body-tertiary">
+			<nav className="navbar navbar-expand-lg bg-body-tertiary nav">
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/home">
 						<img
@@ -136,7 +136,15 @@ const MainLayout = () => {
 												className="dropdown-item"
 												href="/create-volunteer"
 											>
-												Create Volunteer
+												New Volunteer Applications
+											</a>
+										</li>
+										<li>
+											<a
+												className="dropdown-item"
+												href="/volunteers"
+											>
+												Volunteer Database
 											</a>
 										</li>
 										<li>
@@ -145,22 +153,14 @@ const MainLayout = () => {
 										<li>
 											<a
 												className="dropdown-item"
-												href="/volunteers"
+												href="/homeowner-requests"
 											>
-												Volunteers
+												New Requests
 											</a>
 										</li>
 										<li>
 											<a
 												className="dropdown-item"
-												href="/homeowner-requests"
-											>
-												Requests
-											</a>
-										</li>
-										<li>
-											<a
-												className="nav-item nav-link"
 												href="/assignVolunteers"
 											>
 												Assign volunteers to job
@@ -168,7 +168,15 @@ const MainLayout = () => {
 										</li>
 										<li>
 											<a
-												className="nav-item nav-link"
+												className="dropdown-item"
+												href="/requests-in-progress"
+											>
+												Requests in Progress
+											</a>
+										</li>
+										<li>
+											<a
+												className="dropdown-item"
 												href="/generate-reports"
 											>
 												Generate Reports
@@ -204,6 +212,18 @@ const MainLayout = () => {
 										href="/applyVolunteer"
 									>
 										Apply to Volunteer
+									</a>
+								</li>
+							) : (
+								<></>
+							)}
+							{!sessionStorage.getItem("isLoggedIn") ? (
+								<li className="nav-item">
+									<a
+										className="nav-link"
+										href="/more-resources"
+									>
+										Resources
 									</a>
 								</li>
 							) : (

@@ -4,9 +4,10 @@ import { app as AdminRouter } from "./routes/admin.route";
 import { app as helpRouter } from "./routes/homeowner.route";
 import { app as volunteerRouter } from "./routes/Volunteer.route";
 import { mailgunRouter as mailgunRouter } from "./routes/mailgun.route";
-import { AdminAuthchecker } from "./utils/adminAuth.utils";
-import { VolunteerAuthchecker } from "./utils/volunteerAuth.utils";
-import * as dotenv from "dotenv";
+
+import { AdminAuthChecker } from "./utils/adminAuth.utils";
+import { VolunteerAuthChecker } from "./utils/volunteerAuth.utils";
+import * as dotenv from 'dotenv';
 
 // Load custom .env file
 dotenv.config();
@@ -42,9 +43,9 @@ app.get("/", (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.use("/admin", AdminAuthchecker, AdminRouter);
+app.use("/admin", AdminAuthChecker, AdminRouter);
 app.use("/homeowner", helpRouter);
-app.use("/volunteer", volunteerRouter);
+app.use("/volunteer", VolunteerAuthChecker, volunteerRouter);
 app.use("/mailgun", mailgunRouter);
 
 app.listen(port, () => {
