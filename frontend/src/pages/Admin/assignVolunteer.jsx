@@ -18,21 +18,24 @@ const AssignVolunteer = () => {
 	const [volunteerPage, setVolunteerPage] = useState(1);
 	const requestsPerPage = 5; // Number of requests per page
 	const volunteersPerPage = 5; // Number of volunteers per page
-
+	let headers = {
+		Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+	};
 	useEffect(() => {
 		fetchRequests();
-		console.log("Use effect");
 	}, []);
 
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/homeowner/viewRequests`
+				"http://localhost:3000/homeowner/viewRequests",
+				{
+					method: "GET",
+					headers: headers,
+				}
 			);
 			const data = await response.json();
-			console.log(data);
 			if (Array.isArray(data)) {
-				console.log("true");
 				setRequests(data);
 			} else {
 				console.error("Unexpected response format:", data);
@@ -65,108 +68,115 @@ const AssignVolunteer = () => {
 			// Add volunteer to selected list
 			setSelectedVolunteerIds([...selectedVolunteerIds, volunteer.id]);
 		}
-
-		const handleAssignButtonClick = () => {
-			setShowAssignMenu(true);
-		};
-
-		const handleTeamButtonClick = async (team) => {
-			setSelectedTeam(team); // Set the selected team when a button is clicked
-			try {
-				const response = await fetch(
-					`${
-						import.meta.env.VITE_API_URL
-					}/admin/assign-volunteer/list`,
-					{
-						method: "GET",
-						headers: { "Content-Type": "application/json" },
-					}
-				);
-
-				const data = await response.json();
-				console.log("Fetched Volunteers:", data); // Log the raw response data
-
-				if (Array.isArray(data)) {
-					setVolunteers(data); // Directly assign the array to the state
-				} else {
-					console.error("Invalid data format:", data);
-				}
-			} catch (error) {
-				console.error("Error fetching volunteers:", error);
-			}
-		};
-
-		const handleAssignVolunteer = async () => {
-			if (!selectedRequest?.id || selectedVolunteerIds.length === 0) {
-				alert("Please select a request and at least one volunteer.");
-				return;
-			}
-
-			try {
-				// Send all selected volunteers in the body
-				const response = await fetch(
-					"http://localhost:3000/admin/assign-volunteer/updateAssignment",
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							assignment: selectedRequest.id,
-							volunteerIds: selectedVolunteerIds, // Array of selected volunteer IDs
-						}),
-					}
-				);
-
-				const data = await response.json();
-				alert(data.message);
-				handleDeselectRequest();
-			} catch (error) {
-				console.error("Error assigning volunteers:", error);
-				alert("Failed to assign volunteers.");
-			}
-		};
-
-		// Pagination: Slice the filtered requests based on the current page
-		const filteredRequests = requests.filter((request) => {
-			const fullName =
-				`${request.firstName} ${request.lastName}`.toLowerCase();
-			return (
-				(fullName.includes(searchTerm.toLowerCase()) ||
-					request.id?.toString().includes(searchTerm)) &&
-				(filterType ? request.helpType.includes(filterType) : true)
-			);
-		});
-
-		const requestsToDisplay = filteredRequests.slice(
-			(requestPage - 1) * requestsPerPage,
-			requestPage * requestsPerPage
-		);
-
-		// Pagination: Slice the filtered volunteers based on the current page
-		const filteredVolunteers = volunteers.filter((volunteer) => {
-			const fullName =
-				`${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
-			return (
-				(fullName.includes(volunteerSearchTerm.toLowerCase()) ||
-					volunteer.id?.toString().includes(volunteerSearchTerm)) &&
-				(selectedTeam
-					? volunteer.areasOfHelp.includes(selectedTeam)
-					: true)
-			);
-		});
-
-		const volunteersToDisplay = filteredVolunteers.slice(
-			(volunteerPage - 1) * volunteersPerPage,
-			volunteerPage * volunteersPerPage
-		);
-
-		// Pagination controls
-		const totalRequestsPages = Math.ceil(
-			filteredRequests.length / requestsPerPage
-		);
-		const totalVolunteersPages = Math.ceil(
-			filteredVolunteers.length / volunteersPerPage
-		);
 	};
+
+	const handleAssignButtonClick = () => {
+		setShowAssignMenu(true);
+	};
+
+	const handleTeamButtonClick = async (team) => {
+		setSelectedTeam(team); // Set the selected team when a button is clicked
+		try {
+			const response = await fetch(
+				"http://localhost:3000/admin/assign-volunteer/list",
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${sessionStorage.getItem(
+							"userToken"
+						)}`,
+					},
+				}
+			);
+
+			const data = await response.json();
+			console.log("Fetched Volunteers:", data); // Log the raw response data
+
+			if (Array.isArray(data)) {
+				setVolunteers(data); // Directly assign the array to the state
+			} else {
+				console.error("Invalid data format:", data);
+			}
+		} catch (error) {
+			console.error("Error fetching volunteers:", error);
+		}
+	};
+
+	const handleAssignVolunteer = async () => {
+		if (!selectedRequest?.id || selectedVolunteerIds.length === 0) {
+			alert("Please select a request and at least one volunteer.");
+			return;
+		}
+
+		try {
+			// Send all selected volunteers in the body
+			const response = await fetch(
+				"http://localhost:3000/admin/assign-volunteer/updateAssignment",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${sessionStorage.getItem(
+							"userToken"
+						)}`,
+					},
+					body: JSON.stringify({
+						assignment: selectedRequest.id,
+						volunteerIds: selectedVolunteerIds, // Array of selected volunteer IDs
+					}),
+				}
+			);
+
+			const data = await response.json();
+			alert(data.message);
+			handleDeselectRequest();
+		} catch (error) {
+			console.error("Error assigning volunteers:", error);
+			alert("Failed to assign volunteers.");
+		}
+	};
+
+	// Pagination: Slice the filtered requests based on the current page
+	const filteredRequests = requests.filter((request) => {
+		const fullName =
+			`${request.firstName} ${request.lastName}`.toLowerCase();
+		return (
+			(fullName.includes(searchTerm.toLowerCase()) ||
+				request.id?.toString().includes(searchTerm)) &&
+			(filterType ? request.helpType.includes(filterType) : true)
+		);
+	});
+
+	const requestsToDisplay = filteredRequests.slice(
+		(requestPage - 1) * requestsPerPage,
+		requestPage * requestsPerPage
+	);
+
+	// Pagination: Slice the filtered volunteers based on the current page
+	const filteredVolunteers = volunteers.filter((volunteer) => {
+		const fullName =
+			`${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
+		return (
+			(fullName.includes(volunteerSearchTerm.toLowerCase()) ||
+				volunteer.id?.toString().includes(volunteerSearchTerm)) &&
+			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam) : true)
+		);
+	});
+
+	const volunteersToDisplay = filteredVolunteers.slice(
+		(volunteerPage - 1) * volunteersPerPage,
+		volunteerPage * volunteersPerPage
+	);
+
+	// Pagination controls
+	const totalRequestsPages = Math.ceil(
+		filteredRequests.length / requestsPerPage
+	);
+	const totalVolunteersPages = Math.ceil(
+		filteredVolunteers.length / volunteersPerPage
+	);
+
 	return (
 		<div className="container mt-5 assign-volunteer-page">
 			<h1>Current Homeowner Requests</h1>
@@ -457,4 +467,5 @@ const AssignVolunteer = () => {
 		</div>
 	);
 };
+
 export default AssignVolunteer;

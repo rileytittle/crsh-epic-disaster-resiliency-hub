@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 });
 app.use("/admin", AdminAuthchecker, AdminRouter);
 app.use("/homeowner", helpRouter);
-app.use("/volunteer", VolunteerAuthchecker, volunteerRouter);
+app.use("/volunteer", volunteerRouter);
 app.use("/mailgun", mailgunRouter);
 
 app.listen(port, () => {
