@@ -189,13 +189,16 @@ app.post("/requestHelp", async (req, res) => {
 });
 
 app.get("/requestHelp/status", async (req, res) => {
-	const { first_name, last_name, street_address_1, street_address_2 } =
+	let { first_name, last_name, street_address_1, street_address_2 } =
 		req.query;
+		if (street_address_2 == "NULL") {
+			street_address_2 = ""
+		}
 	try {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created
 			FROM request
-			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND (street_address_2 ILIKE '${street_address_2}' OR (street_address_2 IS NULL AND '${street_address_2}' = 'NULL'));
+			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND street_address_2 ILIKE '${street_address_2}';
 		`);
 
 		if (requests.rows.length === 0) {
