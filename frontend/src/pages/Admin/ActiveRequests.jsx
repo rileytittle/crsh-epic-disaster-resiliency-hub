@@ -23,7 +23,7 @@ function ActiveRequests() {
         let headers = {
 			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 		};
-        const response = await fetch('http://localhost:3000/admin/homeowner-requests', {
+        const response = await fetch('${import.meta.env.VITE_API_URL}/admin/homeowner-requests', {
             method: 'GET', // Optional, defaults to 'GET'
             headers: headers
         });
@@ -60,7 +60,7 @@ function ActiveRequests() {
     const handleTeamButtonClick = async (team) => {
       setSelectedTeam(team); // Set the selected team when a button is clicked
       try {
-        const response = await fetch('http://localhost:3000/admin/assign-volunteer/list', {
+        const response = await fetch('${import.meta.env.VITE_API_URL}/admin/assign-volunteer/list', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });
@@ -85,7 +85,7 @@ function ActiveRequests() {
       }
   
       try {
-        const response = await fetch('http://localhost:3000/admin/assign-volunteer/updateAssignment', {
+        const response = await fetch('${import.meta.env.VITE_API_URL}/admin/assign-volunteer/updateAssignment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ assignment: selectedRequest.id, id: selectedVolunteer.id }),

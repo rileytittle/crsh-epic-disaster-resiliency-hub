@@ -113,10 +113,10 @@ const HomeownerApply = () => {
 						validation = emailRegEx.test(value.trim());
 						break;
 					case "phone_number":
-						validation = value.trim().length == 10;
+						validation = value.trim() >= 1000000000 && value.trim() <= 9999999999;
 						break;
 					case "zip_code":
-						validation = value.trim().length == 5;
+						validation = value.trim() >= 10000 && value.trim() <= 99999;
 						break;
 					case "county":
 						validation =
@@ -155,10 +155,10 @@ const HomeownerApply = () => {
 			first_name: formData.first_name.trim() !== "",
 			last_name: formData.last_name.trim() !== "",
 			email: emailRegEx.test(formData.email.trim()),
-			phone_number: formData.phone_number.trim().length == 10,
+			phone_number: formData.phone_number.trim() >= 1000000000 && formData.phone_number.trim() <= 9999999999,
 			street_address_1: formData.street_address_1.trim() != "",
 			city: formData.city.trim() != "",
-			zip_code: formData.zip_code.trim().length == 5,
+			zip_code: formData.zip_code.trim() >= 10000 && formData.zip_code.trim() <= 99999,
 			county:
 				formData.county.trim() != "Choose..." &&
 				formData.county.trim() != "",

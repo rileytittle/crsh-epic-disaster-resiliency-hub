@@ -89,7 +89,7 @@ function ApplicationStatus() {
 		} else {
 			try {
 				const response = await fetch(
-					`http://localhost:3000/homeowner/requestHelp/status?first_name=${encodeURIComponent(formData.first_name)}&last_name=${encodeURIComponent(formData.last_name)}&street_address_1=${encodeURIComponent(formData.street_address_1)}&street_address_2=${encodeURIComponent(null_address_2)}`,
+					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp/status?first_name=${encodeURIComponent(formData.first_name)}&last_name=${encodeURIComponent(formData.last_name)}&street_address_1=${encodeURIComponent(formData.street_address_1)}&street_address_2=${encodeURIComponent(null_address_2)}`,
 					{
 						method: "GET",
 						headers: { "Content-Type": "application/json", },
