@@ -8,7 +8,7 @@ import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
-require('dotenv').config();
+require("dotenv").config();
 
 const IN_DEVELOPMENT = true;
 let pool: Pool;
@@ -29,7 +29,6 @@ if (IN_DEVELOPMENT) {
 		},
 	});
 }
-
 
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
@@ -174,96 +173,93 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/create", async (req: Request, res: Response): Promise<any> => {
-  const {
-    firstName,
-    lastName,
-    phoneNumber,
-    email,
-    streetAddress1,
-    streetAddress2,
-    city,
-    state,
-    zipCode,
-    areasOfHelp,
-  } = req.body;
+	const {
+		firstName,
+		lastName,
+		phoneNumber,
+		email,
+		streetAddress1,
+		streetAddress2,
+		city,
+		state,
+		zipCode,
+		areasOfHelp,
+	} = req.body;
 
-  
-  let id = Math.floor(Math.random() * 1000000) + 1;
+	let id = Math.floor(Math.random() * 1000000) + 1;
 
-  // Create a new instance of VolunteerApplication
-  const newVolunteer = new VolunteerApplication(
-    id,
-    firstName,
-    lastName,
-    phoneNumber,
-    email,
-    streetAddress1,
-    streetAddress2,
-    city,
-    state,
-    zipCode,
-    areasOfHelp
-  );
+	// Create a new instance of VolunteerApplication
+	const newVolunteer = new VolunteerApplication(
+		id,
+		firstName,
+		lastName,
+		phoneNumber,
+		email,
+		streetAddress1,
+		streetAddress2,
+		city,
+		state,
+		zipCode,
+		areasOfHelp
+	);
 
-  try {
-    // Insert the volunteer data into the database
-	const currentDate = new Date().toISOString().split("T")[0];
-	const now = new Date();
-	const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
-    let result = await pool.query(
-      `INSERT INTO "volunteerapplications" 
+	try {
+		// Insert the volunteer data into the database
+		const currentDate = new Date().toISOString().split("T")[0];
+		const now = new Date();
+		const currentTime = now.toTimeString().split(" ")[0]; // Removes timezone and milliseconds
+		let result = await pool.query(
+			`INSERT INTO "volunteerapplications" 
       (first_name, last_name, phone_number, email, street_address_1, street_address_2, 
        city, state, zip_code, admin_team, hospitality, logistic_tracking, 
        community_outreach, community_helpers, status, reason_rejected, date_created, time_created)
       VALUES 
       ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
-      [
-        newVolunteer.firstName,
-        newVolunteer.lastName,
-        newVolunteer.phoneNumber,
-		newVolunteer.email,
-        newVolunteer.streetAddress1,
-        newVolunteer.streetAddress2,
-        newVolunteer.city,
-        newVolunteer.state,
-        newVolunteer.zipCode,
-        newVolunteer.areasOfHelp.includes("Volunteer Management and Administration Team"),
-        newVolunteer.areasOfHelp.includes("Hospitality Team"),
-        newVolunteer.areasOfHelp.includes("Logistic Tracking Team"),
-        newVolunteer.areasOfHelp.includes("Community Outreach Team"),
-        newVolunteer.areasOfHelp.includes("Community Helpers Team"),
-        "Unevaluated",
-		null,
-		currentDate, 
-		currentTime
-      ]
-    );
+			[
+				newVolunteer.firstName,
+				newVolunteer.lastName,
+				newVolunteer.phoneNumber,
+				newVolunteer.email,
+				newVolunteer.streetAddress1,
+				newVolunteer.streetAddress2,
+				newVolunteer.city,
+				newVolunteer.state,
+				newVolunteer.zipCode,
+				newVolunteer.areasOfHelp.includes(
+					"Volunteer Management and Administration Team"
+				),
+				newVolunteer.areasOfHelp.includes("Hospitality Team"),
+				newVolunteer.areasOfHelp.includes("Logistic Tracking Team"),
+				newVolunteer.areasOfHelp.includes("Community Outreach Team"),
+				newVolunteer.areasOfHelp.includes("Community Helpers Team"),
+				"Unevaluated",
+				null,
+				currentDate,
+				currentTime,
+			]
+		);
 
-    // Send success response
-    res.status(201).json({
-      message: "Volunteer Application Created",
-      volunteer: newVolunteer,
-    });
-  } catch (e) {
-	
-	if (e instanceof Error) {
-	  console.log(e.message); 
-	  res.status(500).json({
-		message: "Something went wrong",
-		error: e.message,  
-	  });
-	} else {
-	  
-	  console.log("An unknown error occurred:", e);
-	  res.status(500).json({
-		message: "Something went wrong",
-		error: "Unknown error",
-	  });
+		// Send success response
+		res.status(201).json({
+			message: "Volunteer Application Created",
+			volunteer: newVolunteer,
+		});
+	} catch (e) {
+		if (e instanceof Error) {
+			console.log(e.message);
+			res.status(500).json({
+				message: "Something went wrong",
+				error: e.message,
+			});
+		} else {
+			console.log("An unknown error occurred:", e);
+			res.status(500).json({
+				message: "Something went wrong",
+				error: "Unknown error",
+			});
+		}
 	}
-  }
-  
 });
-
 
 app.post("/changePassword", (req, res) => {
 	const { username, currentPassword, newPassword } = req.body;
@@ -347,7 +343,7 @@ app.post("/status", (req, res) => {
  * assignment is index 0
  * offered is index 1
  */
-app.get("/jobs", async (req, res) => {
+app.get("/jobs", async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
 
@@ -483,9 +479,11 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.get("/user-details", async (req, res) => {
+app.get("/user-details", async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
+
+		console.log("userToken:", userToken);
 
 		if (!userToken) {
 			return res.status(400).send({ message: "User token is required" });
@@ -498,6 +496,8 @@ app.get("/user-details", async (req, res) => {
 				.status(400)
 				.send({ message: "Invalid token: email missing" });
 		}
+
+		console.log("Decoded Token:", decodedToken);
 
 		const queryResult = await pool.query(
 			"SELECT * FROM Volunteer WHERE email = $1",
@@ -525,8 +525,8 @@ app.get("/user-details", async (req, res) => {
 			row.last_name,
 			row.phone_number,
 			row.email,
-			row.street_address1,
-			row.street_address2,   
+			row.street_address_1,
+			row.street_address_2,
 			row.city,
 			row.state,
 			row.zip_code,

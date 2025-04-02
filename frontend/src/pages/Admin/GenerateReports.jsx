@@ -21,7 +21,7 @@ function GenerateReports() {
 				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 			};
 			const response = await axios.post(
-				`http://localhost:3000/admin/reports`,
+				`${import.meta.env.VITE_API_URL}/admin/reports`,
 				{
 					year: year,
 					month: month,

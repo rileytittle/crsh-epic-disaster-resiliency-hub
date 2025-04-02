@@ -17,9 +17,13 @@ function VolLogin() {
 		try {
 			let headers = { Authorization: `Basic ${basicAuthHeader}` };
 			await axios
-				.post(`http://localhost:3000/volunteer/login`, userData, {
-					headers,
-				})
+				.post(
+					`${import.meta.env.VITE_API_URL}/volunteer/login`,
+					userData,
+					{
+						headers,
+					}
+				)
 				.then((response) => {
 					sessionStorage.setItem("isLoggedIn", true);
 					sessionStorage.setItem("userType", "volunteer");

@@ -22,7 +22,7 @@ function AdminLogin() {
 			};
 			//console.log(`backend URL: ${import.meta.env.VITE_BACKEND_URL}/admin/login`);
 			await axios
-				.post(`http://localhost:3000/admin/login`, userData, {
+				.post(`${import.meta.env.VITE_API_URL}/admin/login`, userData, {
 					headers,
 				})
 				.then((response) => {

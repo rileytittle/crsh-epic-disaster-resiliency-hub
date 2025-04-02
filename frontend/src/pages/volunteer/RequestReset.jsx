@@ -8,7 +8,9 @@ const RequestReset = () => {
 	const handleRequestReset = async () => {
 		try {
 			const response = await axios.post(
-				"http://localhost:3000/mailgun/request-password-reset",
+				`${
+					import.meta.env.VITE_API_URL
+				}/mailgun/request-password-reset`,
 				{ email }
 			);
 			setMessage(response.data.message);

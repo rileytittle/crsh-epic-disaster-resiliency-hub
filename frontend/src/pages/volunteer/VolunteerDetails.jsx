@@ -11,7 +11,9 @@ function VolunteerDetails() {
 		console.log("Clicked: ", selectedArea);
 		axios
 			.patch(
-				`http://localhost:3000/admin/volunteers/volunteer-details`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/volunteers/volunteer-details`,
 				{
 					id: id,
 					selectedArea: selectedArea,
@@ -30,7 +32,9 @@ function VolunteerDetails() {
 		console.log("Clicked: ", area);
 		await axios
 			.delete(
-				`http://localhost:3000/admin/volunteers/volunteer-details`,
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/volunteers/volunteer-details`,
 				{
 					data: {
 						id: id,
@@ -54,8 +58,10 @@ function VolunteerDetails() {
 	useEffect(() => {
 		axios
 			.get(
-				`http://localhost:3000/admin/volunteers/volunteer-details/${id}`,
-				{ headers }
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/volunteers/volunteer-details/${id}`,
+        { headers }
 			)
 			.then((res) => {
 				console.log(res.data);

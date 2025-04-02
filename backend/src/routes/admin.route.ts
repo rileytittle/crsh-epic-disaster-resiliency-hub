@@ -228,13 +228,13 @@ app.get("/assign-volunteer/list", async (req, res) => {
 				row.last_name,
 				row.phone_number,
 				row.email,
-				row.street_address,
-				row.street_address2,
+				row.street_address_1,
+				row.street_address_2,
 				row.city,
 				row.state,
 				row.zip_code,
 				areasOfHelp,
-				row.team_leader, // Assuming team_leader is a boolean column in your table
+				row.team_leader,
 				row.password
 			);
 		});
@@ -248,7 +248,6 @@ app.get("/assign-volunteer/list", async (req, res) => {
 });
 app.patch("/volunteers/volunteer-details", async (req, res) => {
 	try {
-		// Ensure `areaToChange` is a valid column name.
 		if (
 			![
 				"hospitality",
@@ -283,16 +282,39 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 });
 app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 	let assignment = req.body.assignment;
-	let volId = req.body.id;
-	console.log(assignment, volId);
+	let volunteerIds = req.body.volunteerIds; // Now it's an array of IDs
+	console.log(assignment, volunteerIds);
+
+	if (!Array.isArray(volunteerIds) || volunteerIds.length === 0) {
+		return res.status(400).send({ message: "No volunteers selected." });
+	}
+
 	try {
-		await pool.query(
-			'UPDATE "volunteer" SET "offered" = $1, status = \'Active\' WHERE "id" = $2',
-			[assignment, volId]
-		);
-		res.status(200).send({ message: "Volunteer Assigned" });
-	} catch (e) {
-		res.status(500).send(e);
+		// Start a transaction to ensure all updates are done atomically
+		const client = await pool.connect();
+		try {
+			await client.query("BEGIN"); // Begin the transaction
+
+			// Update each volunteer in the array
+			for (let volId of volunteerIds) {
+				await client.query(
+					'UPDATE "volunteer" SET "offered" = $1 WHERE "id" = $2',
+					[assignment, volId]
+				);
+			}
+
+			await client.query("COMMIT"); // Commit the transaction
+			res.status(200).send({ message: "Volunteers Assigned" });
+		} catch (error) {
+			await client.query("ROLLBACK"); // Rollback the transaction in case of error
+			console.error("Error assigning volunteers:", error);
+			res.status(500).send({ message: "Failed to assign volunteers." });
+		} finally {
+			client.release(); // Release the client back to the pool
+		}
+	} catch (error) {
+		console.error("Error with database transaction:", error);
+		res.status(500).send({ message: "Database error." });
 	}
 });
 app.post("/homeowner-requests/reject", async (req, res) => {

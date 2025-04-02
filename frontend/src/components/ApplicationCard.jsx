@@ -5,9 +5,12 @@ const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 	function rejectVolunteer() {
 		console.log(email);
 		axios
-			.post(`http://localhost:3000/admin/create-volunteer/reject`, {
-				email: email,
-			})
+			.post(
+				`${import.meta.env.VITE_API_URL}/admin/create-volunteer/reject`,
+				{
+					email: email,
+				}
+			)
 			.then((res) => {
 				navigate("/create-volunteer");
 			})
