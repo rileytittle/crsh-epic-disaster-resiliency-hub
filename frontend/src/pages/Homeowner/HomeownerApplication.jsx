@@ -191,6 +191,7 @@ const HomeownerApply = () => {
 			e.stopPropagation();
 		} else {
 			console.log(`validated: ${isFormValid}`, formData);
+			console.log(JSON.stringify(formData));
 			try {
 				const response = await fetch(
 					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp`,
@@ -258,7 +259,9 @@ const HomeownerApply = () => {
 			<div className="container mt-4">
 				<div className="text-center my-3">
 					<a href="/request-help/status">
-						<button className="btn btn-info">Check the Status of your Application</button>
+						<button className="btn btn-info">
+							Check the Status of your Application
+						</button>
 					</a>
 				</div>
 				<form
@@ -279,12 +282,13 @@ const HomeownerApply = () => {
 										<input
 											placeholder="First Name"
 											type="text"
-											className={`form-control ${formValidity.first_name === null
-												? ""
-												: formValidity.first_name
+											className={`form-control ${
+												formValidity.first_name === null
+													? ""
+													: formValidity.first_name
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="first_name"
 											id="first_name"
 											value={formData.first_name}
@@ -299,12 +303,13 @@ const HomeownerApply = () => {
 										<input
 											placeholder="Last Name"
 											type="text"
-											className={`form-control ${formValidity.last_name === null
-												? ""
-												: formValidity.last_name
+											className={`form-control ${
+												formValidity.last_name === null
+													? ""
+													: formValidity.last_name
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="last_name"
 											id="last_name"
 											value={formData.last_name}
@@ -322,12 +327,13 @@ const HomeownerApply = () => {
 										<input
 											placeholder="E-Mail"
 											type="email"
-											className={`form-control ${formValidity.email === null
-												? ""
-												: formValidity.email
+											className={`form-control ${
+												formValidity.email === null
+													? ""
+													: formValidity.email
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="email"
 											id="email"
 											value={formData.email}
@@ -342,12 +348,14 @@ const HomeownerApply = () => {
 										<input
 											placeholder="Phone Number"
 											type="tel"
-											className={`form-control ${formValidity.phone_number === null
-												? ""
-												: formValidity.phone_number
+											className={`form-control ${
+												formValidity.phone_number ===
+												null
+													? ""
+													: formValidity.phone_number
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="phone_number"
 											id="phone_number"
 											value={formData.phone_number}
@@ -375,13 +383,14 @@ const HomeownerApply = () => {
 										</label>
 										<input
 											type="text"
-											className={`form-control ${formValidity.street_address_1 ===
+											className={`form-control ${
+												formValidity.street_address_1 ===
 												null
-												? ""
-												: formValidity.street_address_1
+													? ""
+													: formValidity.street_address_1
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="street_address_1"
 											id="street_address_1"
 											placeholder="1234 Main St"
@@ -419,12 +428,13 @@ const HomeownerApply = () => {
 										</label>
 										<input
 											type="text"
-											className={`form-control ${formValidity.city === null
-												? ""
-												: formValidity.city
+											className={`form-control ${
+												formValidity.city === null
+													? ""
+													: formValidity.city
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="city"
 											id="city"
 											value={formData.city}
@@ -472,12 +482,13 @@ const HomeownerApply = () => {
 										</label>
 										<input
 											type="number"
-											className={`form-control ${formValidity.zip_code === null
-												? ""
-												: formValidity.zip_code
+											className={`form-control ${
+												formValidity.zip_code === null
+													? ""
+													: formValidity.zip_code
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="zip_code"
 											id="zip_code"
 											value={formData.zip_code}
@@ -499,12 +510,13 @@ const HomeownerApply = () => {
 											required
 											id="county"
 											name="county"
-											className={`form-select ${formValidity.county === null
-												? ""
-												: formValidity.county
+											className={`form-select ${
+												formValidity.county === null
+													? ""
+													: formValidity.county
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											placeholder="Choose..."
 											value={formData.county}
 											onChange={handleChange}
@@ -521,15 +533,19 @@ const HomeownerApply = () => {
 							</div>
 						</div>
 						<div
-							className={`${styles.cardParent1
-								} card rounded-3 shadow-sm m-2 ${formValidity.help === null
+							className={`${
+								styles.cardParent1
+							} card rounded-3 shadow-sm m-2 ${
+								formValidity.help === null
 									? ""
 									: formValidity.help
-										? "is-valid"
-										: "is-invalid"
-								}`}
+									? "is-valid"
+									: "is-invalid"
+							}`}
 						>
-							<div className="card-header">I need help with...</div>
+							<div className="card-header">
+								I need help with...
+							</div>
 							<div className="card-body">
 								<div className="form-check">
 									<input
@@ -646,12 +662,13 @@ const HomeownerApply = () => {
 										Other
 									</label>
 									<input
-										className={`${formValidity.other === null
-											? ""
-											: formValidity.other
+										className={`${
+											formValidity.other === null
+												? ""
+												: formValidity.other
 												? "is-valid"
 												: "is-invalid"
-											}`}
+										}`}
 										type="text"
 										name="other"
 										id="other"
@@ -670,7 +687,8 @@ const HomeownerApply = () => {
 										{formData.other.trim().length} / 100
 									</span>
 									<div className="invalid-feedback">
-										Please enter an other area of help. <br />
+										Please enter an other area of help.{" "}
+										<br />
 										Other must be less than 100 characters.
 									</div>
 								</div>
@@ -685,8 +703,8 @@ const HomeownerApply = () => {
 							<div className="card-header">
 								Description
 								<span className={`${styles.counter}`}>
-									&ensp; {formData.description.trim().length} /
-									500
+									&ensp; {formData.description.trim().length}{" "}
+									/ 500
 								</span>
 							</div>
 							<div className="card-body">
@@ -697,12 +715,13 @@ const HomeownerApply = () => {
 									id="description"
 									value={formData.description}
 									onChange={handleChange}
-									className={`form-control ${formValidity.description === null
-										? ""
-										: formValidity.description
+									className={`form-control ${
+										formValidity.description === null
+											? ""
+											: formValidity.description
 											? "is-valid"
 											: "is-invalid"
-										}`}
+									}`}
 								></textarea>
 								<div className="invalid-feedback text-center">
 									Please enter a brief description of the help

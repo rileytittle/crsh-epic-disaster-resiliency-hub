@@ -154,7 +154,7 @@ app.post("/requestHelp", async (req, res) => {
 				email,
 				phone_number,
 				street_address_1,
-				street_address_2,
+        street_address_2,
 				city,
 				state,
 				zip_code,
@@ -173,11 +173,17 @@ app.post("/requestHelp", async (req, res) => {
 				currentTime,
 			]
 		);
-		res.status(200).send({
-			success: true,
-			message: "Request succcessfully Submitted",
-		});
-		//console.log(await result);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				res.status(200).send({
+					message: "Request succcessfully Submitted",
+				});
+			} else {
+				res.status(400).send({ message: "No rows affected" });
+			}
+		} else {
+			res.status(400).send({ message: "Error adding request" });
+		}
 	} catch (e) {
 		res.status(500).send({
 			success: false,
