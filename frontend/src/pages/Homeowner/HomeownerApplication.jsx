@@ -25,7 +25,7 @@ const HomeownerApply = () => {
 		email: "",
 		phone_number: "",
 		street_address_1: "",
-		street_address_2: undefined,
+		street_address_2: null,
 		city: "",
 		state: "Florida",
 		zip_code: "",
