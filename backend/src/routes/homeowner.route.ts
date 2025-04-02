@@ -4,7 +4,7 @@ import { helpRequest } from "../models/helpRequest.model";
 import { HomeownerStatus } from "../models/homeownerStatus.model";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
-import { VolunteerAuthchecker } from "../utils/volunteerAuth.utils";
+import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
@@ -72,8 +72,8 @@ app.get("/viewRequests", async (req, res) => {
 	try {
 		// Query to get rows with the "Active" status
 		const result = await pool.query(
-			'SELECT * FROM request WHERE status IN ($1, $2);',
-		  ['Accepted', 'Active']
+			"SELECT * FROM request WHERE status IN ($1, $2);",
+			["Accepted", "Active"]
 		);
 
 		// Define the columns with boolean values representing help types
