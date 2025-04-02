@@ -29,7 +29,7 @@ const HomeownerApply = () => {
 		city: "",
 		state: "Florida",
 		zip_code: "",
-		county: "",
+		county: "Choose...",
 		helpExterior: false,
 		helpInterior: false,
 		helpEmotional: false,
@@ -210,6 +210,42 @@ const HomeownerApply = () => {
 			} catch (error) {
 				console.error("Error:", error);
 			}
+			setFormData({
+				first_name: "",
+				last_name: "",
+				email: "",
+				phone_number: "",
+				street_address_1: "",
+				street_address_2: undefined,
+				city: "",
+				state: "Florida",
+				zip_code: "",
+				county: "Choose...",
+				helpExterior: false,
+				helpInterior: false,
+				helpEmotional: false,
+				helpSupplies: false,
+				helpWater: false,
+				helpFood: false,
+				helpOther: false,
+				other: "",
+				description: "",
+			});
+
+			setFormValidity({
+				first_name: null,
+				last_name: null,
+				email: null,
+				phone_number: null,
+				street_address_1: null,
+				city: null,
+				zip_code: null,
+				county: null,
+				help: null,
+				other: null,
+				description: null,
+			});
+
 		}
 		setValidated(true);
 	};
@@ -501,7 +537,7 @@ const HomeownerApply = () => {
 										id="helpExterior"
 										type="checkbox"
 										name="helpExterior"
-										value={formData.helpExterior}
+										checked={formData.helpExterior}
 										onChange={handleChange}
 									/>
 									<label
@@ -517,7 +553,7 @@ const HomeownerApply = () => {
 										id="helpInterior"
 										type="checkbox"
 										name="helpInterior"
-										value={formData.helpInterior}
+										checked={formData.helpInterior}
 										onChange={handleChange}
 									/>
 									<label
@@ -533,7 +569,7 @@ const HomeownerApply = () => {
 										id="helpEmotional"
 										type="checkbox"
 										name="helpEmotional"
-										value={formData.helpEmotional}
+										checked={formData.helpEmotional}
 										onChange={handleChange}
 									/>
 									<label
@@ -549,7 +585,7 @@ const HomeownerApply = () => {
 										id="helpSupplies"
 										type="checkbox"
 										name="helpSupplies"
-										value={formData.helpSupplies}
+										checked={formData.helpSupplies}
 										onChange={handleChange}
 									/>
 									<label
@@ -565,7 +601,7 @@ const HomeownerApply = () => {
 										id="helpWater"
 										type="checkbox"
 										name="helpWater"
-										value={formData.helpWater}
+										checked={formData.helpWater}
 										onChange={handleChange}
 									/>
 									<label
@@ -581,7 +617,7 @@ const HomeownerApply = () => {
 										id="helpFood"
 										type="checkbox"
 										name="helpFood"
-										value={formData.helpFood}
+										checked={formData.helpFood}
 										onChange={handleChange}
 									/>
 									<label
