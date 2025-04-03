@@ -261,7 +261,7 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 		}
 
 		// Update the volunteer record
-		const updateQuery = `UPDATE volunteer SET '${req.body.selectedArea}' = true WHERE id = $1`;
+		const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
 		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
 		if (result.rowCount) {
 			if (result.rowCount > 0) {
@@ -375,7 +375,7 @@ app.delete("/volunteers/volunteer-details", async (req, res) => {
 		}
 
 		// Update the volunteer record
-		const updateQuery = `UPDATE volunteer SET '${areaToChange}' = false WHERE id = $1`;
+		const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
 		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
 		if (result.rowCount) {
 			if (result.rowCount > 0) {
