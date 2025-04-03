@@ -46,30 +46,54 @@ function VolLogin() {
 
 	return (
 		<>
-			<div style={{ textAlign: "center" }}>
-				<h1>Volunteer Login Portal</h1>
-				<form>
-					<input
-						type="text"
-						onChange={(e) => setEmail(e.target.value)}
-						value={email}
-						placeholder="Email"
-					/>
-					<input
-						type="password"
-						onChange={(e) => setPassword(e.target.value)}
-						value={password}
-						placeholder="Password"
-					/>
-					<button onClick={login}>GO</button>
-				</form>
-				<button
-					onClick={handleForgotPassword}
-					style={{ marginTop: "10px" }}
-				>
-					Forgot Password?
-				</button>
-				{message && <p>{message}</p>}
+			<div className="container mt-5">
+				<div className="row justify-content-center">
+					<div className="col-md-4">
+						<h1 className="text-center mb-4">
+							Volunteer Login Portal
+						</h1>
+						<form onSubmit={login}>
+							<div className="mb-3">
+								<input
+									type="text"
+									className="form-control"
+									onChange={(e) => setEmail(e.target.value)}
+									value={email}
+									placeholder="Email"
+								/>
+							</div>
+							<div className="mb-3">
+								<input
+									type="password"
+									className="form-control"
+									onChange={(e) =>
+										setPassword(e.target.value)
+									}
+									value={password}
+									placeholder="Password"
+								/>
+							</div>
+							<button
+								type="submit"
+								className="btn btn-primary w-100"
+							>
+								Log In
+							</button>
+						</form>
+						<button
+							onClick={handleForgotPassword}
+							className="btn btn-link mt-3 w-100"
+							style={{ textDecoration: "none", color: "#007bff" }}
+						>
+							Forgot Password?
+						</button>
+						{message && (
+							<p className="text-center mt-3 text-danger">
+								{message}
+							</p>
+						)}
+					</div>
+				</div>
 			</div>
 		</>
 	);
