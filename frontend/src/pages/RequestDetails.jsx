@@ -79,7 +79,10 @@ function RequestDetails() {
 			});
 	}, []);
 	return (
-		<>
+		<div
+			className="d-flex justify-content-center align-items-center"
+			style={{ minHeight: "100vh" }}
+		>
 			<div className="card">
 				<div className="card-body">
 					<h1>{firstName + " " + lastName}</h1>
@@ -152,7 +155,7 @@ function RequestDetails() {
 					)}
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 
