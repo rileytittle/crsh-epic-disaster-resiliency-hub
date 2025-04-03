@@ -13,7 +13,7 @@ function VolunteerDetails() {
 			.patch(
 				`${
 					import.meta.env.VITE_API_URL
-				}/volunteers/volunteer-details`,
+				}/admin/volunteers/volunteer-details`,
 				{
 					id: id,
 					selectedArea: selectedArea,
@@ -61,7 +61,7 @@ function VolunteerDetails() {
 				`${
 					import.meta.env.VITE_API_URL
 				}/admin/volunteers/volunteer-details/${id}`,
-        { headers }
+				{ headers }
 			)
 			.then((res) => {
 				console.log(res.data);
