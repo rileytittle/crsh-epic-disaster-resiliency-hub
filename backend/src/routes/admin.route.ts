@@ -125,8 +125,8 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			application.rows[0].first_name[0] + application.rows[0].last_name;
 		let hashedPassword = await bcrypt.hash(password, saltRounds);
 		let result = await pool.query(
-			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers)
-			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address_1, street_address_2, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers, offered)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15, $16, $17)`,
 			[
 				application.rows[0].email,
 				hashedPassword,
@@ -134,7 +134,8 @@ app.post("/create-volunteer/accept", async (req, res) => {
 				application.rows[0].first_name,
 				application.rows[0].last_name,
 				application.rows[0].phone_number,
-				application.rows[0].street_address,
+				application.rows[0].street_address_1,
+				application.rows[0].street_address_2,
 				application.rows[0].city,
 				application.rows[0].state,
 				application.rows[0].zip_code,
@@ -143,6 +144,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 				application.rows[0].logistic_tracking || false,
 				application.rows[0].community_outreach || false,
 				application.rows[0].community_helpers || false,
+				null,
 			]
 		);
 		let result2 = await pool.query(
