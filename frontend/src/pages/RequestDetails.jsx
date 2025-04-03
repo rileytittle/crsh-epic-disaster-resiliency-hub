@@ -79,52 +79,60 @@ function RequestDetails() {
 			});
 	}, []);
 	return (
-		<div
-			className="d-flex justify-content-center align-items-center"
-			style={{ minHeight: "100vh" }}
-		>
-			<div className="card">
+		<div className="container mt-4">
+			<div className="card rounded-3 shadow-lg mb-4">
 				<div className="card-body">
-					<h1>{firstName + " " + lastName}</h1>
-					<h2>Contact Information</h2>
-					<p>{phoneNumber}</p>
-					<p>{email}</p>
-					<h2>Address</h2>
-					<p>
-						{streetAddress1 +
-							(streetAddress2 ? " " + streetAddress2 : "") +
-							", " +
-							city +
-							", " +
-							state +
-							" " +
-							zip}
-					</p>
-					<p>{county} County</p>
-					<h2>Details</h2>
-					<h4>Help Area:</h4>
-					<div>
+					<div className="text-center mb-4">
+						<h1 className="fw-bold">
+							{firstName + " " + lastName}
+						</h1>
+					</div>
+
+					<div className="mb-3">
+						<h2 className="fw-bold">Contact Information</h2>
+						<p>{phoneNumber}</p>
+						<p>{email}</p>
+					</div>
+
+					<div className="mb-3">
+						<h2 className="fw-bold">Address</h2>
+						<p>
+							{streetAddress1 +
+								(streetAddress2 ? " " + streetAddress2 : "") +
+								", " +
+								city +
+								", " +
+								state +
+								" " +
+								zip}
+						</p>
+						<p>{county} County</p>
+					</div>
+
+					<div className="mb-3">
+						<h2 className="fw-bold">Details</h2>
+						<h4>Help Area:</h4>
 						<ul>
 							{helpType.map((area, index) => (
 								<li key={index}>{area}</li>
 							))}
 							{other ? <li>{other}</li> : <></>}
 						</ul>
+
+						<h4>Description:</h4>
+						<p>{description}</p>
 					</div>
-					<h4>Description:</h4>
-					<p>{description}</p>
-					<br></br>
-					{status == "Active" ? (
-						<div>
-							<h4>Assigned Volunteers:</h4>
-							{assignedVolunteers.map((volunteer) => (
-								<div>
+
+					{status === "Active" ? (
+						<div className="mb-3">
+							<h4 className="fw-bold">Assigned Volunteers:</h4>
+							{assignedVolunteers.map((volunteer, index) => (
+								<div key={index}>
 									<p>
 										{volunteer.first_name}{" "}
 										{volunteer.last_name}:{" "}
 										{volunteer.phone_number} -{" "}
-										{volunteer.email}
-										{" - "}
+										{volunteer.email}{" "}
 										<Link
 											to="/volunteers/volunteer-details"
 											state={volunteer}
@@ -136,7 +144,7 @@ function RequestDetails() {
 							))}
 						</div>
 					) : (
-						<>
+						<div className="d-flex justify-content-around mt-4">
 							<button
 								type="button"
 								className="btn btn-primary"
@@ -146,12 +154,12 @@ function RequestDetails() {
 							</button>
 							<button
 								type="button"
-								className="btn"
+								className="btn btn-danger"
 								onClick={rejectRequest}
 							>
 								Reject Request
 							</button>
-						</>
+						</div>
 					)}
 				</div>
 			</div>
