@@ -121,13 +121,22 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			"SELECT * FROM volunteerapplications WHERE id = $1",
 			[req.body.id]
 		);
+		let hashedPassword = "";
+		let password =
+			application.rows[0].first_name[0] + application.rows[0].last_name;
+		bcrypt.hash(password, saltRounds, (err, hash) => {
+			if (err) {
+				console.error("Error hashing password:", err);
+			} else {
+				hashedPassword = hash;
+			}
+		});
 		let result = pool.query(
 			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers)
 			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
 			[
 				application.rows[0].email,
-				application.rows[0].first_name[0] +
-					application.rows[0].last_name,
+				hashedPassword,
 				null,
 				application.rows[0].first_name,
 				application.rows[0].last_name,
