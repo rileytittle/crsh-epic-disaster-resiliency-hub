@@ -249,7 +249,7 @@ const MainLayout = () => {
 							<>
 								<a
 									style={{
-										color: "white",
+										color: "black",
 										textDecoration: "none",
 									}}
 									className="nav-link"
