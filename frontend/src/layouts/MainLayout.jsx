@@ -232,14 +232,26 @@ const MainLayout = () => {
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
-								<a className="nav-link" href="/request-help">
-									Request Help
-								</a>
+								<button type="button" class="btn btn-primary">
+									<a
+										className="nav-link"
+										href="/request-help"
+									>
+										Request Help
+									</a>
+								</button>
 							</>
 						) : (
-							<a className="nav-link" href="/home" onClick={logout}>
-								Log Out
-							</a>
+							<button type="button" class="btn btn-primary">
+								<a
+									style={{ color: black }}
+									className="nav-link"
+									href="/home"
+									onClick={logout}
+								>
+									Log Out
+								</a>
+							</button>
 						)}
 					</div>
 				</div>
