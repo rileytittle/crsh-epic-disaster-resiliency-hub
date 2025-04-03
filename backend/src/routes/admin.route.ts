@@ -189,6 +189,29 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 		res.status(500).send({ message: "There was an error in the server" });
 	}
 });
+app.patch("/admin/homeowner-requests/close", async (req, res) => {
+	try {
+		if (req.body.id) {
+			let result = await pool.query(
+				"UPDATE request SET status = 'Resolved' WHERE request_id = $1",
+				[parseInt(req.body.id)]
+			);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send("Success");
+				} else {
+					res.status(404).send("Could not find request");
+				}
+			} else {
+				res.status(400).send({
+					message: "The query failed to execute",
+				});
+			}
+		}
+	} catch (e) {
+		res.status(500).send({ message: "Internal server error" });
+	}
+});
 app.post("/homeowner-requests/accept", async (req, res) => {
 	try {
 		if (req.body.id) {

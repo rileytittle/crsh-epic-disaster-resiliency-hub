@@ -28,6 +28,23 @@ function RequestDetails() {
 	} = location.state;
 	const navigate = useNavigate();
 
+	async function closeRequest() {
+		await axios
+			.patch(
+				`${
+					import.meta.env.VITE_API_URL
+				}/admin/homeowner-requests/close`,
+				{
+					id: id,
+				}
+			)
+			.then((res) => {
+				navigate("/homeowner-requests");
+			})
+			.catch((error) => {
+				console.error("Error closing application");
+			});
+	}
 	async function acceptRequest() {
 		await axios
 			.post(
@@ -124,25 +141,38 @@ function RequestDetails() {
 					</div>
 
 					{status === "Active" ? (
-						<div className="mb-3">
-							<h4 className="fw-bold">Assigned Volunteers:</h4>
-							{assignedVolunteers.map((volunteer, index) => (
-								<div key={index}>
-									<p>
-										{volunteer.first_name}{" "}
-										{volunteer.last_name}:{" "}
-										{volunteer.phone_number} -{" "}
-										{volunteer.email}{" "}
-										<Link
-											to="/volunteers/volunteer-details"
-											state={volunteer}
-										>
-											PROFILE
-										</Link>
-									</p>
-								</div>
-							))}
-						</div>
+						<>
+							<div className="mb-3">
+								<h4 className="fw-bold">
+									Assigned Volunteers:
+								</h4>
+								{assignedVolunteers.map((volunteer, index) => (
+									<div key={index}>
+										<p>
+											{volunteer.first_name}{" "}
+											{volunteer.last_name}:{" "}
+											{volunteer.phone_number} -{" "}
+											{volunteer.email}{" "}
+											<Link
+												to="/volunteers/volunteer-details"
+												state={volunteer}
+											>
+												PROFILE
+											</Link>
+										</p>
+									</div>
+								))}
+							</div>
+							<div>
+								<button
+									type="button"
+									className="btn btn-primary"
+									onClick={closeRequest}
+								>
+									Close Request
+								</button>
+							</div>
+						</>
 					) : (
 						<div className="d-flex justify-content-around mt-4">
 							<button
