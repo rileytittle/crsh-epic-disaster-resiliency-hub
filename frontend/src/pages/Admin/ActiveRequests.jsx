@@ -31,7 +31,7 @@ function ActiveRequests() {
 				}
 			);
 
-			const data = await response.json();
+			const data = await response.data.json();
 			console.log(data.filter((request) => request.status == "Active"));
 			if (Array.isArray(data)) {
 				setRequests(
@@ -60,58 +60,6 @@ function ActiveRequests() {
 
 	const handleMoreInfoButtonClick = () => {};
 
-	const handleTeamButtonClick = async (team) => {
-		setSelectedTeam(team); // Set the selected team when a button is clicked
-		try {
-			const response = await fetch(
-				"${import.meta.env.VITE_API_URL}/admin/assign-volunteer/list",
-				{
-					method: "GET",
-					headers: { "Content-Type": "application/json" },
-				}
-			);
-
-			const data = await response.json();
-			console.log("Fetched Volunteers:", data); // Log the raw response data
-
-			if (Array.isArray(data)) {
-				setVolunteers(data); // Directly assign the array to the state
-			} else {
-				console.error("Invalid data format:", data);
-			}
-		} catch (error) {
-			console.error("Error fetching volunteers:", error);
-		}
-	};
-
-	const handleAssignVolunteer = async () => {
-		if (!selectedRequest?.id || !selectedVolunteer) {
-			alert("Please select a request and a volunteer.");
-			return;
-		}
-
-		try {
-			const response = await fetch(
-				"${import.meta.env.VITE_API_URL}/admin/assign-volunteer/updateAssignment",
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						assignment: selectedRequest.id,
-						id: selectedVolunteer.id,
-					}),
-				}
-			);
-
-			const data = await response.json();
-			alert(data.message);
-			handleDeselectRequest();
-		} catch (error) {
-			console.error("Error assigning volunteer:", error);
-			alert("Failed to assign volunteer.");
-		}
-	};
-
 	const filteredRequests = requests.filter((request) => {
 		const fullName =
 			`${request.firstName} ${request.lastName}`.toLowerCase();
@@ -119,17 +67,6 @@ function ActiveRequests() {
 			(fullName.includes(searchTerm.toLowerCase()) ||
 				request.id?.toString().includes(searchTerm)) &&
 			(filterType ? request.helpType.includes(filterType) : true)
-		);
-	});
-
-	// Filter volunteers by search term, selected team, and volunteerSearchTerm
-	const filteredVolunteers = volunteers.filter((volunteer) => {
-		const fullName =
-			`${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
-		return (
-			(fullName.includes(volunteerSearchTerm.toLowerCase()) ||
-				volunteer.id?.toString().includes(volunteerSearchTerm)) &&
-			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam) : true)
 		);
 	});
 
@@ -245,128 +182,6 @@ function ActiveRequests() {
 						onClick={handleDeselectRequest}
 					>
 						Back to Requests
-					</button>
-				</div>
-			)}
-
-			{showAssignMenu && (
-				<div className="card mt-4 p-3">
-					<h3>
-						Select a Team for {selectedRequest?.firstName}{" "}
-						{selectedRequest?.lastName}
-					</h3>
-					<div className="btn-group mb-3" role="group">
-						<button
-							className="btn btn-outline-primary"
-							onClick={() => handleTeamButtonClick("Admin Team")}
-						>
-							Admin Team
-						</button>
-						<button
-							className="btn btn-outline-primary"
-							onClick={() => handleTeamButtonClick("Hospitality")}
-						>
-							Hospitality
-						</button>
-						<button
-							className="btn btn-outline-primary"
-							onClick={() => handleTeamButtonClick("Logistics")}
-						>
-							Logistics
-						</button>
-						<button
-							className="btn btn-outline-primary"
-							onClick={() =>
-								handleTeamButtonClick("Community Outreach")
-							}
-						>
-							Community Outreach
-						</button>
-						<button
-							className="btn btn-outline-primary"
-							onClick={() =>
-								handleTeamButtonClick("Community Helpers")
-							}
-						>
-							Community Helpers
-						</button>
-						<button
-							className="btn btn-outline-danger"
-							onClick={() => setShowAssignMenu(false)}
-						>
-							Close
-						</button>
-					</div>
-
-					{/* Volunteer Search Bar */}
-					<div className="mb-3">
-						<input
-							type="text"
-							className="form-control"
-							placeholder="Search Volunteers by Name or ID"
-							value={volunteerSearchTerm}
-							onChange={(e) =>
-								setVolunteerSearchTerm(e.target.value)
-							}
-						/>
-					</div>
-
-					{filteredVolunteers.length > 0 ? (
-						<table className="table table-striped">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone</th>
-									<th>Address</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								{filteredVolunteers.map((volunteer) => (
-									<tr key={volunteer.id}>
-										<td>{volunteer.id}</td>
-										<td>
-											{volunteer.firstName}{" "}
-											{volunteer.lastName}
-										</td>
-										<td>{volunteer.email}</td>
-										<td>{volunteer.phoneNumber}</td>
-										<td>
-											{volunteer.streetAddress1}{" "}
-											{volunteer.streetAddress2},{" "}
-											{volunteer.city}, {volunteer.state}{" "}
-											{volunteer.zipCode}
-										</td>
-										<td>
-											<input
-												type="radio"
-												name="volunteer"
-												checked={
-													selectedVolunteer?.id ===
-													volunteer.id
-												}
-												onChange={() =>
-													setSelectedVolunteer(
-														volunteer
-													)
-												}
-											/>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					) : (
-						<p>No volunteers available for this team.</p>
-					)}
-
-					<button
-						className="btn btn-success"
-						onClick={handleAssignVolunteer}
-					>
-						Assign
 					</button>
 				</div>
 			)}
