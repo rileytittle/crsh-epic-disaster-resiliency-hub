@@ -30,7 +30,7 @@ function RequestDetails() {
 
 	async function closeRequest() {
 		await axios
-			.patch(
+			.post(
 				`${
 					import.meta.env.VITE_API_URL
 				}/admin/homeowner-requests/close`,
@@ -39,7 +39,7 @@ function RequestDetails() {
 				}
 			)
 			.then((res) => {
-				navigate("/homeowner-requests");
+				navigate("/requests-in-progress");
 			})
 			.catch((error) => {
 				console.error("Error closing application");
