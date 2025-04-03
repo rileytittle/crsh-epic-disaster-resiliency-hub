@@ -244,7 +244,6 @@ const MainLayout = () => {
 						) : (
 							<button type="button" class="btn btn-primary">
 								<a
-									style={{ color: black }}
 									className="nav-link"
 									href="/home"
 									onClick={logout}
