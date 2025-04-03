@@ -234,6 +234,10 @@ const MainLayout = () => {
 							<>
 								<button type="button" class="btn btn-primary">
 									<a
+										style={{
+											color: "white",
+											textDecoration: "none",
+										}}
 										className="nav-link"
 										href="/request-help"
 									>
@@ -244,6 +248,10 @@ const MainLayout = () => {
 						) : (
 							<button type="button" class="btn btn-primary">
 								<a
+									style={{
+										color: "white",
+										textDecoration: "none",
+									}}
 									className="nav-link"
 									href="/home"
 									onClick={logout}
