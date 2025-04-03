@@ -31,7 +31,7 @@ function ActiveRequests() {
 				}
 			);
 
-			const data = await response.data.json();
+			let data = await response.data;
 			console.log(data.filter((request) => request.status == "Active"));
 			if (Array.isArray(data)) {
 				setRequests(
