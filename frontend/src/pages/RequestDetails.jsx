@@ -110,7 +110,6 @@ function RequestDetails() {
 					</div>
 					<h4>Description:</h4>
 					<p>{description}</p>
-					<p>Pictures should go here</p>
 					<br></br>
 					{status == "Active" ? (
 						<div>

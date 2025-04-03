@@ -302,7 +302,10 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 					[assignment, volId]
 				);
 			}
-
+			await client.query(
+				"UPDATE request SET status = 'Accepted' WHERE request_id = $1",
+				[assignment]
+			);
 			await client.query("COMMIT"); // Commit the transaction
 			res.status(200).send({ message: "Volunteers Assigned" });
 		} catch (error) {
