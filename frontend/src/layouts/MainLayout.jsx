@@ -246,7 +246,7 @@ const MainLayout = () => {
 								</button>
 							</>
 						) : (
-							<button type="button" class="btn btn-primary">
+							<>
 								<a
 									style={{
 										color: "white",
@@ -258,7 +258,7 @@ const MainLayout = () => {
 								>
 									Log Out
 								</a>
-							</button>
+							</>
 						)}
 					</div>
 				</div>
