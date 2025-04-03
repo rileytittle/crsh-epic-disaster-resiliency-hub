@@ -237,7 +237,7 @@ const MainLayout = () => {
 								</a>
 							</>
 						) : (
-							<a className="nav-link" href="#" onClick={logout}>
+							<a className="nav-link" href="/home" onClick={logout}>
 								Log Out
 							</a>
 						)}

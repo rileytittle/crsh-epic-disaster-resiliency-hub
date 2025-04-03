@@ -1,6 +1,6 @@
 import e from "express";
 
-export class helpRequest {
+export class HelpRequest {
 	id: number;
 	firstName: string;
 	lastName: string;
