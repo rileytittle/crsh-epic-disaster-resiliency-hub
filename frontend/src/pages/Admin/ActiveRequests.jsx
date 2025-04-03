@@ -24,14 +24,14 @@ function ActiveRequests() {
 				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 			};
 			const response = await fetch(
-				"${import.meta.env.VITE_API_URL}/admin/homeowner-requests",
+				`${import.meta.env.VITE_API_URL}/admin/homeowner-requests`,
 				{
 					method: "GET", // Optional, defaults to 'GET'
 					headers: headers,
 				}
 			);
 
-			let data = await response.data;
+			let data = await response.json();
 			console.log(data.filter((request) => request.status == "Active"));
 			if (Array.isArray(data)) {
 				setRequests(
