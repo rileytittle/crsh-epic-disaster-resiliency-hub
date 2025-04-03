@@ -78,86 +78,100 @@ function VolunteerDetails() {
 		<p>Loading data</p>;
 	}
 	return (
-		<div className="card">
-			<div className="card-body">
-				<h1>{volunteer.firstName + " " + volunteer.lastName}</h1>
-				<h2>Contact Information</h2>
-				<p>{volunteer.phoneNumber}</p>
-				<p>{volunteer.email}</p>
-				<h2>Address</h2>
-				<p>
-					{volunteer.streetAddress1 +
-						(volunteer.streetAddress2
-							? " " + volunteer.streetAddress2
-							: "") +
-						", " +
-						volunteer.city +
-						", " +
-						volunteer.state +
-						" " +
-						volunteer.zipCode}
-				</p>
-				<div>
-					{/* Check if areasOfHelp is defined before mapping */}
-					<h2>Areas of Help</h2>
-					{volunteer.areasOfHelp &&
-					volunteer.areasOfHelp.length > 0 ? (
-						<ul>
-							{volunteer.areasOfHelp.map((area, index) => (
-								<li
-									key={index}
-									style={{
-										display: "flex",
-										alignItems: "center",
-										gap: "10px",
-									}}
-								>
-									{area}
+		<div className="container mt-5">
+			<div className="row justify-content-center">
+				<div className="col-md-8 col-lg-6">
+					<div className="card p-4 shadow-lg">
+						<div className="card-body">
+							<h1 className="text-center mb-4">
+								{volunteer.firstName + " " + volunteer.lastName}
+							</h1>
+
+							<h2 className="mb-3">Contact Information</h2>
+							<p>{volunteer.phoneNumber}</p>
+							<p>{volunteer.email}</p>
+
+							<h2 className="mb-3">Address</h2>
+							<p>
+								{volunteer.streetAddress1 +
+									(volunteer.streetAddress2
+										? " " + volunteer.streetAddress2
+										: "") +
+									", " +
+									volunteer.city +
+									", " +
+									volunteer.state +
+									" " +
+									volunteer.zipCode}
+							</p>
+
+							<div>
+								<h2 className="mb-3">Areas of Help</h2>
+								{volunteer.areasOfHelp &&
+								volunteer.areasOfHelp.length > 0 ? (
+									<ul className="list-group mb-3">
+										{volunteer.areasOfHelp.map(
+											(area, index) => (
+												<li
+													key={index}
+													className="list-group-item d-flex justify-content-between align-items-center"
+												>
+													{area}
+													<button
+														type="button"
+														className="btn btn-danger btn-sm"
+														onClick={() =>
+															deleteArea(area)
+														}
+													>
+														Delete
+													</button>
+												</li>
+											)
+										)}
+									</ul>
+								) : (
+									<p>No areas of help specified.</p>
+								)}
+
+								<div className="input-group mb-3 w-auto">
 									<button
+										className="btn btn-outline-secondary"
 										type="button"
-										className="btn btn-danger"
-										onClick={() => deleteArea(area)}
+										onClick={addArea}
 									>
-										Delete
+										Add
 									</button>
-								</li>
-							))}
-						</ul>
-					) : (
-						<p>No areas of help specified.</p>
-					)}
-					<div className="input-group mb-3 w-auto">
-						<button
-							className="btn btn-outline-secondary"
-							type="button"
-							onClick={addArea}
-						>
-							Add
-						</button>
-						<select
-							className="form-select custom-select"
-							id="inputGroupSelect03"
-							aria-label="Example select with button addon"
-							value={selectedArea} // Set the value of the select to the state variable
-							onChange={(e) => setSelectedArea(e.target.value)} // Update the state when an option is selected
-						>
-							<option>Choose...</option>
-							<option value="admin_team">
-								Volunteer Management and Administration Team
-							</option>
-							<option value="hospitality">
-								Hospitality Team
-							</option>
-							<option value="logistic_tracking">
-								Logistic Tracking Team
-							</option>
-							<option value="community_outreach">
-								Community Outreach
-							</option>
-							<option value="community_helpers">
-								Community Helpers Team
-							</option>
-						</select>
+									<select
+										className="form-select custom-select"
+										id="inputGroupSelect03"
+										aria-label="Choose area of help"
+										value={selectedArea}
+										onChange={(e) =>
+											setSelectedArea(e.target.value)
+										}
+									>
+										<option>Choose...</option>
+										<option value="admin_team">
+											Volunteer Management and
+											Administration Team
+										</option>
+										<option value="hospitality">
+											Hospitality Team
+										</option>
+										<option value="logistic_tracking">
+											Logistic Tracking Team
+										</option>
+										<option value="community_outreach">
+											Community Outreach
+										</option>
+										<option value="community_helpers">
+											Community Helpers Team
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
