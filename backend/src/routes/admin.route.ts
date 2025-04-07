@@ -121,18 +121,21 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			"SELECT * FROM volunteerapplications WHERE id = $1",
 			[req.body.id]
 		);
-		let result = pool.query(
-			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers)
-			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+		let password =
+			application.rows[0].first_name[0] + application.rows[0].last_name;
+		let hashedPassword = await bcrypt.hash(password, saltRounds);
+		let result = await pool.query(
+			`INSERT INTO volunteer (email, password, assignment, first_name, last_name, phone_number, street_address_1, street_address_2, city, state, zip_code, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers, offered)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15, $16, $17)`,
 			[
 				application.rows[0].email,
-				application.rows[0].first_name[0] +
-					application.rows[0].last_name,
+				hashedPassword,
 				null,
 				application.rows[0].first_name,
 				application.rows[0].last_name,
 				application.rows[0].phone_number,
-				application.rows[0].street_address,
+				application.rows[0].street_address_1,
+				application.rows[0].street_address_2,
 				application.rows[0].city,
 				application.rows[0].state,
 				application.rows[0].zip_code,
@@ -141,6 +144,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 				application.rows[0].logistic_tracking || false,
 				application.rows[0].community_outreach || false,
 				application.rows[0].community_helpers || false,
+				null,
 			]
 		);
 		let result2 = await pool.query(
@@ -183,6 +187,35 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 		res.status(200).send(result.rows);
 	} catch (e) {
 		res.status(500).send({ message: "There was an error in the server" });
+	}
+});
+
+app.post("/homeowner-requests/close", async (req, res) => {
+	try {
+		if (req.body.id) {
+			let result = await pool.query(
+				"UPDATE request SET status = 'Resolved' WHERE request_id = $1",
+				[parseInt(req.body.id)]
+			);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send("Success");
+				} else {
+					res.status(404).send({
+						message: "Could not find record",
+						id: req.body.id,
+					});
+				}
+			} else {
+				res.status(400).send({
+					message: "The query failed to execute",
+				});
+			}
+		} else {
+			res.status(400).send({ message: "You must pass id with request" });
+		}
+	} catch (e) {
+		res.status(500).send({ message: "Internal server error" });
 	}
 });
 app.post("/homeowner-requests/accept", async (req, res) => {
