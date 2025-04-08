@@ -19,6 +19,7 @@ export class HelpRequest {
 	description: string;
 	dateCreated: Date;
 	timeCreated: string;
+	notes: string | undefined = undefined;
 	constructor(
 		id: number,
 		firstName: string,
@@ -37,7 +38,8 @@ export class HelpRequest {
 		other: string | undefined,
 		description: string,
 		dateCreated: Date,
-		timeCreated: string
+		timeCreated: string,
+		notes: string | undefined
 	) {
 		this.id = id;
 		this.firstName = firstName;
@@ -61,5 +63,8 @@ export class HelpRequest {
 		this.description = description;
 		this.dateCreated = dateCreated;
 		this.timeCreated = timeCreated;
+		if (notes) {
+			this.notes = notes;
+		}
 	}
 }
