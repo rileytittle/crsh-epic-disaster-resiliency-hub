@@ -36,6 +36,7 @@ function RequestDetails() {
 				}/admin/homeowner-requests/close`,
 				{
 					id: id,
+					email: email
 				}
 			)
 			.then((res) => {
@@ -53,6 +54,7 @@ function RequestDetails() {
 				}/admin/homeowner-requests/accept`,
 				{
 					id: id,
+					email: email
 				}
 			)
 			.then((res) => {
@@ -70,6 +72,7 @@ function RequestDetails() {
 				}/admin/homeowner-requests/reject`,
 				{
 					id: id,
+					email: email
 				}
 			)
 			.then((res) => {

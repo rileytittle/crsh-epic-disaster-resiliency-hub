@@ -5,12 +5,15 @@ import { HomeownerStatus } from "../models/homeownerStatus.model";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
+import { sendEmail } from "../utils/mailService";
+
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = false; 
+
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -29,6 +32,7 @@ if (IN_DEVELOPMENT) {
 		},
 	});
 }
+
 let app = Router();
 
 let HomeownerApplications: HelpRequest[] = []; // database
@@ -175,6 +179,15 @@ app.post("/requestHelp", async (req, res) => {
 		);
 		if (result.rowCount) {
 			if (result.rowCount > 0) {
+
+				//adding mailgun email to success branch
+				await sendEmail(
+					email,
+					"Your Help Request Has Been Submitted",
+					"This is a confirmation that your request for Epic community helpers has been successfully submitted. We will review your request and reach back out to you shortly!"
+				  );
+				  
+
 				res.status(200).send({
 					message: "Request succcessfully Submitted",
 				});

@@ -9,6 +9,7 @@ import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { sendEmail } from "../utils/mailService";
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
@@ -151,6 +152,14 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			"DELETE from volunteerapplications WHERE id = $1",
 			[req.body.id]
 		);
+
+		await sendEmail(
+			application.rows[0].email,
+			"Your Application Has Been Approved -- Login Instructions",
+			"We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved!" +
+			"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
+		  );
+
 		res.status(201).send("Volunteer created!");
 	} catch (e) {
 		console.log(e);
@@ -163,6 +172,14 @@ app.post("/create-volunteer/reject", async (req, res) => {
 			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
 			[req.body.email]
 		);
+
+		await sendEmail(
+			req.body.email,
+			"Your Application Has Been Rejected",
+			"We regret to inform you that your request to volunteer at EPIC Disaster Resiliency has been rejected."
+		  );
+		  
+
 		res.status(200).send("Applicant rejected");
 	} catch (e) {
 		res.status(400).send("Problem rejected application");
@@ -227,6 +244,13 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
+
+					await sendEmail(
+						req.body.email,
+						"Your Help Request Has Been Accepted",
+						"We are excited to inform you that your request for help with the EPIC Disaster Resiliency Hub has been accepted!"
+					);
+
 					res.status(200).send("Success");
 				} else {
 					res.status(404).send("Could not find request");
@@ -340,6 +364,25 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 				[assignment]
 			);
 			await client.query("COMMIT"); // Commit the transaction
+
+			// Get emails of assigned volunteers
+			const emailQuery = await client.query(
+				'SELECT email FROM volunteer WHERE id = ANY($1)',
+				[volunteerIds]
+			);
+
+			// Extract emails (in case multiple volunteers)
+			const emails: string[] = emailQuery.rows.map(row => row.email);
+
+			// Send an email to each volunteer
+			for (const email of emails) {
+				await sendEmail(
+					email,
+					"You Have a New Volunteer Opportunity At EPIC",
+					"We are excited to inform you that you have a new volunteer opportunity!\nLogin to your volunteer account to see the details and accept it."
+				);
+			}
+
 			res.status(200).send({ message: "Volunteers Assigned" });
 		} catch (error) {
 			await client.query("ROLLBACK"); // Rollback the transaction in case of error
@@ -362,6 +405,15 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
+
+					
+
+					await sendEmail(
+						req.body.email,
+						"Your Help Request Has Been Rejected",
+						`We are sorry to inform you that your request for help with the EPIC Disaster Resiliency Hub has been rejected for the following reason`
+					);
+
 					res.status(200).send("Success");
 				} else {
 					res.status(404).send("Could not find request");
