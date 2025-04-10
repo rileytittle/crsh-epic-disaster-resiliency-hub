@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/viewRequests", async (req, res) => {
-	let sendRequests: Job[] = [];
+	let sendRequests: HelpRequest[] = [];
 	try {
 		// Query to get rows with the "Active" status
 		const result = await pool.query(
@@ -70,17 +70,25 @@ app.get("/viewRequests", async (req, res) => {
 				}
 			});
 
-			const newJob = new Job(
+			const newJob = new HelpRequest(
 				row.request_id,
 				row.first_name,
 				row.last_name,
 				row.email,
+				row.phone_number,
 				row.street_address_1,
+				row.street_address_2,
 				row.city,
 				row.state,
 				row.zip_code,
+				row.county,
+				row.status,
+				row.reason_rejected,
 				helpType,
-				row.other
+				row.other,
+				row.description,
+				row.date_created,
+				row.time_created
 			);
 			sendRequests.push(newJob);
 		});
