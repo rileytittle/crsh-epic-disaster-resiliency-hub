@@ -232,7 +232,7 @@ const MainLayout = () => {
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
-								<button type="button" class="btn btn-primary">
+								<button type="button" className="btn btn-primary">
 									<a
 										style={{
 											color: "white",

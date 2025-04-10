@@ -16,8 +16,8 @@ const AssignVolunteer = () => {
 	// Pagination state
 	const [requestPage, setRequestPage] = useState(1);
 	const [volunteerPage, setVolunteerPage] = useState(1);
-	const requestsPerPage = 5; // Number of requests per page
-	const volunteersPerPage = 5; // Number of volunteers per page
+	const requestsPerPage = 10; // Number of requests per page
+	const volunteersPerPage = 10; // Number of volunteers per page
 	let headers = {
 		Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 	};
@@ -54,7 +54,7 @@ const AssignVolunteer = () => {
 		setSelectedRequest(null);
 		setShowAssignMenu(false);
 		setVolunteers([]);
-		setSelectedVolunteerIds(null);
+		setSelectedVolunteerIds([]);
 	};
 	const handleVolunteerSelect = (volunteer) => {
 		const isSelected = selectedVolunteerIds.includes(volunteer.id);
@@ -73,6 +73,16 @@ const AssignVolunteer = () => {
 	const handleAssignButtonClick = () => {
 		setShowAssignMenu(true);
 	};
+	const formatPhoneNumber = (phoneNumber) => {
+		const cleaned = ('' + phoneNumber).replace(/\D/g, ''); // Remove non-numeric characters
+		const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/); // Match the pattern (xxx)(xxx)(xxxx)
+	  
+		if (match) {
+		  return `(${match[1]})-${match[2]}-${match[3]}`; // Format to (xxx)-xxx-xxxx
+		}
+	  
+		return phoneNumber; // Return the original phone number if it doesn't match the format
+	  };
 
 	const handleTeamButtonClick = async (team) => {
 		setSelectedTeam(team); // Set the selected team when a button is clicked
@@ -91,7 +101,7 @@ const AssignVolunteer = () => {
 			);
 
 			const data = await response.json();
-			console.log("Fetched Volunteers:", data); // Log the raw response data
+			console.log("Fetched Volunteers:", data); 
 
 			if (Array.isArray(data)) {
 				setVolunteers(data); // Directly assign the array to the state
@@ -133,6 +143,7 @@ const AssignVolunteer = () => {
 			const data = await response.json();
 			alert(data.message);
 			handleDeselectRequest();
+
 		} catch (error) {
 			console.error("Error assigning volunteers:", error);
 			alert("Failed to assign volunteers.");
@@ -162,7 +173,7 @@ const AssignVolunteer = () => {
 		return (
 			(fullName.includes(volunteerSearchTerm.toLowerCase()) ||
 				volunteer.id?.toString().includes(volunteerSearchTerm)) &&
-			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam) : true)
+			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam): true)
 		);
 	});
 
@@ -215,7 +226,7 @@ const AssignVolunteer = () => {
 						<tr>
 							<th>#</th>
 							<th>Name</th>
-							<th>Email</th>
+							<th>Contact Information</th>
 							<th>Address</th>
 							<th>Help Type</th>
 							<th>Actions</th>
@@ -228,9 +239,12 @@ const AssignVolunteer = () => {
 								<td>
 									{request.firstName} {request.lastName}
 								</td>
-								<td>{request.email}</td>
+								<td>{request.email}
+									<br />
+									{formatPhoneNumber(request.phoneNumber)}
+								</td>
 								<td>
-									{request.address}, {request.city},{" "}
+									{request.streetAddress1}{request.streetAddress2 ? `, ${request.streetAddress2}` : ""}, {request.city},{" "}
 									{request.state} {request.zip}
 								</td>
 								<td>
@@ -249,7 +263,7 @@ const AssignVolunteer = () => {
 											handleAssignButtonClick();
 										}}
 									>
-										Assign
+										Select
 									</button>
 								</td>
 							</tr>
@@ -296,13 +310,20 @@ const AssignVolunteer = () => {
 						<strong>Email:</strong> {selectedRequest.email}
 					</p>
 					<p>
-						<strong>Address:</strong> {selectedRequest.address},{" "}
+						<strong>Phone:</strong> {formatPhoneNumber(selectedRequest.phoneNumber)}
+					</p>
+					<p>
+						<strong>Address:</strong> {selectedRequest.streetAddress1}{selectedRequest.streetAddress2 ? `, ${selectedRequest.streetAddress2}` : ""},{" "}
 						{selectedRequest.city}, {selectedRequest.state}{" "}
 						{selectedRequest.zip}
 					</p>
 					<p>
 						<strong>Support Type:</strong>{" "}
 						{selectedRequest.helpType.join(", ")}
+					</p>
+					<p>
+						<strong>Description:</strong>{" "}
+						{selectedRequest.description}
 					</p>
 					<button
 						className="btn btn-secondary"
@@ -352,7 +373,7 @@ const AssignVolunteer = () => {
 								handleTeamButtonClick("Community Helpers")
 							}
 						>
-							Community Helpers
+							EPIC Helpers
 						</button>
 						<button
 							className="btn btn-outline-danger"
@@ -399,7 +420,7 @@ const AssignVolunteer = () => {
 												{volunteer.lastName}
 											</td>
 											<td>{volunteer.email}</td>
-											<td>{volunteer.phoneNumber}</td>
+											<td>{formatPhoneNumber(volunteer.phoneNumber)}</td>
 											<td>
 												{volunteer.streetAddress1 ||
 													"N/A"}
