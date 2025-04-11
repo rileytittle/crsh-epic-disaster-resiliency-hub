@@ -157,8 +157,8 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			application.rows[0].email,
 			"Your Application Has Been Approved -- Login Instructions",
 			"We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved!" +
-			"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
-		  );
+				"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
+		);
 
 		res.status(201).send("Volunteer created!");
 	} catch (e) {
@@ -177,8 +177,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 			req.body.email,
 			"Your Application Has Been Rejected",
 			"We regret to inform you that your request to volunteer at EPIC Disaster Resiliency has been rejected."
-		  );
-		  
+		);
 
 		res.status(200).send("Applicant rejected");
 	} catch (e) {
@@ -214,6 +213,10 @@ app.post("/homeowner-requests/close", async (req, res) => {
 				"UPDATE request SET status = 'Resolved', notes = $1 WHERE request_id = $2",
 				[req.body.notes, parseInt(req.body.id)]
 			);
+			let result2 = await pool.query(
+				"UPDATE volunteer SET assignment = NULL WHERE assignment = $1",
+				[parseInt(req.body.id)]
+			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
 					res.status(200).send("Success");
@@ -244,7 +247,6 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
-
 					await sendEmail(
 						req.body.email,
 						"Your Help Request Has Been Accepted",
@@ -268,7 +270,9 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 app.get("/assign-volunteer/list", async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
-		const result = await pool.query('SELECT * FROM "volunteer" WHERE "assignment" IS NULL');
+		const result = await pool.query(
+			'SELECT * FROM "volunteer" WHERE "assignment" IS NULL'
+		);
 
 		// Map the results to Volunteer instances
 		const volunteers = result.rows.map((row) => {
@@ -367,12 +371,12 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 
 			// Get emails of assigned volunteers
 			const emailQuery = await client.query(
-				'SELECT email FROM volunteer WHERE id = ANY($1)',
+				"SELECT email FROM volunteer WHERE id = ANY($1)",
 				[volunteerIds]
 			);
 
 			// Extract emails (in case multiple volunteers)
-			const emails: string[] = emailQuery.rows.map(row => row.email);
+			const emails: string[] = emailQuery.rows.map((row) => row.email);
 
 			// Send an email to each volunteer
 			for (const email of emails) {
@@ -405,9 +409,6 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
-
-					
-
 					await sendEmail(
 						req.body.email,
 						"Your Help Request Has Been Rejected",
