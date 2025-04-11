@@ -156,8 +156,16 @@ app.post("/create-volunteer/accept", async (req, res) => {
 		await sendEmail(
 			application.rows[0].email,
 			"Your Application Has Been Approved -- Login Instructions",
-			"We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved!" +
-				"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
+			`Hello ${application.rows[0].first_name}!
+		
+		We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved.
+		
+		To login to your account for the first time, use the following credentials:
+		
+		Email: ${application.rows[0].email}
+		Password: ${password}
+		
+		Please change your password after logging in. Welcome aboard!`
 		);
 
 		res.status(201).send("Volunteer created!");
