@@ -156,7 +156,7 @@ const VolunteerForm = () => {
 		}
 
 		try {
-			const response = await fetch(`http://localhost:3000/volunteer/create`, { //${import.meta.env.VITE_API_URL}
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, { 
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
