@@ -10,7 +10,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = process.env.IN_DEVELOPMENT;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
