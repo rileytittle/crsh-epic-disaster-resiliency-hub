@@ -253,12 +253,8 @@ const HomeownerApply = () => {
 	return (
 		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
 		<div>
-			<div className="text-center">
-				<span className="text-decoration-underline fw-bold">
+			<div className="text-center text-decoration-underline fw-bold">
 				<h2>Request Help</h2>
-				EPIC only supports a limited number of zip codes: <br />
-				</span>
-				34223, 34224, 33947, 33946, 33981
 			</div>
 			<div className="container mt-4">
 				<div className="text-center my-3">
@@ -267,6 +263,13 @@ const HomeownerApply = () => {
 							Check the Status of your Application
 						</button>
 					</a>
+				</div>
+				<div className="text-center mb-2">
+					<span className="text-decoration-underline fw-bold">
+						EPIC only supports a limited number of zip codes
+						<br />
+					</span>
+					34223, 34224, 33947, 33946, 33981
 				</div>
 				<form
 					noValidate
