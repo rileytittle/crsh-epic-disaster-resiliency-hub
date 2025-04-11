@@ -12,7 +12,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false; 
+const IN_DEVELOPMENT = false;
 
 let pool: Pool;
 
@@ -92,7 +92,8 @@ app.get("/viewRequests", async (req, res) => {
 				row.other,
 				row.description,
 				row.date_created,
-				row.time_created
+				row.time_created,
+				row.notes
 			);
 			sendRequests.push(newJob);
 		});
@@ -187,14 +188,12 @@ app.post("/requestHelp", async (req, res) => {
 		);
 		if (result.rowCount) {
 			if (result.rowCount > 0) {
-
 				//adding mailgun email to success branch
 				await sendEmail(
 					email,
 					"Your Help Request Has Been Submitted",
 					"This is a confirmation that your request for Epic community helpers has been successfully submitted. We will review your request and reach back out to you shortly!"
-				  );
-				  
+				);
 
 				res.status(200).send({
 					message: "Request succcessfully Submitted",
