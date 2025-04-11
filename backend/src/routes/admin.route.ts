@@ -192,10 +192,10 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 
 app.post("/homeowner-requests/close", async (req, res) => {
 	try {
-		if (req.body.id) {
+		if (req.body.id && req.body.notes) {
 			let result = await pool.query(
-				"UPDATE request SET status = 'Resolved' WHERE request_id = $1",
-				[parseInt(req.body.id)]
+				"UPDATE request SET status = 'Resolved', notes = $1 WHERE request_id = $2",
+				[req.body.notes, parseInt(req.body.id)]
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
@@ -533,6 +533,7 @@ app.get("/homeowner-requests", async (req, res) => {
 			let description = request.description;
 			let dateCreated = request.date_created;
 			let timeCreated = request.time_created;
+			let notes = request.notes;
 			let newRequest = new HelpRequest(
 				id,
 				firstName,
@@ -551,7 +552,8 @@ app.get("/homeowner-requests", async (req, res) => {
 				other,
 				description,
 				dateCreated,
-				timeCreated
+				timeCreated,
+				notes
 			);
 			requestList.push(newRequest);
 		}
@@ -576,7 +578,6 @@ app.post("/reports", async (req, res) => {
 	let county = req.body.county;
 	let zipCode = parseInt(req.body.zipCode);
 	let status = req.body.status;
-	let uniqueHomes = req.body.uniqueHomes;
 	if (req.body.uniqueHomes && req.body.uniqueHomes == true) {
 		queryString =
 			"SELECT DISTINCT ON (street_address_1, street_address_2) * FROM request";
@@ -641,6 +642,7 @@ app.post("/reports", async (req, res) => {
 			{ header: "Time Created", key: "time_created", width: 20 },
 			{ header: "Status", key: "status", width: 10 },
 			{ header: "Reason Rejected", key: "reason_rejected", width: 30 },
+			{ header: "Notes", key: "notes", width: 30 },
 		];
 
 		// Add rows
@@ -656,17 +658,18 @@ app.post("/reports", async (req, res) => {
 				city: row.city,
 				county: row.county,
 				zip_code: row.zip_code,
-				yard_cleanup: row.yard_cleanup,
-				interior_cleanup: row.interior_cleanup,
-				emotional_support: row.emotional_support,
-				cleaning_supplies: row.cleaning_supplies,
-				clean_water: row.clean_water,
-				emergency_food: row.emergency_food,
+				yard_cleanup: row.yard_cleanup ? "Yes" : "No",
+				interior_cleanup: row.interior_cleanup ? "Yes" : "No",
+				emotional_support: row.emotional_support ? "Yes" : "No",
+				cleaning_supplies: row.cleaning_supplies ? "Yes" : "No",
+				clean_water: row.clean_water ? "Yes" : "No",
+				emergency_food: row.emergency_food ? "Yes" : "No",
 				other: row.other,
 				date_created: row.date_created.toISOString().split("T")[0], // Format year as a date string (YYYY-MM-DD)
 				time_created: row.time_created,
 				status: row.status,
 				reason_rejected: row.reason_rejected,
+				notes: row.notes,
 			});
 		}
 

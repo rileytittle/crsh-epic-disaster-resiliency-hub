@@ -31,28 +31,32 @@ function CreateVolunteer() {
 
 	return (
 		<>
-			<div className="card">
-				<div className="card-body">
-					{applications.map((application) => (
-						<ApplicationCard
-							key={application.id}
-							id={application.id}
-							firstName={application.first_name} // Updated for snake_case
-							lastName={application.last_name} // Updated for snake_case
-							email={application.email}
-							areasOfHelp={[
-								application.logistic_tracking &&
-									"Logistic Tracking",
-								application.community_helpers &&
-									"Community Helpers",
-								application.hospitality && "Hospitality",
-								application.community_outreach &&
-									"Community Outreach",
-							].filter(Boolean)} // Dynamically compute areas of help
-						/>
-					))}
+			{applications.length > 0 ? (
+				<div className="card">
+					<div className="card-body">
+						{applications.map((application) => (
+							<ApplicationCard
+								key={application.id}
+								id={application.id}
+								firstName={application.first_name} // Updated for snake_case
+								lastName={application.last_name} // Updated for snake_case
+								email={application.email}
+								areasOfHelp={[
+									application.logistic_tracking &&
+										"Logistic Tracking",
+									application.community_helpers &&
+										"Community Helpers",
+									application.hospitality && "Hospitality",
+									application.community_outreach &&
+										"Community Outreach",
+								].filter(Boolean)} // Dynamically compute areas of help
+							/>
+						))}
+					</div>
 				</div>
-			</div>
+			) : (
+				<h2>No Volunteer Applications found</h2>
+			)}
 		</>
 	);
 }

@@ -1,0 +1,44 @@
+.card-body {
+	padding: 2rem;
+	background-color: #f8f9fa; /* Light gray background */
+	border-radius: 10px;
+}
+
+h2 {
+	font-size: 1.8rem;
+	font-weight: bold;
+	color: #007bff; /* Primary color for headings */
+}
+
+p {
+	line-height: 1.6;
+	color: #555; /* Softer text color for better readability */
+}
+
+.text-center {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.shadow-lg {
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: fit-content; /* Size the container to the image */
+	margin: 0 auto; /* Center horizontally */
+}
+
+.scaled-image {
+	width: 50%; /* Adjust size as needed */
+	height: auto; /* Maintain aspect ratio */
+}
+
+.card-container {
+	width: fit-content; /* Only fit the content */
+	margin-top: 1rem; /* Space between image and card */
+	text-align: center; /* Align the text */
+}
