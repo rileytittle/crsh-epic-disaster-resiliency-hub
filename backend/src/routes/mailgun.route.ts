@@ -10,7 +10,7 @@ dotenv.config();
 
 const router = Router();
 
-const IN_DEVELOPMENT = process.env.IN_DEVELOPMENT;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {

@@ -10,7 +10,7 @@ import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
 require("dotenv").config();
 
-const IN_DEVELOPMENT = process.env.IN_DEVELOPMENT;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
