@@ -35,7 +35,7 @@ const mg = mailgun({
 	domain: process.env.MAILGUN_DOMAIN as string,
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Change this in production!
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; 
 
 //Request Password Reset (Generate JWT & Send Email)
 router.post(
@@ -44,7 +44,7 @@ router.post(
 		const { email } = req.body;
 
 		try {
-			//Check if user exists
+			
 			const userQuery = await pool.query(
 				"SELECT email FROM volunteer WHERE email = $1",
 				[email]
@@ -59,7 +59,7 @@ router.post(
 				expiresIn: "1h",
 			});
 
-			//Create reset link
+			
 			const resetLink = `https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/reset-password?token=${resetToken}`;
 
 			//Send email
@@ -112,5 +112,6 @@ router.post(
 		}
 	}
 );
+  
 
 export { router as mailgunRouter };
