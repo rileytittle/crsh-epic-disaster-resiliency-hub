@@ -396,7 +396,7 @@ const VolunteerForm = () => {
 								checked={formData.areasOfHelp.includes("Community Helpers Team")}
 								onChange={handleChange}
 							/>
-							Community Helpers
+							EPIC Helpers
 						</label>
 					</div>
 				</div>

@@ -159,8 +159,8 @@ button:hover {
   visibility: visible;
 }
 .volunteerInput:disabled {
-  width: 100%; /* Ensure the disabled input takes full width */
-  background-color: #f0f0f0; /* Optional: Change background color to indicate it's disabled */
+  width: 100%; 
+  background-color: #f0f0f0; 
 }
 .areasOfHelpWrapper {
   margin-bottom: 20px;
@@ -258,12 +258,12 @@ button:hover {
   display: inline-block;
 }
 .tooltipTextBlock {
-  height: 200px; /* Adjust this based on the size of your tooltip */
+  height: 240px; 
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px 0;
-  transition: opacity 0.3s ease-in-out; /* Optional: adds a fade-in effect */
+  transition: opacity 0.3s ease-in-out; 
 }
 
 .tooltipTextBlock p {
