@@ -156,7 +156,7 @@ const VolunteerForm = () => {
 		}
 
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, { 
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -396,7 +396,7 @@ const VolunteerForm = () => {
 								checked={formData.areasOfHelp.includes("Community Helpers Team")}
 								onChange={handleChange}
 							/>
-							Community Helpers
+							EPIC Helpers
 						</label>
 					</div>
 				</div>

@@ -9,6 +9,7 @@ import sgMail from "@sendgrid/mail";
 import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { sendEmail } from "../utils/mailService";
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
@@ -151,6 +152,14 @@ app.post("/create-volunteer/accept", async (req, res) => {
 			"DELETE from volunteerapplications WHERE id = $1",
 			[req.body.id]
 		);
+
+		await sendEmail(
+			application.rows[0].email,
+			"Your Application Has Been Approved -- Login Instructions",
+			"We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved!" +
+				"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
+		);
+
 		res.status(201).send("Volunteer created!");
 	} catch (e) {
 		console.log(e);
@@ -163,6 +172,13 @@ app.post("/create-volunteer/reject", async (req, res) => {
 			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
 			[req.body.email]
 		);
+
+		await sendEmail(
+			req.body.email,
+			"Your Application Has Been Rejected",
+			"We regret to inform you that your request to volunteer at EPIC Disaster Resiliency has been rejected."
+		);
+
 		res.status(200).send("Applicant rejected");
 	} catch (e) {
 		res.status(400).send("Problem rejected application");
@@ -192,9 +208,13 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 
 app.post("/homeowner-requests/close", async (req, res) => {
 	try {
-		if (req.body.id) {
+		if (req.body.id && req.body.notes) {
 			let result = await pool.query(
-				"UPDATE request SET status = 'Resolved' WHERE request_id = $1",
+				"UPDATE request SET status = 'Resolved', notes = $1 WHERE request_id = $2",
+				[req.body.notes, parseInt(req.body.id)]
+			);
+			let result2 = await pool.query(
+				"UPDATE volunteer SET assignment = NULL WHERE assignment = $1",
 				[parseInt(req.body.id)]
 			);
 			if (result.rowCount) {
@@ -227,6 +247,12 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
+					await sendEmail(
+						req.body.email,
+						"Your Help Request Has Been Accepted",
+						"We are excited to inform you that your request for help with the EPIC Disaster Resiliency Hub has been accepted!"
+					);
+
 					res.status(200).send("Success");
 				} else {
 					res.status(404).send("Could not find request");
@@ -244,7 +270,9 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 app.get("/assign-volunteer/list", async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
-		const result = await pool.query('SELECT * FROM "volunteer"');
+		const result = await pool.query(
+			'SELECT * FROM "volunteer" WHERE "assignment" IS NULL'
+		);
 
 		// Map the results to Volunteer instances
 		const volunteers = result.rows.map((row) => {
@@ -340,6 +368,25 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 				[assignment]
 			);
 			await client.query("COMMIT"); // Commit the transaction
+
+			// Get emails of assigned volunteers
+			const emailQuery = await client.query(
+				"SELECT email FROM volunteer WHERE id = ANY($1)",
+				[volunteerIds]
+			);
+
+			// Extract emails (in case multiple volunteers)
+			const emails: string[] = emailQuery.rows.map((row) => row.email);
+
+			// Send an email to each volunteer
+			for (const email of emails) {
+				await sendEmail(
+					email,
+					"You Have a New Volunteer Opportunity At EPIC",
+					"We are excited to inform you that you have a new volunteer opportunity!\nLogin to your volunteer account to see the details and accept it."
+				);
+			}
+
 			res.status(200).send({ message: "Volunteers Assigned" });
 		} catch (error) {
 			await client.query("ROLLBACK"); // Rollback the transaction in case of error
@@ -362,6 +409,12 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 			);
 			if (result.rowCount) {
 				if (result.rowCount > 0) {
+					await sendEmail(
+						req.body.email,
+						"Your Help Request Has Been Rejected",
+						`We are sorry to inform you that your request for help with the EPIC Disaster Resiliency Hub has been rejected for the following reason`
+					);
+
 					res.status(200).send("Success");
 				} else {
 					res.status(404).send("Could not find request");
@@ -533,6 +586,7 @@ app.get("/homeowner-requests", async (req, res) => {
 			let description = request.description;
 			let dateCreated = request.date_created;
 			let timeCreated = request.time_created;
+			let notes = request.notes;
 			let newRequest = new HelpRequest(
 				id,
 				firstName,
@@ -551,7 +605,8 @@ app.get("/homeowner-requests", async (req, res) => {
 				other,
 				description,
 				dateCreated,
-				timeCreated
+				timeCreated,
+				notes
 			);
 			requestList.push(newRequest);
 		}
@@ -576,7 +631,6 @@ app.post("/reports", async (req, res) => {
 	let county = req.body.county;
 	let zipCode = parseInt(req.body.zipCode);
 	let status = req.body.status;
-	let uniqueHomes = req.body.uniqueHomes;
 	if (req.body.uniqueHomes && req.body.uniqueHomes == true) {
 		queryString =
 			"SELECT DISTINCT ON (street_address_1, street_address_2) * FROM request";
@@ -641,6 +695,7 @@ app.post("/reports", async (req, res) => {
 			{ header: "Time Created", key: "time_created", width: 20 },
 			{ header: "Status", key: "status", width: 10 },
 			{ header: "Reason Rejected", key: "reason_rejected", width: 30 },
+			{ header: "Notes", key: "notes", width: 30 },
 		];
 
 		// Add rows
@@ -656,17 +711,18 @@ app.post("/reports", async (req, res) => {
 				city: row.city,
 				county: row.county,
 				zip_code: row.zip_code,
-				yard_cleanup: row.yard_cleanup,
-				interior_cleanup: row.interior_cleanup,
-				emotional_support: row.emotional_support,
-				cleaning_supplies: row.cleaning_supplies,
-				clean_water: row.clean_water,
-				emergency_food: row.emergency_food,
+				yard_cleanup: row.yard_cleanup ? "Yes" : "No",
+				interior_cleanup: row.interior_cleanup ? "Yes" : "No",
+				emotional_support: row.emotional_support ? "Yes" : "No",
+				cleaning_supplies: row.cleaning_supplies ? "Yes" : "No",
+				clean_water: row.clean_water ? "Yes" : "No",
+				emergency_food: row.emergency_food ? "Yes" : "No",
 				other: row.other,
 				date_created: row.date_created.toISOString().split("T")[0], // Format year as a date string (YYYY-MM-DD)
 				time_created: row.time_created,
 				status: row.status,
 				reason_rejected: row.reason_rejected,
+				notes: row.notes,
 			});
 		}
 

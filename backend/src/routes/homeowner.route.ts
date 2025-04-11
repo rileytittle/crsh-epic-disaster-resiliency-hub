@@ -5,12 +5,15 @@ import { HomeownerStatus } from "../models/homeownerStatus.model";
 
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
+import { sendEmail } from "../utils/mailService";
+
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
 const IN_DEVELOPMENT = false;
+
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -29,6 +32,7 @@ if (IN_DEVELOPMENT) {
 		},
 	});
 }
+
 let app = Router();
 
 let HomeownerApplications: HelpRequest[] = []; // database
@@ -38,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/viewRequests", async (req, res) => {
-	let sendRequests: Job[] = [];
+	let sendRequests: HelpRequest[] = [];
 	try {
 		// Query to get rows with the "Active" status
 		const result = await pool.query(
@@ -70,17 +74,26 @@ app.get("/viewRequests", async (req, res) => {
 				}
 			});
 
-			const newJob = new Job(
+			const newJob = new HelpRequest(
 				row.request_id,
 				row.first_name,
 				row.last_name,
 				row.email,
+				row.phone_number,
 				row.street_address_1,
+				row.street_address_2,
 				row.city,
 				row.state,
 				row.zip_code,
+				row.county,
+				row.status,
+				row.reason_rejected,
 				helpType,
-				row.other
+				row.other,
+				row.description,
+				row.date_created,
+				row.time_created,
+				row.notes
 			);
 			sendRequests.push(newJob);
 		});
@@ -154,7 +167,7 @@ app.post("/requestHelp", async (req, res) => {
 				email,
 				phone_number,
 				street_address_1,
-        street_address_2,
+				street_address_2,
 				city,
 				state,
 				zip_code,
@@ -175,6 +188,13 @@ app.post("/requestHelp", async (req, res) => {
 		);
 		if (result.rowCount) {
 			if (result.rowCount > 0) {
+				//adding mailgun email to success branch
+				await sendEmail(
+					email,
+					"Your Help Request Has Been Submitted",
+					"This is a confirmation that your request for Epic community helpers has been successfully submitted. We will review your request and reach back out to you shortly!"
+				);
+
 				res.status(200).send({
 					message: "Request succcessfully Submitted",
 				});
@@ -187,7 +207,7 @@ app.post("/requestHelp", async (req, res) => {
 	} catch (e) {
 		res.status(500).send({
 			success: false,
-			message: "Something went wrong"
+			message: "Something went wrong",
 		});
 		console.log(e);
 	}
@@ -197,9 +217,9 @@ app.post("/requestHelp", async (req, res) => {
 app.get("/requestHelp/status", async (req, res) => {
 	let { first_name, last_name, street_address_1, street_address_2 } =
 		req.query;
-		if (street_address_2 == "NULL") {
-			street_address_2 = ""
-		}
+	if (street_address_2 == "NULL") {
+		street_address_2 = "";
+	}
 	try {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created

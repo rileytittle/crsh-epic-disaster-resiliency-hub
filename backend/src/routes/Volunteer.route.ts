@@ -8,10 +8,16 @@ import { Pool } from "pg";
 import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
+import { sendEmail } from "../utils/mailService";
 require("dotenv").config();
 
 const IN_DEVELOPMENT = false;
 let pool: Pool;
+/**user: "postgres",
+		host: "localhost",
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
+		port: 5432, */
 
 if (IN_DEVELOPMENT) {
 	pool = new Pool({
@@ -240,6 +246,14 @@ app.post("/create", async (req: Request, res: Response): Promise<any> => {
 		);
 
 		// Send success response
+
+		await sendEmail(
+			email,
+			"Your Application Has Been Submitted",
+			"This is a confirmation that your application for Epic community helpers has been successfully submitted. We will review your request and reach back out to you shortly!"
+		  );
+		  
+
 		res.status(201).json({
 			message: "Volunteer Application Created",
 			volunteer: newVolunteer,
