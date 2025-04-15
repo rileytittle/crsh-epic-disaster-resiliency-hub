@@ -17,7 +17,7 @@ let saltRounds = 10;
 require("dotenv").config();
 const SECRET_KEY =
 	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
@@ -757,6 +757,19 @@ app.post("/reports", async (req, res) => {
 		res.end(); // Make sure to end the response
 	} else {
 		res.status(400).send({ message: "No records found" });
+	}
+});
+app.get("/notifications", async (req, res) => {
+	try {
+		let result = await pool.query(`
+		SELECT 
+		COUNT(CASE WHEN status = 'Unevaluated' THEN 1 END) AS unevaluated_count,
+		COUNT(CASE WHEN status = 'Accepted' THEN 1 END) AS accepted_count,
+		COUNT(CASE WHEN status = 'Active' THEN 1 END) AS active_count
+		FROM request`);
+		res.status(200).send(result.rows);
+	} catch (e) {
+		res.status(500).send({ message: e });
 	}
 });
 export { app };
