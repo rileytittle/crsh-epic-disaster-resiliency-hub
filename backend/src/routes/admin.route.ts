@@ -41,16 +41,24 @@ let app = Router();
 
 app.post("/create-account", async (req, res) => {
 	try {
-		//write some logic here
-		let queryResult = await pool.query(
-			"SELECT * FROM AdminAccount WHERE email = $1",
-			[req.body.email]
-		);
-		if (queryResult.rows.length == 0) {
+		let email = req.body.email;
+		let password = req.body.password;
+		let hashedPassword = await bcrypt.hash(password, saltRounds);
+		let firstName = req.body.firstName;
+		let lastName = req.body.lastName;
+		if (email && password && firstName && lastName) {
+			let result = await pool.query(
+				`INSERT INTO adminaccount (email, password, first_name, last_name)
+				 VALUES ($1, $2, $3, $4)`,
+				[email, hashedPassword, firstName, lastName]
+			);
+			res.status(201).send({ message: "Admin account created" });
 		} else {
-			res.status(400).send({ message: "Email already in use" });
+			res.status(400).send({
+				message:
+					"Email, password, first name, and last name must be supplied",
+			});
 		}
-		res.status(200).send("Success");
 	} catch (e) {
 		res.status(500).send(e);
 	}
