@@ -120,70 +120,80 @@ const MainLayout = () => {
 							)}
 							{sessionStorage.getItem("isLoggedIn") &&
 							sessionStorage.getItem("userType") == "admin" ? (
-								<li className="nav-item dropdown">
-									<a
-										className="nav-link dropdown-toggle"
-										href="#"
-										role="button"
-										data-bs-toggle="dropdown"
-										aria-expanded="false"
-									>
-										Admin
-									</a>
-									<ul className="dropdown-menu">
-										<li>
-											<a
-												className="dropdown-item"
-												href="/create-volunteer"
-											>
-												New Volunteer Applications
-											</a>
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/volunteers"
-											>
-												Volunteer Database
-											</a>
-										</li>
-										<li>
-											<hr className="dropdown-divider" />
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/homeowner-requests"
-											>
-												New Requests
-											</a>
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/assignVolunteers"
-											>
-												Assign volunteers to job
-											</a>
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/requests-in-progress"
-											>
-												Requests in Progress
-											</a>
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/generate-reports"
-											>
-												Generate Reports
-											</a>
-										</li>
-									</ul>
-								</li>
+								<>
+									<li className="nav-item dropdown">
+										<a
+											className="nav-link dropdown-toggle"
+											href="#"
+											role="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											Admin
+										</a>
+										<ul className="dropdown-menu">
+											<li>
+												<a
+													className="dropdown-item"
+													href="/create-volunteer"
+												>
+													New Volunteer Applications
+												</a>
+											</li>
+											<li>
+												<a
+													className="dropdown-item"
+													href="/volunteers"
+												>
+													Volunteer Database
+												</a>
+											</li>
+											<li>
+												<hr className="dropdown-divider" />
+											</li>
+											<li>
+												<a
+													className="dropdown-item"
+													href="/homeowner-requests"
+												>
+													New Requests
+												</a>
+											</li>
+											<li>
+												<a
+													className="dropdown-item"
+													href="/assignVolunteers"
+												>
+													Assign volunteers to job
+												</a>
+											</li>
+											<li>
+												<a
+													className="dropdown-item"
+													href="/requests-in-progress"
+												>
+													Requests in Progress
+												</a>
+											</li>
+											<li>
+												<a
+													className="dropdown-item"
+													href="/generate-reports"
+												>
+													Generate Reports
+												</a>
+											</li>
+										</ul>
+									</li>
+									<li className="nav-item">
+										<a
+											className="nav-link"
+											href="/create-admin"
+										>
+											Create new Admin Account
+										</a>
+									</li>
+								</>
 							) : (
 								<></>
 							)}
@@ -232,7 +242,10 @@ const MainLayout = () => {
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
-								<button type="button" className="btn btn-primary">
+								<button
+									type="button"
+									className="btn btn-primary"
+								>
 									<a
 										style={{
 											color: "white",
