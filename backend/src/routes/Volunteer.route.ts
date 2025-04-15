@@ -275,25 +275,50 @@ app.post("/create", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.post("/changePassword", (req, res) => {
-	const { username, currentPassword, newPassword } = req.body;
+app.post("/changePassword", async (req, res) => {
+	const { currentPassword, newPassword } = req.body;
 
-	// Create a new instance of VolunteerApplication
-	const index = dummyVolunteers.findIndex(
-		(volunteer) => volunteer.id == username
-	);
+	const authHeader = req.headers.authorization;
+	const token = authHeader && authHeader.split(" ")[1];
 
-	console.log(`${dummyVolunteers[0].id} == ${username} (${index})`);
-	if (index != -1) {
-		if (dummyVolunteers[index].password == currentPassword) {
-			dummyVolunteers[index].password = newPassword;
-			res.status(200).json({ message: "Password Succesfully Updated" });
-			console.log(dummyVolunteers[index]);
-		} else {
-			res.status(401).json({ message: "Old Password does not match" });
+	if (!token) {
+		return res.status(400).send({ message: "User token is required" });
+	}
+
+	// Decode token to get email
+	const decodedToken = jwtDecode<{ email: string }>(token);
+	const email = decodedToken.email;
+
+	try {
+
+		const userQuery = await pool.query(
+			"SELECT password FROM Volunteer WHERE email = $1",
+			[email]
+		);
+
+		if (userQuery.rows.length === 0) {
+			return res.status(404).send({ message: "User not found" });
 		}
-	} else {
-		res.status(401).json({ message: "Username Not Found" });
+
+		const hashedPassword = userQuery.rows[0].password;
+
+		const match = await bcrypt.compare(currentPassword, hashedPassword);
+		if (!match) {
+			return res.status(401).send({ message: "Incorrect current password" });
+		}
+
+		const saltRounds = 10;
+		const newHashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+		await pool.query(
+			"UPDATE Volunteer SET password = $1 WHERE email = $2",
+			[newHashedPassword, email]
+		);
+
+		res.status(200).send({ message: "Password successfully updated" });
+	} catch (err) {
+		console.error("Error changing password:", err);
+		res.status(500).send({ message: "Server error" });
 	}
 });
 

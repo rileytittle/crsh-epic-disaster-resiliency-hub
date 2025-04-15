@@ -108,60 +108,54 @@ function VolunteerDashboard() {
 					<h2 className="fw-semibold">
 						{user.firstName} {user.lastName}
 					</h2>
-
+	
 					{loading ? (
 						<p className="text-muted mt-3">Loading...</p>
 					) : error ? (
 						<p className="text-danger mt-3">{error}</p>
 					) : (
 						<>
-							<div className="mt-4">
-								<h4 className="fw-bold">Current Job</h4>
-								{assigned !== 0 ? (
+							{offered && typeof offered === "object" ? (
+								<div className="mt-4">
+									<h4 className="fw-bold">Job Offer</h4>
+									<JobCard job={offered} />
+									<div className="btn-group mt-3">
+										<button
+											className="btn btn-success px-4"
+											onClick={() => answerOffer("accept")}
+										>
+											Accept
+										</button>
+										<button
+											className="btn btn-danger px-4 ms-2"
+											onClick={() => answerOffer("reject")}
+										>
+											Reject
+										</button>
+									</div>
+								</div>
+							) : assigned && typeof assigned === "object" ? (
+								<div className="mt-4">
+									<h4 className="fw-bold">Assigned Job</h4>
 									<JobCard job={assigned} />
-								) : (
+								</div>
+							) : (
+								<div className="mt-4">
+									<h4 className="fw-bold">No Jobs Yet</h4>
 									<p className="text-muted">
-										Nothing assigned
+										You haven’t been assigned a job yet. An admin will contact you when a role becomes available.
 									</p>
-								)}
-							</div>
+								</div>
+							)}
 
-							<div className="mt-4">
-								<h4 className="fw-bold">Current Offer</h4>
-								{offered !== 0 ? (
-									<>
-										<JobCard job={offered} />
-										<div className="btn-group mt-3">
-											<button
-												className="btn btn-success px-4"
-												onClick={() =>
-													answerOffer("accept")
-												}
-											>
-												Accept
-											</button>
-											<button
-												className="btn btn-danger px-4 ms-2"
-												onClick={() =>
-													answerOffer("reject")
-												}
-											>
-												Reject
-											</button>
-										</div>
-									</>
-								) : (
-									<p className="text-muted">
-										Nothing offered
-									</p>
-								)}
-							</div>
 						</>
 					)}
 				</div>
 			</div>
 		</div>
 	);
+	
+	
 }
 
 export default VolunteerDashboard;
