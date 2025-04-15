@@ -759,4 +759,17 @@ app.post("/reports", async (req, res) => {
 		res.status(400).send({ message: "No records found" });
 	}
 });
+app.get("/notifications", async (req, res) => {
+	try {
+		let result = await pool.query(`
+		SELECT 
+		COUNT(CASE WHEN status = 'Unevaluated' THEN 1 END) AS unevaluated_count,
+		COUNT(CASE WHEN status = 'Accepted' THEN 1 END) AS accepted_count,
+		COUNT(CASE WHEN status = 'Active' THEN 1 END) AS active_count
+		FROM request`);
+		res.status(200).send(result.rows);
+	} catch (e) {
+		res.status(500).send({ message: e });
+	}
+});
 export { app };

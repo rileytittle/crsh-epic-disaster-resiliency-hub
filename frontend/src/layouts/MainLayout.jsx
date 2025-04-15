@@ -121,6 +121,14 @@ const MainLayout = () => {
 							{sessionStorage.getItem("isLoggedIn") &&
 							sessionStorage.getItem("userType") == "admin" ? (
 								<>
+									<li className="nav-item">
+										<a
+											className="nav-link"
+											href="/admin-dashboard"
+										>
+											Dashboard
+										</a>
+									</li>
 									<li className="nav-item dropdown">
 										<a
 											className="nav-link dropdown-toggle"
