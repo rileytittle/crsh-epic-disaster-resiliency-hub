@@ -4,11 +4,18 @@ import axios from "axios";
 const ApplicationCard = ({ id, firstName, lastName, email, areasOfHelp }) => {
 	function rejectVolunteer() {
 		console.log(email);
+		let token = sessionStorage.getItem("userToken");
+		let headers = {
+			Authorization: `Bearer ${token}`,
+		};
 		axios
 			.post(
 				`${import.meta.env.VITE_API_URL}/admin/create-volunteer/reject`,
 				{
 					email: email,
+				},
+				{
+					headers,
 				}
 			)
 			.then((res) => {

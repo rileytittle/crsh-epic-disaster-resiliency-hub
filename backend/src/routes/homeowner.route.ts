@@ -6,6 +6,7 @@ import { HomeownerStatus } from "../models/homeownerStatus.model";
 import { HomeownerApplication } from "../models/homeownerApplication.model";
 import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
 import { sendEmail } from "../utils/mailService";
+import { AdminAuthChecker } from "../utils/adminAuth.utils";
 
 import { Pool } from "pg";
 import { Job } from "../models/job.model";
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
 	res.send("Homeowner Assistance Backend");
 });
 
-app.get("/viewRequests", async (req, res) => {
+app.get("/viewRequests", AdminAuthChecker, async (req, res) => {
 	let sendRequests: HelpRequest[] = [];
 	try {
 		// Query to get rows with the "Active" status

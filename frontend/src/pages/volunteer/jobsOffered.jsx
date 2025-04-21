@@ -13,8 +13,16 @@ const JobsOffered = () => {
 			try {
 				setLoading(true);
 				setError("");
+				let headers = {
+					Authorization: `Bearer ${sessionStorage.getItem(
+						"userToken"
+					)}`,
+				};
 				const response = await axios.get(
-					`${import.meta.env.VITE_API_URL}/volunteer/job/offered`
+					`${import.meta.env.VITE_API_URL}/volunteer/job/offered`,
+					{
+						headers: headers,
+					}
 				);
 				if (Array.isArray(response.data)) {
 					setJobs(response.data);
@@ -36,8 +44,16 @@ const JobsOffered = () => {
 			try {
 				setLoading(true);
 				setError("");
+				let headers = {
+					Authorization: `Bearer ${sessionStorage.getItem(
+						"userToken"
+					)}`,
+				};
 				const response = await axios.get(
-					`${import.meta.env.VITE_API_URL}/volunteer/job/schedule`
+					`${import.meta.env.VITE_API_URL}/volunteer/job/schedule`,
+					{
+						headers: headers,
+					}
 				);
 				setSchedule(response.data);
 			} catch (error) {
@@ -54,9 +70,15 @@ const JobsOffered = () => {
 
 	const acceptJob = async (jobId) => {
 		try {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+			};
 			const response = await axios.post(
 				`${import.meta.env.VITE_API_URL}/volunteer/job/accept`,
-				{ jobId }
+				{ jobId },
+				{
+					headers,
+				}
 			);
 			if (response.status === 200) {
 				//Remove the accepted job from jobs and add to schedule
@@ -73,9 +95,15 @@ const JobsOffered = () => {
 
 	const rejectJob = async (jobId) => {
 		try {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+			};
 			const response = await axios.post(
 				`${import.meta.env.VITE_API_URL}/volunteer/job/reject`,
-				{ jobId }
+				{ jobId },
+				{
+					headers,
+				}
 			);
 			if (response.status === 200) {
 				setJobs(jobs.filter((job) => job.id !== jobId));
@@ -89,11 +117,17 @@ const JobsOffered = () => {
 
 	const completeJob = async (jobId) => {
 		try {
+			let headers = {
+				Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+			};
 			const response = await axios.post(
 				`${import.meta.env.VITE_API_URL}/volunteer/job/job-completed`,
 				{
 					jobId,
 					details,
+				},
+				{
+					headers,
 				}
 			);
 			if (response.status === 200) {
