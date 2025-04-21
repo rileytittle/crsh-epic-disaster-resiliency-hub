@@ -11,7 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import { sendEmail } from "../utils/mailService";
 require("dotenv").config();
 
-const IN_DEVELOPMENT = true;
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 /**user: "postgres",
 		host: "localhost",
@@ -23,8 +23,8 @@ if (IN_DEVELOPMENT) {
 	pool = new Pool({
 		user: "postgres",
 		host: "localhost",
-		database: "postgres",       
-		password: "pass",           
+		database: "Senior-Project",
+		password: "garnetisGold!1820",
 		port: 5432,
 	});
 } else {
