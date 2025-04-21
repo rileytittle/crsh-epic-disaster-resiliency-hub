@@ -24,7 +24,7 @@ export default function Homepage() {
 								</h2>
 								<p className="fs-5 text-muted">
 									During day-to-day operations, known as{" "}
-									<strong>Blue Skys</strong>, EPIC is a center
+									<strong>Blue Skies</strong>, EPIC is a center
 									providing partner resources with programs
 									and services that educate, support, and
 									promote mental well-being for individuals
