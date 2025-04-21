@@ -41,16 +41,24 @@ let app = Router();
 
 app.post("/create-account", async (req, res) => {
 	try {
-		//write some logic here
-		let queryResult = await pool.query(
-			"SELECT * FROM AdminAccount WHERE email = $1",
-			[req.body.email]
-		);
-		if (queryResult.rows.length == 0) {
+		let email = req.body.email;
+		let password = req.body.password;
+		let hashedPassword = await bcrypt.hash(password, saltRounds);
+		let firstName = req.body.firstName;
+		let lastName = req.body.lastName;
+		if (email && password && firstName && lastName) {
+			let result = await pool.query(
+				`INSERT INTO adminaccount (email, password, first_name, last_name)
+				 VALUES ($1, $2, $3, $4)`,
+				[email, hashedPassword, firstName, lastName]
+			);
+			res.status(201).send({ message: "Admin account created" });
 		} else {
-			res.status(400).send({ message: "Email already in use" });
+			res.status(400).send({
+				message:
+					"Email, password, first name, and last name must be supplied",
+			});
 		}
-		res.status(200).send("Success");
 	} catch (e) {
 		res.status(500).send(e);
 	}
@@ -156,8 +164,16 @@ app.post("/create-volunteer/accept", async (req, res) => {
 		await sendEmail(
 			application.rows[0].email,
 			"Your Application Has Been Approved -- Login Instructions",
-			"We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved!" +
-				"\nTo login to your account for the first time, navigate to the volunteer login page and click forgot password."
+			`Hello ${application.rows[0].first_name}!
+		
+		We are excited to inform you that your request to volunteer at EPIC Disaster Resiliency has been approved.
+		
+		To login to your account for the first time, use the following credentials:
+		
+		Email: ${application.rows[0].email}
+		Password: ${password}
+		
+		Please change your password after logging in. Welcome aboard!`
 		);
 
 		res.status(201).send("Volunteer created!");
@@ -741,6 +757,19 @@ app.post("/reports", async (req, res) => {
 		res.end(); // Make sure to end the response
 	} else {
 		res.status(400).send({ message: "No records found" });
+	}
+});
+app.get("/notifications", async (req, res) => {
+	try {
+		let result = await pool.query(`
+		SELECT 
+		COUNT(CASE WHEN status = 'Unevaluated' THEN 1 END) AS unevaluated_count,
+		COUNT(CASE WHEN status = 'Accepted' THEN 1 END) AS accepted_count,
+		COUNT(CASE WHEN status = 'Active' THEN 1 END) AS active_count
+		FROM request`);
+		res.status(200).send(result.rows);
+	} catch (e) {
+		res.status(500).send({ message: e });
 	}
 });
 export { app };

@@ -38,24 +38,21 @@ import ThankYouPage from "./pages/pVolunteer/ThankYouPage";
 import GenerateReports from "./pages/Admin/GenerateReports";
 import ActiveRequests from "./pages/Admin/ActiveRequests";
 import Resources from "./pages/Resources";
-
+import CreateAdmin from "./pages/Admin/CreateAdmin";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<MainLayout />}>
 			<Route index element={<Navigate to="/home" replace />} />
 			<Route path="/home" element={<Homepage />}></Route>
-
+			<Route path="/create-admin" element={<CreateAdmin />}></Route>
 			<Route path="/request-help" element={<HomeownerForm />}></Route>
 			<Route
 				path="/request-help/status"
 				element={<HomeownerApplicationStatus />}
 			></Route>
 
-			<Route
-				path="/request-help"
-				element={<HomeownerForm />}
-			></Route>
+			<Route path="/request-help" element={<HomeownerForm />}></Route>
 			<Route
 				path="/request-help/status"
 				element={<HomeownerApplicationStatus />}
@@ -82,31 +79,16 @@ const router = createBrowserRouter(
 				path="/homeowner-requests/request-details"
 				element={<RequestDetails />}
 			></Route>
-			<Route
-				path="/admin-login"
-				element={<AdminLogin />}
-			></Route>
-			<Route
-				path="/admin-dashboard"
-				element={<AdminDashboard />}
-			></Route>
+			<Route path="/admin-login" element={<AdminLogin />}></Route>
+			<Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
 
-			<Route
-				path="/vol-login"
-				element={<VolLogin />}
-			></Route>
+			<Route path="/vol-login" element={<VolLogin />}></Route>
 			<Route
 				path="/volunteer-dashboard"
 				element={<VolunteerDashboard />}
 			></Route>
-			<Route
-				path="/applyVolunteer"
-				element={<VolunteerForm />}>
-			</Route>
-			<Route
-				path="/thank-you"
-				element={<ThankYouPage />}
-			/>
+			<Route path="/applyVolunteer" element={<VolunteerForm />}></Route>
+			<Route path="/thank-you" element={<ThankYouPage />} />
 			<Route
 				path="/applyVolunteer/status"
 				element={<VolunteerApplicationStatus />}
@@ -134,10 +116,7 @@ const router = createBrowserRouter(
 				path="/volunteer/request-reset"
 				element={<VolunteerRequestReset />}
 			></Route>
-			<Route
-				path="/volunteers"
-				element={<Volunteers />}
-			></Route>
+			<Route path="/volunteers" element={<Volunteers />}></Route>
 			<Route
 				path="/volunteers/volunteer-details"
 				element={<VolunteerDetails />}
