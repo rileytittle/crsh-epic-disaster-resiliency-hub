@@ -11,7 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import { sendEmail } from "../utils/mailService";
 require("dotenv").config();
 
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 /**user: "postgres",
 		host: "localhost",
@@ -23,8 +23,8 @@ if (IN_DEVELOPMENT) {
 	pool = new Pool({
 		user: "postgres",
 		host: "localhost",
-		database: "Senior-Project",
-		password: "garnetisGold!1820",
+		database: "postgres",       
+		password: "pass",           
 		port: 5432,
 	});
 } else {
@@ -588,20 +588,19 @@ app.get("/user-details", async (req: Request, res: Response): Promise<any> => {
 
 app.post("/update-user-details", async (req: Request, res: any) => {
 	try {
-		const {
-			email: email,
-			phone: phone,
-			address: address,
-			city: city,
-			state: state,
-			zip: zip,
-		} = req.body;
+		const { email, phone, address, city, state, zip } = req.body;
 
-		if (!email) {
-			return res.status(400).json({ message: "Email is required" });
+		
+		if (!email || !phone || !address || !city || !state || !zip) {
+			return res.status(400).json({ message: "All fields are required." });
 		}
 
-		console.log(email, phone, address, city, state, zip);
+		
+		if (!/^\d+$/.test(phone)) {
+			return res
+				.status(400)
+				.json({ message: "Phone number must contain only digits." });
+		}
 
 		const query = `
             UPDATE Volunteer 
@@ -614,11 +613,11 @@ app.post("/update-user-details", async (req: Request, res: any) => {
 		const result = await pool.query(query, values);
 
 		if (result.rowCount === 0) {
-			return res.status(404).json({ message: "User not found" });
+			return res.status(404).json({ message: "User not found." });
 		}
 
 		res.status(200).json({
-			message: "User details updated successfully",
+			message: "User details updated successfully.",
 			user: result.rows[0],
 		});
 	} catch (error: any) {
@@ -629,5 +628,6 @@ app.post("/update-user-details", async (req: Request, res: any) => {
 		});
 	}
 });
+
 
 export { app };

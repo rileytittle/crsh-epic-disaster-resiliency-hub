@@ -75,22 +75,7 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/volunteer/resetPassword"
-											>
-												Reset Password
-											</a>
-										</li>
-										<li>
-											<a
-												className="nav-item nav-link"
-												href="/volunteer/jobs"
-											>
-												Check Job Offer
-											</a>
-										</li>
+									
 										<li>
 											<hr className="dropdown-divider" />
 										</li>
