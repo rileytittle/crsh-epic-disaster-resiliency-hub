@@ -9,6 +9,8 @@ import { Job } from "../models/job.model";
 import { Request, Response } from "express";
 import { jwtDecode } from "jwt-decode";
 import { sendEmail } from "../utils/mailService";
+import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
+
 require("dotenv").config();
 
 const IN_DEVELOPMENT = false;
@@ -110,7 +112,7 @@ dummyApplications[1].reasonRejected =
 	"we are not accepting volunteers under 18 years old";
 /*************************************************DUMMMY DATA*********************************************************/
 
-app.post("/login", async (req, res) => {
+app.post("/login", VolunteerAuthChecker, async (req, res) => {
 	try {
 		//write some logic here
 		if (req.headers["authorization"]) {
@@ -382,7 +384,7 @@ app.post("/status", (req, res) => {
  * assignment is index 0
  * offered is index 1
  */
-app.get("/jobs", async (req: Request, res: Response): Promise<any> => {
+app.get("/jobs", VolunteerAuthChecker, async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
 
@@ -478,7 +480,7 @@ app.get("/jobs", async (req: Request, res: Response): Promise<any> => {
 });
 
 //allows user to accept or reject their job
-app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
+app.post("/job-accept", VolunteerAuthChecker, async (req: Request, res: Response): Promise<any> => {
 	try {
 		const { offered, action, id } = req.body;
 
@@ -518,7 +520,7 @@ app.post("/job-accept", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.get("/user-details", async (req: Request, res: Response): Promise<any> => {
+app.get("/user-details", VolunteerAuthChecker, async (req: Request, res: Response): Promise<any> => {
 	try {
 		const userToken = req.query.userToken as string;
 
@@ -586,7 +588,7 @@ app.get("/user-details", async (req: Request, res: Response): Promise<any> => {
 	}
 });
 
-app.post("/update-user-details", async (req: Request, res: any) => {
+app.post("/update-user-details", VolunteerAuthChecker, async (req: Request, res: any) => {
 	try {
 		const { email, phone, address, city, state, zip } = req.body;
 
