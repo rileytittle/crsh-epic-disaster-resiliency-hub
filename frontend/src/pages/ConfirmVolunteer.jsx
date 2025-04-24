@@ -12,12 +12,19 @@ function ConfirmVolunteer() {
 		setTeamLeader(!teamLeader);
 	}
 	async function createVolunteer() {
+		let token = sessionStorage.getItem("userToken");
+		let headers = {
+			Authorization: `Bearer ${token}`,
+		};
 		await axios
 			.post(
 				`${import.meta.env.VITE_API_URL}/admin/create-volunteer/accept`,
 				{
 					id: id,
 					teamLeader: teamLeader,
+				},
+				{
+					headers,
 				}
 			)
 			.then((res) => {

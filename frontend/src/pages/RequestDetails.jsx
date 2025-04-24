@@ -30,6 +30,10 @@ function RequestDetails() {
 	const navigate = useNavigate();
 
 	async function closeRequest() {
+		let token = sessionStorage.getItem("userToken");
+		let headers = {
+			Authorization: `Bearer ${token}`,
+		};
 		await axios
 			.post(
 				`${
@@ -39,6 +43,9 @@ function RequestDetails() {
 					id: id,
 					email: email,
 					notes: notes,
+				},
+				{
+					headers,
 				}
 			)
 			.then((res) => {
@@ -49,6 +56,10 @@ function RequestDetails() {
 			});
 	}
 	async function acceptRequest() {
+		let token = sessionStorage.getItem("userToken");
+		let headers = {
+			Authorization: `Bearer ${token}`,
+		};
 		await axios
 			.post(
 				`${
@@ -57,7 +68,8 @@ function RequestDetails() {
 				{
 					id: id,
 					email: email,
-				}
+				},
+				{ headers }
 			)
 			.then((res) => {
 				navigate("/homeowner-requests");
@@ -67,6 +79,10 @@ function RequestDetails() {
 			});
 	}
 	async function rejectRequest() {
+		let token = sessionStorage.getItem("userToken");
+		let headers = {
+			Authorization: `Bearer ${token}`,
+		};
 		await axios
 			.post(
 				`${
@@ -75,7 +91,8 @@ function RequestDetails() {
 				{
 					id: id,
 					email: email,
-				}
+				},
+				{ headers }
 			)
 			.then((res) => {
 				navigate("/homeowner-requests");
@@ -93,7 +110,7 @@ function RequestDetails() {
 				`${
 					import.meta.env.VITE_API_URL
 				}/admin/homeowner-requests/assigned-volunteers/${id}`,
-				{ headers }
+				{ headers: headers }
 			)
 			.then((res) => {
 				console.log(res.data);

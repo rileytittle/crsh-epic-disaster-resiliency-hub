@@ -10,6 +10,8 @@ import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/mailService";
+import { AdminAuthChecker } from "../utils/adminAuth.utils";
+
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
@@ -38,7 +40,7 @@ if (IN_DEVELOPMENT) {
 
 let app = Router();
 
-app.post("/create-account", async (req, res) => {
+app.post("/create-account", AdminAuthChecker, async (req, res) => {
 	try {
 		let email = req.body.email;
 		let password = req.body.password;
@@ -62,7 +64,7 @@ app.post("/create-account", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.post("/login", async (req, res) => {
+app.post("/login", AdminAuthChecker, async (req, res) => {
 	try {
 		//write some logic here
 		if (req.headers["authorization"]) {
@@ -121,7 +123,7 @@ app.post("/login", async (req, res) => {
 		console.log(e);
 	}
 });
-app.post("/create-volunteer/accept", async (req, res) => {
+app.post("/create-volunteer/accept", AdminAuthChecker, async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
@@ -181,7 +183,7 @@ app.post("/create-volunteer/accept", async (req, res) => {
 		res.status(400).send(e);
 	}
 });
-app.post("/create-volunteer/reject", async (req, res) => {
+app.post("/create-volunteer/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
 			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
@@ -199,7 +201,7 @@ app.post("/create-volunteer/reject", async (req, res) => {
 		res.status(400).send("Problem rejected application");
 	}
 });
-app.get("/create-volunteer/applications", async (req, res) => {
+app.get("/create-volunteer/applications", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
 			"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
@@ -209,7 +211,7 @@ app.get("/create-volunteer/applications", async (req, res) => {
 		res.status(400).send("Something went wrong");
 	}
 });
-app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
+app.get("/homeowner-requests/assigned-volunteers/:id", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
 			"SELECT * FROM volunteer WHERE assignment = $1",
@@ -221,7 +223,7 @@ app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
 	}
 });
 
-app.post("/homeowner-requests/close", async (req, res) => {
+app.post("/homeowner-requests/close", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id && req.body.notes) {
 			let result = await pool.query(
@@ -253,7 +255,7 @@ app.post("/homeowner-requests/close", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.post("/homeowner-requests/accept", async (req, res) => {
+app.post("/homeowner-requests/accept", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id) {
 			let result = await pool.query(
@@ -282,7 +284,7 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.get("/assign-volunteer/list", async (req, res) => {
+app.get("/assign-volunteer/list", AdminAuthChecker, async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
 		const result = await pool.query(
@@ -322,7 +324,7 @@ app.get("/assign-volunteer/list", async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch volunteers" });
 	}
 });
-app.patch("/volunteers/volunteer-details", async (req, res) => {
+app.patch("/volunteers/volunteer-details", AdminAuthChecker, async (req, res) => {
 	try {
 		if (
 			![
@@ -356,7 +358,7 @@ app.patch("/volunteers/volunteer-details", async (req, res) => {
 		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
-app.post("/assign-volunteer/updateAssignment", async (req, res) => {
+app.post("/assign-volunteer/updateAssignment", AdminAuthChecker, async (req, res) => {
 	let assignment = req.body.assignment;
 	let volunteerIds = req.body.volunteerIds; // Now it's an array of IDs
 	console.log(assignment, volunteerIds);
@@ -415,7 +417,7 @@ app.post("/assign-volunteer/updateAssignment", async (req, res) => {
 		res.status(500).send({ message: "Database error." });
 	}
 });
-app.post("/homeowner-requests/reject", async (req, res) => {
+app.post("/homeowner-requests/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id) {
 			let result = await pool.query(
@@ -444,7 +446,7 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.delete("/volunteers/volunteer-details", async (req, res) => {
+app.delete("/volunteers/volunteer-details", AdminAuthChecker, async (req, res) => {
 	try {
 		let areaToChange = "";
 		if (req.body.selectedArea === "Hospitality Team") {
@@ -495,7 +497,7 @@ app.delete("/volunteers/volunteer-details", async (req, res) => {
 		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
 });
-app.get("/volunteers/volunteer-details/:id", async (req, res) => {
+app.get("/volunteers/volunteer-details/:id", AdminAuthChecker, async (req, res) => {
 	try {
 		let volunteer = await pool.query(
 			"SELECT * FROM volunteer WHERE id = $1",
@@ -559,7 +561,7 @@ app.get("/volunteers/volunteer-details/:id", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.get("/homeowner-requests", async (req, res) => {
+app.get("/homeowner-requests", AdminAuthChecker, async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
 		let requestList: HelpRequest[] = [];
@@ -630,7 +632,7 @@ app.get("/homeowner-requests", async (req, res) => {
 		res.send(e);
 	}
 });
-app.get("/volunteers", async (req, res) => {
+app.get("/volunteers", AdminAuthChecker, async (req, res) => {
 	try {
 		let volunteers = await pool.query("SELECT * FROM volunteer");
 		res.status(200).send(volunteers.rows);
@@ -638,7 +640,7 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.post("/reports", async (req, res) => {
+app.post("/reports", AdminAuthChecker, async (req, res) => {
 	let queryString = "SELECT * FROM request";
 	let queryConditions: string[] = [];
 	let year = parseInt(req.body.year);
@@ -758,7 +760,7 @@ app.post("/reports", async (req, res) => {
 		res.status(400).send({ message: "No records found" });
 	}
 });
-app.get("/notifications", async (req, res) => {
+app.get("/notifications", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(`
 		SELECT 
