@@ -35,7 +35,7 @@ const mg = mailgun({
 	domain: process.env.MAILGUN_DOMAIN as string,
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+const JWT_SECRET = process.env.SECRET_KEY || "your_jwt_secret";
 
 //Request Password Reset (Generate JWT & Send Email)
 router.post(
