@@ -8,7 +8,7 @@ export default function Homepage() {
 				</h1>
 			</div>
 			<div className="text-center mt-4">
-				<h4 className="display-4 text-primary">
+				<h4 className="display-7 text-primary">
 					<a href="https://epiccommunitycenter.org/">EPIC Community Resource Center</a>
 				</h4>
 			</div>
