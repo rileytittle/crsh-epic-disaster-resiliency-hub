@@ -227,7 +227,7 @@ app.post("/homeowner-requests/close", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id && req.body.notes) {
 			let result = await pool.query(
-				"UPDATE request SET status = 'Resolved', notes = $1 WHERE request_id = $2",
+				"UPDATE request SET status = 'Completed', notes = $1 WHERE request_id = $2",
 				[req.body.notes, parseInt(req.body.id)]
 			);
 			let result2 = await pool.query(

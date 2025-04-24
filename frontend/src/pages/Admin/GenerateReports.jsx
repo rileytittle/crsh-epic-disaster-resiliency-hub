@@ -199,7 +199,7 @@ function GenerateReports() {
 									<option value="Accepted">Accepted</option>
 									<option value="Active">Active</option>
 									<option value="Rejected">Rejected</option>
-									<option value="Resolved">Resolved</option>
+									<option value="Completed">Completed</option>
 								</select>
 							</div>
 
