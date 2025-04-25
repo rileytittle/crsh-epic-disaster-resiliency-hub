@@ -11,7 +11,7 @@ console.log("MAILGUN_DOMAIN:", process.env.MAILGUN_DOMAIN);
 
 
   const emailData = {
-    from: "EPIC <no-reply@mg.epic-disaster-relief.com>",
+    from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
     to,
     subject,
     text,

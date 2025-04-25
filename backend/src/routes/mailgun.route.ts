@@ -58,11 +58,12 @@ router.post(
 				expiresIn: "1h",
 			});
 
-			const resetLink = `https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/reset-password?token=${resetToken}`;
+			const resetLink = `${process.env.FRONTEND_DOMAIN}/volunteer/reset-password?token=${resetToken}`;
+
 
 			//Send email
 			const emailData = {
-				from: "EPIC <no-reply@mg.epic-disaster-relief.com>",
+				from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
 				to: email,
 				subject: "Password Reset Request",
 				text: `Click the link to reset your password: ${resetLink}`,
