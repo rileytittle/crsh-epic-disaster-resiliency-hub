@@ -10,8 +10,7 @@ function CreateVolunteer() {
 
 		axios
 			.get(
-				`${
-					import.meta.env.VITE_API_URL
+				`${import.meta.env.VITE_API_URL
 				}/admin/create-volunteer/applications`,
 				{
 					headers: {
@@ -32,30 +31,42 @@ function CreateVolunteer() {
 	return (
 		<>
 			{applications.length > 0 ? (
-				<div className="card">
-					<div className="card-body">
-						{applications.map((application) => (
-							<ApplicationCard
-								key={application.id}
-								id={application.id}
-								firstName={application.first_name} // Updated for snake_case
-								lastName={application.last_name} // Updated for snake_case
-								email={application.email}
-								areasOfHelp={[
-									application.logistic_tracking &&
+				<div className="m-5">
+					<div className="mt-4">
+						<h1 className="display-6 text-primary">
+							Volunteer Applications
+						</h1>
+					</div>
+					<div className="card">
+						<div className="card-body">
+							{applications.map((application) => (
+								<ApplicationCard
+									key={application.id}
+									id={application.id}
+									firstName={application.first_name} // Updated for snake_case
+									lastName={application.last_name} // Updated for snake_case
+									email={application.email}
+									areasOfHelp={[
+										application.logistic_tracking &&
 										"Logistic Tracking",
-									application.community_helpers &&
+										application.community_helpers &&
 										"Community Helpers",
-									application.hospitality && "Hospitality",
-									application.community_outreach &&
+										application.hospitality && "Hospitality",
+										application.community_outreach &&
 										"Community Outreach",
-								].filter(Boolean)} // Dynamically compute areas of help
-							/>
-						))}
+									].filter(Boolean)} // Dynamically compute areas of help
+								/>
+							))}
+						</div>
 					</div>
 				</div>
 			) : (
-				<h2>No Volunteer Applications found</h2>
+				<div className="text-center">
+					<h1 className="display-6 text-primary">
+						No Volunteer Applications Found
+					</h1>
+				</div>
+
 			)}
 		</>
 	);

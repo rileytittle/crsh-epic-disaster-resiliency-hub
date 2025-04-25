@@ -58,7 +58,7 @@ function ActiveRequests() {
 		setSelectedVolunteer(null);
 	};
 
-	const handleMoreInfoButtonClick = () => {};
+	const handleMoreInfoButtonClick = () => { };
 
 	const filteredRequests = requests.filter((request) => {
 		const fullName =
@@ -71,8 +71,12 @@ function ActiveRequests() {
 	});
 
 	return (
-		<div className="container mt-5">
-			<h1>Current Homeowner Requests</h1>
+		<div className="m-5">
+			<div className="mt-4">
+				<h1 className="display-6 text-primary">
+					Current Homeowner Requests
+				</h1>
+			</div>
 
 			<div className="mb-3">
 				<input

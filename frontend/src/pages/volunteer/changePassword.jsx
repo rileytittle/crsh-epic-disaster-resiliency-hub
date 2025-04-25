@@ -73,8 +73,12 @@ function PasswordChange() {
 				<button className="btn btn-secondary mb-3" onClick={() => navigate("/volunteer-dashboard")}>← Back to Dashboard</button>
 			</div>
 			<center>
-				<h3>Change your Password</h3>
-				<br />
+				
+			<div className="text-center">
+					<h1 className="display-5 text-primary">
+						Change your Password
+					</h1>
+				</div>
 
 				{error && (
 					<div

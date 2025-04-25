@@ -25,39 +25,51 @@ function HomeownerRequests() {
 			});
 	}, []);
 	return (
-		<>
+
+		<div className="m-5">
 			{requests.length > 0 ? (
-				<div className="card">
-					<div className="card-body row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5">
-						{requests.map((request) => (
-							<RequestCard
-								key={request.id}
-								id={request.id}
-								firstName={request.firstName}
-								lastName={request.lastName}
-								email={request.email}
-								phoneNumber={request.phoneNumber}
-								streetAddress1={request.streetAddress1}
-								streetAddress2={request.streetAddress2}
-								city={request.city}
-								state={request.state}
-								zip={request.zipCode}
-								county={request.county}
-								status={request.status}
-								reasonRejected={request.reasonRejected}
-								helpType={request.helpType}
-								other={request.other}
-								description={request.description}
-								dateCreated={request.dateCreated}
-								timeCreated={request.timeCreated}
-							></RequestCard>
-						))}
+				<div className="mt-4">
+					<h1 className="display-6 text-primary">
+						New Homeowner Requests
+					</h1>
+					<div className="card">
+						<div className="card-body">
+							<div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5">
+								{requests.map((request) => (
+									<RequestCard
+										key={request.id}
+										id={request.id}
+										firstName={request.firstName}
+										lastName={request.lastName}
+										email={request.email}
+										phoneNumber={request.phoneNumber}
+										streetAddress1={request.streetAddress1}
+										streetAddress2={request.streetAddress2}
+										city={request.city}
+										state={request.state}
+										zip={request.zipCode}
+										county={request.county}
+										status={request.status}
+										reasonRejected={request.reasonRejected}
+										helpType={request.helpType}
+										other={request.other}
+										description={request.description}
+										dateCreated={request.dateCreated}
+										timeCreated={request.timeCreated}
+									></RequestCard>
+								))}
+							</div>
+						</div>
 					</div>
 				</div>
 			) : (
-				<h2>No Homeowner Requests found</h2>
+				<div className="text-center mt-4">
+					<h1 className="display-6 text-primary">
+						No Homeowner Requests found
+					</h1>
+				</div>
 			)}
-		</>
+		</div>
 	);
 }
 

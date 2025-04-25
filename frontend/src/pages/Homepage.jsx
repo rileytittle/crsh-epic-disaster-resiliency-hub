@@ -8,9 +8,11 @@ export default function Homepage() {
 				</h1>
 			</div>
 			<div className="text-center mt-4">
-				<h4 className="display-7 text-primary">
-					<a href="https://epiccommunitycenter.org/">EPIC Community Resource Center</a>
-				</h4>
+				<a href="https://epiccommunitycenter.org/" className="display-7 btn btn-primary">
+					<h4 className="display-7">
+						EPIC Community Resource Center
+					</h4>
+				</a>
 			</div>
 			<div className="d-flex flex-column align-items-center">
 				<div className="image-container">

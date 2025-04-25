@@ -156,7 +156,7 @@ const VolunteerForm = () => {
 		}
 
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, { 
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/volunteer/create`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -180,236 +180,251 @@ const VolunteerForm = () => {
 	const handleMouseLeave = () => setTooltipText("");
 
 	return (
-		<form className={styles.volunteerForm} onSubmit={handleSubmit}>
-			<input
-				className={`${styles.volunteerInput} ${touched.firstName && errors.firstName ? styles.error : ""}`}
-				type="text"
-				name="firstName"
-				placeholder="First Name"
-				value={formData.firstName}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.firstName && errors.firstName && <p className={styles.error}>{errors.firstName}</p>}
-
-			<input
-				className={`${styles.volunteerInput} ${touched.lastName && errors.lastName ? styles.error : ""}`}
-				type="text"
-				name="lastName"
-				placeholder="Last Name"
-				value={formData.lastName}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.lastName && errors.lastName && <p className={styles.error}>{errors.lastName}</p>}
-
-			<input
-				className={`${styles.volunteerInput} ${touched.phoneNumber && errors.phoneNumber ? styles.error : ""}`}
-				type="tel"
-				name="phoneNumber"
-				placeholder="Phone Number"
-				value={formData.phoneNumber}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.phoneNumber && errors.phoneNumber && <p className={styles.error}>{errors.phoneNumber}</p>}
-
-			<input
-				className={`${styles.volunteerInput} ${touched.email && errors.email ? styles.error : ""}`}
-				type="email"
-				name="email"
-				placeholder="Email"
-				value={formData.email}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.email && errors.email && <p className={styles.error}>{errors.email}</p>}
-
-			<input
-				className={`${styles.volunteerInput} ${touched.streetAddress1 && errors.streetAddress1 ? styles.error : ""}`}
-				type="text"
-				name="streetAddress1"
-				placeholder="Street Address Line 1"
-				value={formData.streetAddress1}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.streetAddress1 && errors.streetAddress1 && <p className={styles.error}>{errors.streetAddress1}</p>}
-
-			<input
-				className={styles.volunteerInput}
-				type="text"
-				name="streetAddress2"
-				placeholder="Street Address Line 2"
-				value={formData.streetAddress2}
-				onChange={handleChange}
-			/>
-
-			<input
-				className={`${styles.volunteerInput} ${touched.city && errors.city ? styles.error : ""}`}
-				type="text"
-				name="city"
-				placeholder="City"
-				value={formData.city}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.city && errors.city && <p className={styles.error}>{errors.city}</p>}
-
-			<div className={styles.stateWrapper}>
-				<input
-					className={`${styles.volunteerInput} ${touched.state && errors.state ? styles.error : ""}`}
-					type="text"
-					name="state"
-					placeholder="State"
-					value="Florida"
-					onChange={handleChange}
-					onBlur={handleBlur}
-					required
-					disabled
-				/>
-				{touched.state && errors.state && <p className={styles.error}>{errors.state}</p>}
+		<div className="container mt-5">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+					Apply to Volunteer
+				</h1>
 			</div>
-
-			<select
-				id="county"
-				name="county"
-				className={`${styles.volunteerInput} ${touched.county && errors.county ? styles.error : ""}`}
-				value={formData.county}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			>
-				<option>Choose...</option>
-				<option>Charlotte</option>
-				<option>Sarasota</option>
-			</select>
-			{touched.county && errors.county && <p className={styles.error}>{errors.county}</p>}
-
-			<input
-				className={`${styles.volunteerInput} ${touched.zipCode && errors.zipCode ? styles.error : ""}`}
-				type="text"
-				name="zipCode"
-				placeholder="Zip Code"
-				value={formData.zipCode}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				required
-			/>
-			{touched.zipCode && errors.zipCode && <p className={styles.error}>{errors.zipCode}</p>}
-
-			<div className={styles.areasOfHelpWrapper}>
-				<label className={styles.areasOfHelpLabel}>Areas of Help:</label>
-				<div className={styles.areasOfHelpContainer}>
-					<div
-						className={styles.checkboxWrapper}
-						onMouseEnter={() => handleMouseEnter("Collaborate with Sarasota Government contact to acquire volunteers from other areas if required. Assure volunteer applications and waivers are completed. Data Entry to CRM software. Train volunteers with basic and expected roles. Manage and collect volunteer hours for reporting to the county. Make phone calls to clients requesting work, or volunteers. Answer phone calls.")}
-						onMouseLeave={handleMouseLeave}
-					>
-						<label className={styles.volunteerLabel}>
-							<input
-								className={styles.checkboxInput}
-								type="checkbox"
-								name="areasOfHelp"
-								value="Volunteer Management and Administration Team"
-								checked={formData.areasOfHelp.includes("Volunteer Management and Administration Team")}
-								onChange={handleChange}
-							/>
-							Volunteer Management and Administration
-						</label>
-					</div>
-
-					<div
-						className={styles.checkboxWrapper}
-						onMouseEnter={() => handleMouseEnter("Makes sure volunteers are fed and rested. Keeps the food management systems in order and items needed for delivery. Collects donations such as clothes, shoes, towels and hygiene items for delivery.")}
-						onMouseLeave={handleMouseLeave}
-					>
-						<label className={styles.volunteerLabel}>
-							<input
-								className={styles.checkboxInput}
-								type="checkbox"
-								name="areasOfHelp"
-								value="Hospitality Team"
-								checked={formData.areasOfHelp.includes("Hospitality Team")}
-								onChange={handleChange}
-							/>
-							Hospitality
-						</label>
-					</div>
-
-
-					<div
-						className={styles.checkboxWrapper}
-						onMouseEnter={() => handleMouseEnter("Identifies where things are located, keeps track of all materials signed out, and tracks the return. Organize, manage incoming supplies of food, water, tarps, equipment, etc.")}
-						onMouseLeave={handleMouseLeave}
-					>
-						<label className={styles.volunteerLabel}>
-							<input
-								className={styles.checkboxInput}
-								type="checkbox"
-								name="areasOfHelp"
-								value="Logistic Tracking Team"
-								checked={formData.areasOfHelp.includes("Logistic Tracking Team")}
-								onChange={handleChange}
-							/>
-							Logistic Tracking
-						</label>
-					</div>
-
-
-					<div
-						className={styles.checkboxWrapper}
-						onMouseEnter={() => handleMouseEnter("Engage with local community to raise awareness about the hub’s services. Notify neighborhoods without power or communication ability on where to get help. May require visiting devastated neighborhoods and handing out flyers.")}
-						onMouseLeave={handleMouseLeave}
-					>
-						<label className={styles.volunteerLabel}>
-							<input
-								className={styles.checkboxInput}
-								type="checkbox"
-								name="areasOfHelp"
-								value="Community Outreach Team"
-								checked={formData.areasOfHelp.includes("Community Outreach Team")}
-								onChange={handleChange}
-							/>
-							Community Outreach
-						</label>
-					</div>
-
-
-					<div
-						className={styles.checkboxWrapper}
-						onMouseEnter={() => handleMouseEnter("Physically helping in the affected areas for indoor or outdoor debris removal, general")}
-						onMouseLeave={handleMouseLeave}
-					>
-						<label className={styles.volunteerLabel}>
-							<input
-								className={styles.checkboxInput}
-								type="checkbox"
-								name="areasOfHelp"
-								value="Community Helpers Team"
-								checked={formData.areasOfHelp.includes("Community Helpers Team")}
-								onChange={handleChange}
-							/>
-							EPIC Helpers
-						</label>
-					</div>
+			<div className="container mt-4">
+				<div className="text-center my-3">
+					<a className="btn btn-primary" href="/applyVolunteer/status">
+						Check the Status of your Application
+					</a>
 				</div>
 			</div>
 
-			<div className={styles.tooltipTextBlock}>
-				{tooltipText && <p>{tooltipText}</p>}
-			</div>
-			{errors.areasOfHelp && <p className={styles.error}>{errors.areasOfHelp}</p>}
-			<button type="submit" className={styles.volunteerButton}>
-				Submit
-			</button>
-		</form>
+			<form className={styles.volunteerForm} onSubmit={handleSubmit}>
+				<input
+					className={`${styles.volunteerInput} ${touched.firstName && errors.firstName ? styles.error : ""}`}
+					type="text"
+					name="firstName"
+					placeholder="First Name"
+					value={formData.firstName}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.firstName && errors.firstName && <p className={styles.error}>{errors.firstName}</p>}
+
+				<input
+					className={`${styles.volunteerInput} ${touched.lastName && errors.lastName ? styles.error : ""}`}
+					type="text"
+					name="lastName"
+					placeholder="Last Name"
+					value={formData.lastName}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.lastName && errors.lastName && <p className={styles.error}>{errors.lastName}</p>}
+
+				<input
+					className={`${styles.volunteerInput} ${touched.phoneNumber && errors.phoneNumber ? styles.error : ""}`}
+					type="tel"
+					name="phoneNumber"
+					placeholder="Phone Number"
+					value={formData.phoneNumber}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.phoneNumber && errors.phoneNumber && <p className={styles.error}>{errors.phoneNumber}</p>}
+
+				<input
+					className={`${styles.volunteerInput} ${touched.email && errors.email ? styles.error : ""}`}
+					type="email"
+					name="email"
+					placeholder="Email"
+					value={formData.email}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.email && errors.email && <p className={styles.error}>{errors.email}</p>}
+
+				<input
+					className={`${styles.volunteerInput} ${touched.streetAddress1 && errors.streetAddress1 ? styles.error : ""}`}
+					type="text"
+					name="streetAddress1"
+					placeholder="Street Address Line 1"
+					value={formData.streetAddress1}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.streetAddress1 && errors.streetAddress1 && <p className={styles.error}>{errors.streetAddress1}</p>}
+
+				<input
+					className={styles.volunteerInput}
+					type="text"
+					name="streetAddress2"
+					placeholder="Street Address Line 2"
+					value={formData.streetAddress2}
+					onChange={handleChange}
+				/>
+
+				<input
+					className={`${styles.volunteerInput} ${touched.city && errors.city ? styles.error : ""}`}
+					type="text"
+					name="city"
+					placeholder="City"
+					value={formData.city}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.city && errors.city && <p className={styles.error}>{errors.city}</p>}
+
+				<div className={styles.stateWrapper}>
+					<input
+						className={`${styles.volunteerInput} ${touched.state && errors.state ? styles.error : ""}`}
+						type="text"
+						name="state"
+						placeholder="State"
+						value="Florida"
+						onChange={handleChange}
+						onBlur={handleBlur}
+						required
+						disabled
+					/>
+					{touched.state && errors.state && <p className={styles.error}>{errors.state}</p>}
+				</div>
+
+				<select
+					id="county"
+					name="county"
+					className={`${styles.volunteerInput} ${touched.county && errors.county ? styles.error : ""}`}
+					value={formData.county}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				>
+					<option>Choose...</option>
+					<option>Charlotte</option>
+					<option>Sarasota</option>
+				</select>
+				{touched.county && errors.county && <p className={styles.error}>{errors.county}</p>}
+
+				<input
+					className={`${styles.volunteerInput} ${touched.zipCode && errors.zipCode ? styles.error : ""}`}
+					type="text"
+					name="zipCode"
+					placeholder="Zip Code"
+					value={formData.zipCode}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					required
+				/>
+				{touched.zipCode && errors.zipCode && <p className={styles.error}>{errors.zipCode}</p>}
+
+				<div className={styles.areasOfHelpWrapper}>
+					<label className={styles.areasOfHelpLabel}>Areas of Help:</label>
+					<div className={styles.areasOfHelpContainer}>
+						<div
+							className={styles.checkboxWrapper}
+							onMouseEnter={() => handleMouseEnter("Collaborate with Sarasota Government contact to acquire volunteers from other areas if required. Assure volunteer applications and waivers are completed. Data Entry to CRM software. Train volunteers with basic and expected roles. Manage and collect volunteer hours for reporting to the county. Make phone calls to clients requesting work, or volunteers. Answer phone calls.")}
+							onMouseLeave={handleMouseLeave}
+						>
+							<label className={styles.volunteerLabel}>
+								<input
+									className={styles.checkboxInput}
+									type="checkbox"
+									name="areasOfHelp"
+									value="Volunteer Management and Administration Team"
+									checked={formData.areasOfHelp.includes("Volunteer Management and Administration Team")}
+									onChange={handleChange}
+								/>
+								Volunteer Management and Administration
+							</label>
+						</div>
+
+						<div
+							className={styles.checkboxWrapper}
+							onMouseEnter={() => handleMouseEnter("Makes sure volunteers are fed and rested. Keeps the food management systems in order and items needed for delivery. Collects donations such as clothes, shoes, towels and hygiene items for delivery.")}
+							onMouseLeave={handleMouseLeave}
+						>
+							<label className={styles.volunteerLabel}>
+								<input
+									className={styles.checkboxInput}
+									type="checkbox"
+									name="areasOfHelp"
+									value="Hospitality Team"
+									checked={formData.areasOfHelp.includes("Hospitality Team")}
+									onChange={handleChange}
+								/>
+								Hospitality
+							</label>
+						</div>
+
+
+						<div
+							className={styles.checkboxWrapper}
+							onMouseEnter={() => handleMouseEnter("Identifies where things are located, keeps track of all materials signed out, and tracks the return. Organize, manage incoming supplies of food, water, tarps, equipment, etc.")}
+							onMouseLeave={handleMouseLeave}
+						>
+							<label className={styles.volunteerLabel}>
+								<input
+									className={styles.checkboxInput}
+									type="checkbox"
+									name="areasOfHelp"
+									value="Logistic Tracking Team"
+									checked={formData.areasOfHelp.includes("Logistic Tracking Team")}
+									onChange={handleChange}
+								/>
+								Logistic Tracking
+							</label>
+						</div>
+
+
+						<div
+							className={styles.checkboxWrapper}
+							onMouseEnter={() => handleMouseEnter("Engage with local community to raise awareness about the hub’s services. Notify neighborhoods without power or communication ability on where to get help. May require visiting devastated neighborhoods and handing out flyers.")}
+							onMouseLeave={handleMouseLeave}
+						>
+							<label className={styles.volunteerLabel}>
+								<input
+									className={styles.checkboxInput}
+									type="checkbox"
+									name="areasOfHelp"
+									value="Community Outreach Team"
+									checked={formData.areasOfHelp.includes("Community Outreach Team")}
+									onChange={handleChange}
+								/>
+								Community Outreach
+							</label>
+						</div>
+
+
+						<div
+							className={styles.checkboxWrapper}
+							onMouseEnter={() => handleMouseEnter("Physically helping in the affected areas for indoor or outdoor debris removal, general")}
+							onMouseLeave={handleMouseLeave}
+						>
+							<label className={styles.volunteerLabel}>
+								<input
+									className={styles.checkboxInput}
+									type="checkbox"
+									name="areasOfHelp"
+									value="Community Helpers Team"
+									checked={formData.areasOfHelp.includes("Community Helpers Team")}
+									onChange={handleChange}
+								/>
+								EPIC Helpers
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div className={styles.tooltipTextBlock}>
+					{tooltipText && <p>{tooltipText}</p>}
+				</div>
+				{errors.areasOfHelp && <p className={styles.error}>{errors.areasOfHelp}</p>}
+				<button type="submit" className={styles.volunteerButton}>
+					Submit
+				</button>
+			</form>
+		</div>
 	);
 };
 

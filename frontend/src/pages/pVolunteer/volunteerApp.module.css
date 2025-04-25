@@ -271,3 +271,17 @@ button:hover {
 }
 
 
+.cardParent0 {
+  background-color: #f9f9f9 !important;
+}
+
+.cardParent1 {
+  background-color: #f5f5f5 !important;
+}
+
+.cardParent2 {
+  background-color: #f1f1f1 !important;
+}
+.counter {
+  color: #00000080;
+}

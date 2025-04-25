@@ -13,7 +13,7 @@ import { Job } from "../models/job.model";
 import * as dotenv from "dotenv";
 // Load custom .env file
 dotenv.config();
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = process.env.IN_DEVELOPMENT === "true";
 
 let pool: Pool;
 
@@ -225,11 +225,12 @@ app.get("/requestHelp/status", async (req, res) => {
 		let requests = await pool.query(`
 			SELECT status, reason_rejected, yard_cleanup, interior_cleanup, emotional_support, cleaning_supplies, clean_water, emergency_food, other, description, date_created, time_created
 			FROM request
-			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND street_address_2 ILIKE '${street_address_2}';
+			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND street_address_2 ILIKE '${street_address_2}'
+			ORDER BY date_created DESC, time_created DESC;
 		`);
 
 		if (requests.rows.length === 0) {
-			return res.status(404).json({ message: "No data matches query" }); // Return 404 if no rows are found
+			return res.status(404).json({ message: "No results found. Please double check your spelling" }); // Return 404 if no rows are found
 		}
 
 		let request = requests.rows[0];
@@ -255,8 +256,9 @@ app.get("/requestHelp/status", async (req, res) => {
 		if (request.emergency_food) {
 			helpType.push("Emergency food");
 		}
-
-		let other = request.other;
+		if (request.other != "") {
+			helpType.push(request.other);
+		}
 		let description = request.description;
 		let dateCreated = request.date_created;
 		let timeCreated = request.time_created;
@@ -265,7 +267,6 @@ app.get("/requestHelp/status", async (req, res) => {
 			status,
 			reasonRejected,
 			helpType,
-			other,
 			description,
 			dateCreated,
 			timeCreated

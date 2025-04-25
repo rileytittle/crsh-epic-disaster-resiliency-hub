@@ -252,16 +252,16 @@ const HomeownerApply = () => {
 	};
 	return (
 		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
-		<div>
-			<div className="text-center text-decoration-underline fw-bold">
-				<h2>Request Help</h2>
+		<div className="container mt-5">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+					Request Help
+				</h1>
 			</div>
 			<div className="container mt-4">
 				<div className="text-center my-3">
-					<a href="/request-help/status">
-						<button className="btn btn-info">
+					<a className="btn btn-primary" href="/request-help/status">
 							Check the Status of your Application
-						</button>
 					</a>
 				</div>
 				<div className="text-center mb-2">

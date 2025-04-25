@@ -1,22 +1,21 @@
-export class HomeownerStatus {
+import e from "express";
+
+export class VolunteerApplicationStatus {
 	status: string;
 	reasonRejected: string;
-	helpType: string[];
-	description: string;
+	helpAreas: string[];
 	dateCreated: Date;
 	timeCreated: string;
 	constructor(
 		status: string,
 		reasonRejected: string,
-		helpType: string[],
-		description: string,
+		teams: string[],
 		dateCreated: Date,
 		timeCreated: string
 	) {
 		this.status = status;
 		this.reasonRejected = reasonRejected;
-		this.helpType = helpType;
-		this.description = description;
+		this.helpAreas = teams;
 		this.dateCreated = dateCreated;
 		this.timeCreated = timeCreated;
 	}

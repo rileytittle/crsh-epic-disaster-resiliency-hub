@@ -18,7 +18,7 @@ const path = require("path");
 let saltRounds = 10;
 require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "unsecured";
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = process.env.IN_DEVELOPMENT === "true";
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
