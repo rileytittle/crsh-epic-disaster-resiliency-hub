@@ -53,14 +53,6 @@ const MainLayout = () => {
 									<ul className="dropdown-menu">
 										<li>
 											<a
-												className="dropdown-item disabled"
-												href="#"
-											>
-												Action
-											</a>
-										</li>
-										<li>
-											<a
 												className="dropdown-item"
 												href="/volunteer/account-details"
 											>
@@ -75,22 +67,7 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/volunteer/resetPassword"
-											>
-												Reset Password
-											</a>
-										</li>
-										<li>
-											<a
-												className="nav-item nav-link"
-												href="/volunteer/jobs"
-											>
-												Check Job Offer
-											</a>
-										</li>
+
 										<li>
 											<hr className="dropdown-divider" />
 										</li>
@@ -104,14 +81,6 @@ const MainLayout = () => {
 										</li>
 										<li>
 											<hr className="dropdown-divider" />
-										</li>
-										<li>
-											<a
-												className="dropdown-item disabled"
-												href="#"
-											>
-												Disabled
-											</a>
 										</li>
 									</ul>
 								</li>
@@ -172,7 +141,7 @@ const MainLayout = () => {
 													className="dropdown-item"
 													href="/assignVolunteers"
 												>
-													Assign volunteers to job
+													Assign volunteers to request
 												</a>
 											</li>
 											<li>
@@ -235,19 +204,23 @@ const MainLayout = () => {
 							) : (
 								<></>
 							)}
-							{!sessionStorage.getItem("isLoggedIn") ? (
-								<li className="nav-item">
-									<a
-										className="nav-link"
-										href="/more-resources"
-									>
-										Resources
-									</a>
-								</li>
-							) : (
-								<></>
-							)}
 						</ul>
+						{!sessionStorage.getItem("isLoggedIn") ? (
+							<l className="nav-item">
+								<a
+									style={{
+										textDecoration: "none",
+										color: "black",
+									}}
+									className="nav-link"
+									href="/more-resources"
+								>
+									Resources
+								</a>
+							</l>
+						) : (
+							<></>
+						)}
 						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
 								<button
@@ -285,6 +258,22 @@ const MainLayout = () => {
 				</div>
 			</nav>
 			<Outlet />
+			<footer
+				className="text-end py-2"
+				style={{
+					position: "fixed",
+					bottom: 0,
+					right: 0,
+					width: "auto",
+					backgroundColor: "transparent", // Matches the body background
+					paddingRight: "1rem",
+				}}
+			>
+				<small>
+					<strong>CRSH Development</strong> ©{" "}
+					{new Date().getFullYear()}
+				</small>
+			</footer>
 		</>
 	);
 };

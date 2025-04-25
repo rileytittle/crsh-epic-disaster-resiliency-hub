@@ -24,18 +24,20 @@ function RequestCard({
 	return (
 		<div className="card mb-3" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
-				<h5 className="card-title">{firstName + " " + lastName}</h5>
-				<h6>{status}</h6>
-				<h7>{county} County</h7>
-				<br></br>
-				<h7>{zip}</h7>
-				<h7 className="card-subtitle mb-2 text-body-secondary">
+				<h3 className="card-title">{firstName + " " + lastName}</h3>
+				<h5>{email}</h5>
+				<h5>{phoneNumber}</h5>
+				<div>
+					{county} County, {zip}
+				</div>
+				<div>Wants help with:</div>
+				<div className="card-subtitle mb-2 text-body-secondary">
 					<ul>
 						{helpType.map((area, index) => (
 							<li key={index}>{area}</li>
 						))}
 					</ul>
-				</h7>
+				</div>
 				<Link
 					to="/homeowner-requests/request-details"
 					className="card-link"

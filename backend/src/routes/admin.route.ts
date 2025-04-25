@@ -10,13 +10,14 @@ import { Pool } from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/mailService";
+import { AdminAuthChecker } from "../utils/adminAuth.utils";
+
 const ExcelJS = require("exceljs");
 const fs = require("fs");
 const path = require("path");
 let saltRounds = 10;
 require("dotenv").config();
-const SECRET_KEY =
-	"0fb5f53f4d7ae5114979d94d01ddf11bf7e11d30dadf025732642995194fdf5fa0e62d5f726de0315e09c780319f98e512dc3c3a6c0ea8c847e7f1e76885bcd0";
+const SECRET_KEY = process.env.SECRET_KEY || "unsecured";
 const IN_DEVELOPMENT = false;
 let pool: Pool;
 
@@ -39,7 +40,7 @@ if (IN_DEVELOPMENT) {
 
 let app = Router();
 
-app.post("/create-account", async (req, res) => {
+app.post("/create-account", AdminAuthChecker, async (req, res) => {
 	try {
 		let email = req.body.email;
 		let password = req.body.password;
@@ -63,7 +64,7 @@ app.post("/create-account", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.post("/login", async (req, res) => {
+app.post("/login", AdminAuthChecker, async (req, res) => {
 	try {
 		//write some logic here
 		if (req.headers["authorization"]) {
@@ -122,7 +123,7 @@ app.post("/login", async (req, res) => {
 		console.log(e);
 	}
 });
-app.post("/create-volunteer/accept", async (req, res) => {
+app.post("/create-volunteer/accept", AdminAuthChecker, async (req, res) => {
 	//get areas of help and team lead variables from body
 	//create volunteer object and give it these variables
 	try {
@@ -182,10 +183,10 @@ app.post("/create-volunteer/accept", async (req, res) => {
 		res.status(400).send(e);
 	}
 });
-app.post("/create-volunteer/reject", async (req, res) => {
+app.post("/create-volunteer/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
-			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
+			"UPDATE volunteerapplications SET status = 'Rejected' WHERE email = $1",
 			[req.body.email]
 		);
 
@@ -200,33 +201,43 @@ app.post("/create-volunteer/reject", async (req, res) => {
 		res.status(400).send("Problem rejected application");
 	}
 });
-app.get("/create-volunteer/applications", async (req, res) => {
-	try {
-		let result = await pool.query(
-			"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
-		);
-		res.status(200).send(result.rows);
-	} catch (e) {
-		res.status(400).send("Something went wrong");
+app.get(
+	"/create-volunteer/applications",
+	AdminAuthChecker,
+	async (req, res) => {
+		try {
+			let result = await pool.query(
+				"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
+			);
+			res.status(200).send(result.rows);
+		} catch (e) {
+			res.status(400).send("Something went wrong");
+		}
 	}
-});
-app.get("/homeowner-requests/assigned-volunteers/:id", async (req, res) => {
-	try {
-		let result = await pool.query(
-			"SELECT * FROM volunteer WHERE assignment = $1",
-			[req.params.id]
-		);
-		res.status(200).send(result.rows);
-	} catch (e) {
-		res.status(500).send({ message: "There was an error in the server" });
+);
+app.get(
+	"/homeowner-requests/assigned-volunteers/:id",
+	AdminAuthChecker,
+	async (req, res) => {
+		try {
+			let result = await pool.query(
+				"SELECT * FROM volunteer WHERE assignment = $1",
+				[req.params.id]
+			);
+			res.status(200).send(result.rows);
+		} catch (e) {
+			res.status(500).send({
+				message: "There was an error in the server",
+			});
+		}
 	}
-});
+);
 
-app.post("/homeowner-requests/close", async (req, res) => {
+app.post("/homeowner-requests/close", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id && req.body.notes) {
 			let result = await pool.query(
-				"UPDATE request SET status = 'Resolved', notes = $1 WHERE request_id = $2",
+				"UPDATE request SET status = 'Completed', notes = $1 WHERE request_id = $2",
 				[req.body.notes, parseInt(req.body.id)]
 			);
 			let result2 = await pool.query(
@@ -254,7 +265,7 @@ app.post("/homeowner-requests/close", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.post("/homeowner-requests/accept", async (req, res) => {
+app.post("/homeowner-requests/accept", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id) {
 			let result = await pool.query(
@@ -283,7 +294,7 @@ app.post("/homeowner-requests/accept", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.get("/assign-volunteer/list", async (req, res) => {
+app.get("/assign-volunteer/list", AdminAuthChecker, async (req, res) => {
 	try {
 		// Query the VolunteerAccount table
 		const result = await pool.query(
@@ -323,100 +334,112 @@ app.get("/assign-volunteer/list", async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch volunteers" });
 	}
 });
-app.patch("/volunteers/volunteer-details", async (req, res) => {
-	try {
-		if (
-			![
-				"hospitality",
-				"community_helpers",
-				"community_outreach",
-				"admin_team",
-				"logistic_tracking",
-			].includes(req.body.selectedArea)
-		) {
-			res.status(400).send({ error: "Invalid area name" });
-		}
-
-		// Update the volunteer record
-		const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
-		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
-		if (result.rowCount) {
-			if (result.rowCount > 0) {
-				res.status(200).send({
-					message: "Successfully updated record",
-				});
-			} else {
-				res.status(404).send({
-					message: "Could not find a record to update.",
-				});
-			}
-		} else {
-			res.status(500).send({ message: "Internal server error" });
-		}
-	} catch (e) {
-		res.status(500).send({ Area: req.body.selectedArea, error: e });
-	}
-});
-app.post("/assign-volunteer/updateAssignment", async (req, res) => {
-	let assignment = req.body.assignment;
-	let volunteerIds = req.body.volunteerIds; // Now it's an array of IDs
-	console.log(assignment, volunteerIds);
-
-	if (!Array.isArray(volunteerIds) || volunteerIds.length === 0) {
-		return res.status(400).send({ message: "No volunteers selected." });
-	}
-
-	try {
-		// Start a transaction to ensure all updates are done atomically
-		const client = await pool.connect();
+app.patch(
+	"/volunteers/volunteer-details",
+	AdminAuthChecker,
+	async (req, res) => {
 		try {
-			await client.query("BEGIN"); // Begin the transaction
-
-			// Update each volunteer in the array
-			for (let volId of volunteerIds) {
-				await client.query(
-					'UPDATE "volunteer" SET "offered" = $1 WHERE "id" = $2',
-					[assignment, volId]
-				);
-			}
-			await client.query(
-				"UPDATE request SET status = 'Active' WHERE request_id = $1",
-				[assignment]
-			);
-			await client.query("COMMIT"); // Commit the transaction
-
-			// Get emails of assigned volunteers
-			const emailQuery = await client.query(
-				"SELECT email FROM volunteer WHERE id = ANY($1)",
-				[volunteerIds]
-			);
-
-			// Extract emails (in case multiple volunteers)
-			const emails: string[] = emailQuery.rows.map((row) => row.email);
-
-			// Send an email to each volunteer
-			for (const email of emails) {
-				await sendEmail(
-					email,
-					"You Have a New Volunteer Opportunity At EPIC",
-					"We are excited to inform you that you have a new volunteer opportunity!\nLogin to your volunteer account to see the details and accept it."
-				);
+			if (
+				![
+					"hospitality",
+					"community_helpers",
+					"community_outreach",
+					"admin_team",
+					"logistic_tracking",
+				].includes(req.body.selectedArea)
+			) {
+				res.status(400).send({ error: "Invalid area name" });
 			}
 
-			res.status(200).send({ message: "Volunteers Assigned" });
-		} catch (error) {
-			await client.query("ROLLBACK"); // Rollback the transaction in case of error
-			console.error("Error assigning volunteers:", error);
-			res.status(500).send({ message: "Failed to assign volunteers." });
-		} finally {
-			client.release(); // Release the client back to the pool
+			// Update the volunteer record
+			const updateQuery = `UPDATE volunteer SET ${req.body.selectedArea} = true WHERE id = $1`;
+			let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send({
+						message: "Successfully updated record",
+					});
+				} else {
+					res.status(404).send({
+						message: "Could not find a record to update.",
+					});
+				}
+			} else {
+				res.status(500).send({ message: "Internal server error" });
+			}
+		} catch (e) {
+			res.status(500).send({ Area: req.body.selectedArea, error: e });
 		}
-	} catch (error) {
-		console.error("Error with database transaction:", error);
-		res.status(500).send({ message: "Database error." });
 	}
-});
-app.post("/homeowner-requests/reject", async (req, res) => {
+);
+app.post(
+	"/assign-volunteer/updateAssignment",
+	AdminAuthChecker,
+	async (req, res) => {
+		let assignment = req.body.assignment;
+		let volunteerIds = req.body.volunteerIds; // Now it's an array of IDs
+		console.log(assignment, volunteerIds);
+
+		if (!Array.isArray(volunteerIds) || volunteerIds.length === 0) {
+			return res.status(400).send({ message: "No volunteers selected." });
+		}
+
+		try {
+			// Start a transaction to ensure all updates are done atomically
+			const client = await pool.connect();
+			try {
+				await client.query("BEGIN"); // Begin the transaction
+
+				// Update each volunteer in the array
+				for (let volId of volunteerIds) {
+					await client.query(
+						'UPDATE "volunteer" SET "offered" = $1 WHERE "id" = $2',
+						[assignment, volId]
+					);
+				}
+				await client.query(
+					"UPDATE request SET status = 'Active' WHERE request_id = $1",
+					[assignment]
+				);
+				await client.query("COMMIT"); // Commit the transaction
+
+				// Get emails of assigned volunteers
+				const emailQuery = await client.query(
+					"SELECT email FROM volunteer WHERE id = ANY($1)",
+					[volunteerIds]
+				);
+
+				// Extract emails (in case multiple volunteers)
+				const emails: string[] = emailQuery.rows.map(
+					(row) => row.email
+				);
+
+				// Send an email to each volunteer
+				for (const email of emails) {
+					await sendEmail(
+						email,
+						"You Have a New Volunteer Opportunity At EPIC",
+						"We are excited to inform you that you have a new volunteer opportunity!\nLogin to your volunteer account to see the details and accept it."
+					);
+				}
+
+				res.status(200).send({ message: "Volunteers Assigned" });
+			} catch (error) {
+				await client.query("ROLLBACK"); // Rollback the transaction in case of error
+				console.error("Error assigning volunteers:", error);
+				res.status(500).send({
+					message: "Failed to assign volunteers.",
+				});
+			} finally {
+				client.release(); // Release the client back to the pool
+			}
+		} catch (error) {
+			console.error("Error with database transaction:", error);
+			res.status(500).send({ message: "Database error." });
+		}
+	}
+);
+app.post("/homeowner-requests/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		if (req.body.id) {
 			let result = await pool.query(
@@ -445,122 +468,132 @@ app.post("/homeowner-requests/reject", async (req, res) => {
 		res.status(500).send({ message: "Internal server error" });
 	}
 });
-app.delete("/volunteers/volunteer-details", async (req, res) => {
-	try {
-		let areaToChange = "";
-		if (req.body.selectedArea === "Hospitality Team") {
-			areaToChange = "hospitality";
-		} else if (req.body.selectedArea === "Community Helpers") {
-			areaToChange = "community_helpers";
-		} else if (req.body.selectedArea === "Community Outreach") {
-			areaToChange = "community_outreach";
-		} else if (
-			req.body.selectedArea ===
-			"Volunteer Management and Administration Team"
-		) {
-			areaToChange = "admin_team";
-		} else if (req.body.selectedArea === "Logistic Tracking") {
-			areaToChange = "logistic_tracking";
-		}
-
-		// Ensure `areaToChange` is a valid column name.
-		if (
-			![
-				"hospitality",
-				"community_helpers",
-				"community_outreach",
-				"admin_team",
-				"logistic_tracking",
-			].includes(areaToChange)
-		) {
-			res.status(400).send({ error: "Invalid area name" });
-		}
-
-		// Update the volunteer record
-		const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
-		let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
-		if (result.rowCount) {
-			if (result.rowCount > 0) {
-				res.status(200).send({
-					message: "Successfully updated record",
-				});
-			} else {
-				res.status(404).send({
-					message: "Could not find a record to update.",
-				});
+app.delete(
+	"/volunteers/volunteer-details",
+	AdminAuthChecker,
+	async (req, res) => {
+		try {
+			let areaToChange = "";
+			if (req.body.selectedArea === "Hospitality Team") {
+				areaToChange = "hospitality";
+			} else if (req.body.selectedArea === "Community Helpers") {
+				areaToChange = "community_helpers";
+			} else if (req.body.selectedArea === "Community Outreach") {
+				areaToChange = "community_outreach";
+			} else if (
+				req.body.selectedArea ===
+				"Volunteer Management and Administration Team"
+			) {
+				areaToChange = "admin_team";
+			} else if (req.body.selectedArea === "Logistic Tracking") {
+				areaToChange = "logistic_tracking";
 			}
-		} else {
-			res.status(500).send({ message: "Internal server error" });
+
+			// Ensure `areaToChange` is a valid column name.
+			if (
+				![
+					"hospitality",
+					"community_helpers",
+					"community_outreach",
+					"admin_team",
+					"logistic_tracking",
+				].includes(areaToChange)
+			) {
+				res.status(400).send({ error: "Invalid area name" });
+			}
+
+			// Update the volunteer record
+			const updateQuery = `UPDATE volunteer SET ${areaToChange} = false WHERE id = $1`;
+			let result = await pool.query(updateQuery, [parseInt(req.body.id)]);
+			if (result.rowCount) {
+				if (result.rowCount > 0) {
+					res.status(200).send({
+						message: "Successfully updated record",
+					});
+				} else {
+					res.status(404).send({
+						message: "Could not find a record to update.",
+					});
+				}
+			} else {
+				res.status(500).send({ message: "Internal server error" });
+			}
+		} catch (e) {
+			res.status(500).send({ Area: req.body.selectedArea, error: e });
 		}
-	} catch (e) {
-		res.status(500).send({ Area: req.body.selectedArea, error: e });
 	}
-});
-app.get("/volunteers/volunteer-details/:id", async (req, res) => {
-	try {
-		let volunteer = await pool.query(
-			"SELECT * FROM volunteer WHERE id = $1",
-			[parseInt(req.params.id)]
-		);
-		if (volunteer.rowCount === 0) {
-			return res.status(404).send({ message: "Volunteer not found" });
-		}
+);
+app.get(
+	"/volunteers/volunteer-details/:id",
+	AdminAuthChecker,
+	async (req, res) => {
+		try {
+			let volunteer = await pool.query(
+				"SELECT * FROM volunteer WHERE id = $1",
+				[parseInt(req.params.id)]
+			);
+			if (volunteer.rowCount === 0) {
+				return res.status(404).send({ message: "Volunteer not found" });
+			}
 
-		const volunteerData = volunteer.rows[0];
+			const volunteerData = volunteer.rows[0];
 
-		// Assigning each column value to a local constant
-		let id = volunteerData.id;
-		let firstName = volunteerData.first_name;
-		let lastName = volunteerData.last_name;
-		let phoneNumber = volunteerData.phone_number;
-		let email = volunteerData.email;
-		let streetAddress1 = volunteerData.street_address_1;
-		let streetAddress2 = volunteerData.street_address_2;
-		let city = volunteerData.city;
-		let state = volunteerData.state;
-		let zipCode = volunteerData.zip_code;
-		let areasOfHelp: string[] = [];
-		if (volunteerData.admin_team) {
-			areasOfHelp.push("Volunteer Management and Administration Team");
-		}
-		if (volunteerData.hospitality) {
-			areasOfHelp.push("Hospitality Team");
-		}
-		if (volunteerData.logistic_tracking) {
-			areasOfHelp.push("Logistic Tracking");
-		}
-		if (volunteerData.community_outreach) {
-			areasOfHelp.push("Community Outreach");
-		}
-		if (volunteerData.community_helpers) {
-			areasOfHelp.push("Community Helpers");
-		}
-		let teamLeader = volunteerData.team_leader;
-		let password = volunteerData.password;
+			// Assigning each column value to a local constant
+			let id = volunteerData.id;
+			let firstName = volunteerData.first_name;
+			let lastName = volunteerData.last_name;
+			let phoneNumber = volunteerData.phone_number;
+			let email = volunteerData.email;
+			let streetAddress1 = volunteerData.street_address_1;
+			let streetAddress2 = volunteerData.street_address_2;
+			let city = volunteerData.city;
+			let state = volunteerData.state;
+			let zipCode = volunteerData.zip_code;
+			let areasOfHelp: string[] = [];
+			if (volunteerData.admin_team) {
+				areasOfHelp.push(
+					"Volunteer Management and Administration Team"
+				);
+			}
+			if (volunteerData.hospitality) {
+				areasOfHelp.push("Hospitality Team");
+			}
+			if (volunteerData.logistic_tracking) {
+				areasOfHelp.push("Logistic Tracking");
+			}
+			if (volunteerData.community_outreach) {
+				areasOfHelp.push("Community Outreach");
+			}
+			if (volunteerData.community_helpers) {
+				areasOfHelp.push("Community Helpers");
+			}
+			let teamLeader = volunteerData.team_leader;
+			let password = volunteerData.password;
 
-		// Passing the variables into the constructor
-		let volunteerDetails = new Volunteer(
-			id,
-			firstName,
-			lastName,
-			phoneNumber,
-			email,
-			streetAddress1,
-			streetAddress2,
-			city,
-			state,
-			zipCode,
-			areasOfHelp,
-			teamLeader,
-			password
-		);
+			// Passing the variables into the constructor
+			let volunteerDetails = new Volunteer(
+				id,
+				firstName,
+				lastName,
+				phoneNumber,
+				email,
+				streetAddress1,
+				streetAddress2,
+				city,
+				state,
+				zipCode,
+				areasOfHelp,
+				teamLeader,
+				password
+			);
 
-		res.status(200).send(volunteerDetails);
-	} catch (e) {
-		res.status(500).send(e);
+			res.status(200).send(volunteerDetails);
+		} catch (e) {
+			res.status(500).send(e);
+		}
 	}
-});
-app.get("/homeowner-requests", async (req, res) => {
+);
+app.get("/homeowner-requests", AdminAuthChecker, async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
 		let requestList: HelpRequest[] = [];
@@ -631,7 +664,7 @@ app.get("/homeowner-requests", async (req, res) => {
 		res.send(e);
 	}
 });
-app.get("/volunteers", async (req, res) => {
+app.get("/volunteers", AdminAuthChecker, async (req, res) => {
 	try {
 		let volunteers = await pool.query("SELECT * FROM volunteer");
 		res.status(200).send(volunteers.rows);
@@ -639,7 +672,7 @@ app.get("/volunteers", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
-app.post("/reports", async (req, res) => {
+app.post("/reports", AdminAuthChecker, async (req, res) => {
 	let queryString = "SELECT * FROM request";
 	let queryConditions: string[] = [];
 	let year = parseInt(req.body.year);
@@ -759,7 +792,7 @@ app.post("/reports", async (req, res) => {
 		res.status(400).send({ message: "No records found" });
 	}
 });
-app.get("/notifications", async (req, res) => {
+app.get("/notifications", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(`
 		SELECT 

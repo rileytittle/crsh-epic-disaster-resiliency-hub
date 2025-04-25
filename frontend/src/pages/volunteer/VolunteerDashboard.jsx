@@ -17,6 +17,26 @@ function VolunteerDashboard() {
 	const [offered, setOffered] = useState("");
 
 	useEffect(() => {
+			const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+			const userType = sessionStorage.getItem("userType");
+			const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+			const hasReloaded = sessionStorage.getItem("hasReloaded");
+			console.log("test");
+			if (!isLoggedIn || userType !== "volunteer") {
+				// Redirect to login if not logged in or not an admin
+				navigate("/vol-login");
+			} else if (justLoggedIn === "true" && !hasReloaded) {
+				// Mark reload as completed and refresh the page
+				sessionStorage.setItem("justLoggedIn", "false");
+				sessionStorage.setItem("hasReloaded", "true");
+				navigate(0); // Programmatic page reload
+			} else if (hasReloaded) {
+				// Clear reload flag after it has been used
+				sessionStorage.removeItem("hasReloaded");
+			}
+		}, [navigate]);
+
+	useEffect(() => {
 		if (!userToken) return;
 
 		async function fetchData() {

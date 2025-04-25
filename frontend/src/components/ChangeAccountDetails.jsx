@@ -11,7 +11,10 @@ function ChangeAccountDetails(props) {
 		zip: "",
 	});
 
-	// Sync props with state when props change
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
+	// Sync props with state
 	useEffect(() => {
 		setFormData({
 			phone: props.phone || "",
@@ -22,14 +25,37 @@ function ChangeAccountDetails(props) {
 		});
 	}, [props.phone, props.address, props.city, props.state, props.zip]);
 
+	// Clear messages after 5 seconds
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setError("");
+			setSuccess("");
+		}, 5000);
+
+		return () => clearTimeout(timer);
+	}, [error, success]);
+
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.id]: e.target.value });
 	};
 
 	const handleClick = () => {
+		// Frontend validation
+		const { phone, address, city, state, zip } = formData;
+
+		if (!phone || !address || !city || !state || !zip) {
+			setError("All fields must be filled out.");
+			return;
+		}
+
+		if (!/^\d+$/.test(phone)) {
+			setError("Phone number must contain only digits.");
+			return;
+		}
+
 		const updatedDetails = { email: props.email, ...formData };
 
-		let headers = {
+		const headers = {
 			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 		};
 
@@ -37,17 +63,19 @@ function ChangeAccountDetails(props) {
 			.post(
 				`${import.meta.env.VITE_API_URL}/volunteer/update-user-details`,
 				updatedDetails,
-				{
-					headers: headers,
-				}
+				{ headers }
 			)
 			.then((response) => {
 				console.log("Update Successful:", response.data);
-				alert("User details updated successfully!");
+				setSuccess("User details updated successfully!");
+				setError("");
 			})
 			.catch((error) => {
 				console.error("Error updating user details:", error);
-				alert("Failed to update user details.");
+				const errMsg =
+					error.response?.data?.message || "Failed to update user details.";
+				setError(errMsg);
+				setSuccess("");
 			});
 	};
 
@@ -61,6 +89,10 @@ function ChangeAccountDetails(props) {
 					<p className="text-muted text-center">
 						Would you like to change your account details?
 					</p>
+
+					{error && <div className="alert alert-danger">{error}</div>}
+					{success && <div className="alert alert-success">{success}</div>}
+
 					<form>
 						<div className="mb-3">
 							<label className="form-label">Email:</label>
