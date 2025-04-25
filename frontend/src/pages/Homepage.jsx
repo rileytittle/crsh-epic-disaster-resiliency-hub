@@ -9,7 +9,9 @@ export default function Homepage() {
 			</div>
 			<div className="text-center mt-4">
 				<h4 className="display-7 text-primary">
-					<a href="https://epiccommunitycenter.org/">EPIC Community Resource Center</a>
+					<a href="https://epiccommunitycenter.org/">
+						EPIC Community Resource Center
+					</a>
 				</h4>
 			</div>
 			<div className="d-flex flex-column align-items-center">
@@ -29,16 +31,16 @@ export default function Homepage() {
 								</h2>
 								<p className="fs-5 text-muted">
 									During day-to-day operations, known as{" "}
-									<strong>Blue Skies</strong>, EPIC is a center
-									providing partner resources with programs
-									and services that educate, support, and
-									promote mental well-being for individuals
-									struggling physically, emotionally, and
-									spiritually.
+									<strong>Blue Skies</strong>, EPIC is a
+									center providing partner resources with
+									programs and services that educate, support,
+									and promote mental well-being for
+									individuals struggling physically,
+									emotionally, and spiritually.
 								</p>
 								<p className="fs-5 text-muted">
 									After a disaster, known as{" "}
-									<strong>Gray Skys</strong>, EPIC, in
+									<strong>Gray Skies</strong>, EPIC, in
 									partnership with the American Red Cross,
 									transitions to a Disaster Resilience Hub
 									serving the Southern Sarasota and Western

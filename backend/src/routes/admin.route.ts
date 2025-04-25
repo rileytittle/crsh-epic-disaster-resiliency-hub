@@ -186,7 +186,7 @@ app.post("/create-volunteer/accept", AdminAuthChecker, async (req, res) => {
 app.post("/create-volunteer/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
-			"UPDATE volunteerapplications SET status = 'rejected' WHERE email = $1",
+			"UPDATE volunteerapplications SET status = 'Rejected' WHERE email = $1",
 			[req.body.email]
 		);
 
