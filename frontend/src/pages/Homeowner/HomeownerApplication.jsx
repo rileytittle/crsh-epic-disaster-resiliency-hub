@@ -3,8 +3,7 @@ import { Tooltip } from "react-tooltip";
 import styles from "./HomeownerApplication.module.css";
 
 const HomeownerApply = () => {
-	let emailRegEx =
-		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	let emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 	const [validated, setValidated] = useState(false);
 	const [formValidity, setFormValidity] = useState({
 		first_name: null,
@@ -194,7 +193,7 @@ const HomeownerApply = () => {
 			console.log(JSON.stringify(formData));
 			try {
 				const response = await fetch(
-					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp`, 
+					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp`,
 					{
 						method: "POST",
 						headers: {
@@ -261,7 +260,7 @@ const HomeownerApply = () => {
 			<div className="container mt-4">
 				<div className="text-center my-3">
 					<a className="btn btn-primary" href="/request-help/status">
-							Check the Status of your Application
+						Check the Status of your Application
 					</a>
 				</div>
 				<div className="text-center mb-2">
@@ -271,18 +270,9 @@ const HomeownerApply = () => {
 					</span>
 					34223, 34224, 33947, 33946, 33981
 				</div>
-				<form
-					noValidate
-					id="homeownerForm"
-					onSubmit={formSubmitted}
-					className="row g-3 needs-validation"
-				>
-					<div
-						className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}
-					>
-						<div
-							className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
-						>
+				<form noValidate id="homeownerForm" onSubmit={formSubmitted} className="row g-3 needs-validation"				>
+					<div className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}					>
+						<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}						>
 							<div className="card-body">
 								<div className="row">
 									<div className="col">
