@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/mailService";
 import { AdminAuthChecker } from "../utils/adminAuth.utils";
+import { jwtDecode } from "jwt-decode";
 
 const ExcelJS = require("exceljs");
 const fs = require("fs");
@@ -18,15 +19,15 @@ const path = require("path");
 let saltRounds = 10;
 require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "unsecured";
-const IN_DEVELOPMENT = false;
+const IN_DEVELOPMENT = true;
 let pool: Pool;
 
 if (IN_DEVELOPMENT) {
 	pool = new Pool({
 		user: "postgres",
 		host: "localhost",
-		database: "Senior-Project",
-		password: "garnetisGold!1820",
+		database: "postgres",       
+		password: "pass",           
 		port: 5432,
 	});
 } else {
@@ -803,6 +804,54 @@ app.get("/notifications", AdminAuthChecker, async (req, res) => {
 		res.status(200).send(result.rows);
 	} catch (e) {
 		res.status(500).send({ message: e });
+	}
+});
+
+app.post("/changePassword", async (req, res) => {
+	const { currentPassword, newPassword } = req.body;
+
+	const authHeader = req.headers.authorization;
+	const token = authHeader && authHeader.split(" ")[1];
+
+	if (!token) {
+		return res.status(400).send({ message: "User token is required" });
+	}
+
+	// Decode token to get email
+	const decodedToken = jwtDecode<{ email: string }>(token);
+	const email = decodedToken.email;
+
+	try {
+		const userQuery = await pool.query(
+			"SELECT password FROM AdminAccount WHERE email = $1",
+			[email]
+		);
+
+		if (userQuery.rows.length === 0) {
+			return res.status(404).send({ message: "User not found" });
+		}
+
+		const hashedPassword = userQuery.rows[0].password;
+
+		const match = await bcrypt.compare(currentPassword, hashedPassword);
+		if (!match) {
+			return res
+				.status(401)
+				.send({ message: "Incorrect current password" });
+		}
+
+		const saltRounds = 10;
+		const newHashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+		await pool.query(
+			"UPDATE Volunteer SET password = $1 WHERE email = $2",
+			[newHashedPassword, email]
+		);
+
+		res.status(200).send({ message: "Password successfully updated" });
+	} catch (err) {
+		console.error("Error changing password:", err);
+		res.status(500).send({ message: "Server error" });
 	}
 });
 export { app };

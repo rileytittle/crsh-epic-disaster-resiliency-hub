@@ -38,6 +38,10 @@ function AdminLogin() {
 		}
 	}
 
+	function handleForgotPassword() {
+		navigate("/admin/request-reset");
+	}
+
 	return (
 		<div className="container mt-5">
 			<div className="row justify-content-center">
@@ -74,6 +78,13 @@ function AdminLogin() {
 							Log In
 						</button>
 					</form>
+					<button
+						onClick={handleForgotPassword}
+						className="btn btn-link mt-3 w-100"
+						style={{ textDecoration: "none", color: "#007bff" }}
+					>
+						Forgot Password?
+					</button>
 				</div>
 			</div>
 		</div>

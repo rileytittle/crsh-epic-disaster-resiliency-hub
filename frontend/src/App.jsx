@@ -39,10 +39,13 @@ import GenerateReports from "./pages/Admin/GenerateReports";
 import ActiveRequests from "./pages/Admin/ActiveRequests";
 import Resources from "./pages/Resources";
 import CreateAdmin from "./pages/Admin/CreateAdmin";
+import AdminChangePassowrd from "./pages/Admin/changePassword";
+import AdminRequestReset from "./pages/Admin/RequestReset";
+import AdminResetPassword from "./pages/Admin/resetPassword";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<MainLayout />}>
+		<Route path="/" element={<MainLayout />}>			
 			<Route index element={<Navigate to="/home" replace />} />
 			<Route path="/home" element={<Homepage />}></Route>
 			<Route path="/create-admin" element={<CreateAdmin />}></Route>
@@ -130,6 +133,9 @@ const router = createBrowserRouter(
 				element={<GenerateReports />}
 			></Route>
 			<Route path="/more-resources" element={<Resources />}></Route>
+			<Route path="/admin/changePassword" element={<AdminChangePassowrd />}></Route>
+			<Route path="/admin/request-reset" element={<AdminRequestReset />}></Route>
+			<Route path="/admin/reset-password" element={<AdminResetPassword />}></Route>
 		</Route>
 	)
 );

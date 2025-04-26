@@ -67,7 +67,7 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
-
+									
 										<li>
 											<hr className="dropdown-divider" />
 										</li>
@@ -125,6 +125,19 @@ const MainLayout = () => {
 													Volunteer Database
 												</a>
 											</li>
+											<li>
+												<hr className="dropdown-divider" />
+											</li>
+
+											<li>
+												<a
+													className="dropdown-item"
+													href="/admin/changePassword"
+												>
+													Change Password
+												</a>
+											</li>
+
 											<li>
 												<hr className="dropdown-divider" />
 											</li>
