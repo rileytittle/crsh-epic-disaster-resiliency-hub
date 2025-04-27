@@ -10,7 +10,8 @@ function CreateVolunteer() {
 
 		axios
 			.get(
-				`${import.meta.env.VITE_API_URL
+				`${
+					import.meta.env.VITE_API_URL
 				}/admin/create-volunteer/applications`,
 				{
 					headers: {
@@ -31,42 +32,37 @@ function CreateVolunteer() {
 	return (
 		<>
 			{applications.length > 0 ? (
-				<div className="m-5">
-					<div className="mt-4">
-						<h1 className="display-6 text-primary">
-							Volunteer Applications
-						</h1>
-					</div>
-					<div className="card">
-						<div className="card-body">
-							{applications.map((application) => (
-								<ApplicationCard
-									key={application.id}
-									id={application.id}
-									firstName={application.first_name} // Updated for snake_case
-									lastName={application.last_name} // Updated for snake_case
-									email={application.email}
-									areasOfHelp={[
-										application.logistic_tracking &&
+				<div className="card">
+					<div className="card-body">
+						{applications.map((application) => (
+							<ApplicationCard
+								key={application.id}
+								id={application.id}
+								firstName={application.first_name} // Updated for snake_case
+								lastName={application.last_name} // Updated for snake_case
+								phoneNumber={application.phone_number}
+								streetAddress1={application.street_address_1}
+								streetAddress2={application.street_address_2}
+								zipCode={application.zip_code}
+								state={application.state}
+								email={application.email}
+								areasOfHelp={[
+									application.admin_team &&
+										"Volunteer Management and Administration",
+									application.logistic_tracking &&
 										"Logistic Tracking",
-										application.community_helpers &&
-										"Community Helpers",
-										application.hospitality && "Hospitality",
-										application.community_outreach &&
+									application.community_helpers &&
+										"EPIC Helpers",
+									application.hospitality && "Hospitality",
+									application.community_outreach &&
 										"Community Outreach",
-									].filter(Boolean)} // Dynamically compute areas of help
-								/>
-							))}
-						</div>
+								].filter(Boolean)} // Dynamically compute areas of help
+							/>
+						))}
 					</div>
 				</div>
 			) : (
-				<div className="text-center">
-					<h1 className="display-6 text-primary">
-						No Volunteer Applications Found
-					</h1>
-				</div>
-
+				<h2>No Volunteer Applications found</h2>
 			)}
 		</>
 	);
