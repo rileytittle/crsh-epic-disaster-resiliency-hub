@@ -38,7 +38,7 @@ const MainLayout = () => {
 					>
 						<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 							{sessionStorage.getItem("isLoggedIn") &&
-								sessionStorage.getItem("userType") ==
+							sessionStorage.getItem("userType") ==
 								"volunteer" ? (
 								<li className="nav-item dropdown">
 									<a
@@ -67,13 +67,28 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
+
+										<li>
+											<hr className="dropdown-divider" />
+										</li>
+										<li>
+											<a
+												className="dropdown-item"
+												href="/applyVolunteer/status"
+											>
+												Check Status of Application
+											</a>
+										</li>
+										<li>
+											<hr className="dropdown-divider" />
+										</li>
 									</ul>
 								</li>
 							) : (
 								<></>
 							)}
 							{sessionStorage.getItem("isLoggedIn") &&
-								sessionStorage.getItem("userType") == "admin" ? (
+							sessionStorage.getItem("userType") == "admin" ? (
 								<>
 									<li className="nav-item">
 										<a
@@ -126,7 +141,7 @@ const MainLayout = () => {
 													className="dropdown-item"
 													href="/assignVolunteers"
 												>
-													Assign volunteers to job
+													Assign volunteers to request
 												</a>
 											</li>
 											<li>
@@ -189,28 +204,40 @@ const MainLayout = () => {
 							) : (
 								<></>
 							)}
-							{!sessionStorage.getItem("isLoggedIn") ? (
-								<li className="nav-item">
-										<a
-											className="btn btn-primary px-3 py-2"
-											href="/more-resources"
-										>
-											Resources
-										</a>
-								</li>
-							) : (
-								<></>
-							)}
 						</ul>
 						{!sessionStorage.getItem("isLoggedIn") ? (
+							<l className="nav-item">
+								<a
+									style={{
+										textDecoration: "none",
+										color: "black",
+									}}
+									className="nav-link"
+									href="/more-resources"
+								>
+									Resources
+								</a>
+							</l>
+						) : (
+							<></>
+						)}
+						{!sessionStorage.getItem("isLoggedIn") ? (
 							<>
-								
+								<button
+									type="button"
+									className="btn btn-primary"
+								>
 									<a
-										className="btn btn-danger px-4 py-3"
+										style={{
+											color: "white",
+											textDecoration: "none",
+										}}
+										className="nav-link"
 										href="/request-help"
 									>
 										Request Help
 									</a>
+								</button>
 							</>
 						) : (
 							<>
@@ -231,6 +258,22 @@ const MainLayout = () => {
 				</div>
 			</nav>
 			<Outlet />
+			<footer
+				className="text-end py-2"
+				style={{
+					position: "fixed",
+					bottom: 0,
+					right: 0,
+					width: "auto",
+					backgroundColor: "transparent", // Matches the body background
+					paddingRight: "1rem",
+				}}
+			>
+				<small>
+					<strong>CRSH Development</strong> ©{" "}
+					{new Date().getFullYear()}
+				</small>
+			</footer>
 		</>
 	);
 };

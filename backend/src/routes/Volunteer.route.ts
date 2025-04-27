@@ -15,7 +15,7 @@ import { VolunteerAuthChecker } from "../utils/volunteerAuth.utils";
 
 require("dotenv").config();
 
-const IN_DEVELOPMENT = false //process.env.IN_DEVELOPMENT === "true";
+const IN_DEVELOPMENT = false;
 let pool: Pool;
 /**user: "postgres",
 		host: "localhost",
