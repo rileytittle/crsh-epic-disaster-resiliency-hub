@@ -1,3 +1,8 @@
+.contact-info{
+  @extend .col-md-6;
+  @extend .mt-2;
+}
+
 .volunteerForm {
   display: flex;
   flex-direction: column;

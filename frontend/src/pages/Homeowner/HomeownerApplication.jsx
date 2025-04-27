@@ -275,7 +275,7 @@ const HomeownerApply = () => {
 						<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}						>
 							<div className="card-body">
 								<div className="row">
-									<div className="col">
+									<div className="col-md-6 mt-2">
 										<input
 											placeholder="First Name"
 											type="text"
@@ -295,7 +295,7 @@ const HomeownerApply = () => {
 											Please enter a First Name
 										</div>
 									</div>
-									<div className="col">
+									<div className="col-md-6 mt-2">
 										<input
 											placeholder="Last Name"
 											type="text"
@@ -317,8 +317,8 @@ const HomeownerApply = () => {
 									</div>
 								</div>
 
-								<div className="row mt-2">
-									<div className="col">
+								<div className="row">
+									<div className="col-md-6 mt-2">
 										<input
 											placeholder="E-Mail"
 											type="email"
@@ -338,7 +338,7 @@ const HomeownerApply = () => {
 											Please enter a valid E-mail
 										</div>
 									</div>
-									<div className="col">
+									<div className="col-md-6 mt-2">
 										<input
 											placeholder="Phone Number"
 											type="tel"
@@ -461,7 +461,7 @@ const HomeownerApply = () => {
 											place="top"
 											effect="solid"
 										>
-											Florida is the only supported State
+											We apologize, but EPIC only services areas in Florida
 										</Tooltip>
 									</div>
 									<div className="col-md-2">
