@@ -56,7 +56,6 @@ function AdminDashboard() {
 							sessionStorage.getItem("userType") === "admin" &&
 							notifications ? (
 								<>
-									
 									<div className="text-center">
 										<h1 className="display-6 text-primary">
 											Admin Dashboard

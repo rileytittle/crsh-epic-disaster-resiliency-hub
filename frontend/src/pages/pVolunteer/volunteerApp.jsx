@@ -39,6 +39,9 @@ const VolunteerForm = () => {
 		setSubmitDisabled(!submitDisabled);
 	};
 
+	const handleCheckbox = () => {
+		setSubmitDisabled(!submitDisabled);
+	};
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 
@@ -53,7 +56,6 @@ const VolunteerForm = () => {
 					areasOfHelp: newAreasOfHelp,
 				};
 			});
-
 		} else {
 			setFormData({
 				...formData,
@@ -93,7 +95,6 @@ const VolunteerForm = () => {
 				return (/^\d{5}$/.test(value))
 		}
 	};
-
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "unsecured";
 let AdminAuthChecker = (req: Request, res: Response, next: NextFunction) => {
 	if (req.headers["authorization"]) {
