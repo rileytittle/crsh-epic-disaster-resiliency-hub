@@ -67,10 +67,6 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
-
-										<li>
-											<hr className="dropdown-divider" />
-										</li>
 									</ul>
 								</li>
 							) : (
