@@ -1,4 +1,7 @@
 import mailgun from "mailgun-js";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export async function sendEmail(to: string, subject: string, text: string): Promise<any> {
   const mg = mailgun({

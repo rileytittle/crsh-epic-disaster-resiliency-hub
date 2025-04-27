@@ -807,7 +807,7 @@ app.get("/notifications", AdminAuthChecker, async (req, res) => {
 	}
 });
 
-app.post("/changePassword", async (req, res) => {
+app.post("/changePassword",AdminAuthChecker, async (req, res) => {
 	const { currentPassword, newPassword } = req.body;
 
 	const authHeader = req.headers.authorization;
