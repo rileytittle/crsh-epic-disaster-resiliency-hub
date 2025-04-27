@@ -56,10 +56,11 @@ function GenerateReports() {
 				<div className="col-md-8 col-lg-6">
 					<div className="card p-4">
 						<div className="card-body">
-							<h1 className="text-center mb-4">
-								Generate Reports
-							</h1>
-
+							<div className="text-center">
+								<h1 className="display-6 text-primary">
+									Generate Reports
+								</h1>
+							</div>
 							<div className="form-check">
 								<input
 									className="form-check-input"

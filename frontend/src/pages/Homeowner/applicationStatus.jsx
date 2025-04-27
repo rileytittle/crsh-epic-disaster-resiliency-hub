@@ -6,7 +6,6 @@ function ApplicationStatus() {
 	let validReturn = false;
 	const [helpResults, setHelpResults] = useState({
 		status: "",
-		rejected: false,
 		reasonRejected: "",
 
 		dateCreated: "",
@@ -29,21 +28,11 @@ function ApplicationStatus() {
 
 	function toggleInformation() {
 		const response = document.getElementById("statusBox");
-		const rejectedTitle = document.getElementById("rejectedTitle");
-		const rejectedText = document.getElementById("rejectedText");
 		// Toggle the textarea based on the checkbox status
 		if (validReturn) {
 			response.style.display = "inline";
 		} else {
 			response.style.display = "none";
-		}
-
-		if (helpResults.rejected) {
-			rejectedTitle.style.display = "inline";
-			rejectedText.style.display = "inline";
-		} else {
-			rejectedTitle.style.display = "none";
-			rejectedText.style.display = "none";
 		}
 	}
 
@@ -107,11 +96,6 @@ function ApplicationStatus() {
 					//alert(response.statusText);
 					validReturn = true;
 
-					let isRejected = false;
-					if (result.status == "Rejected") {
-						isRejected = true;
-					}
-
 					const date = new Date(result.dateCreated);
 					const formattedDate = date.toLocaleDateString("en-US");
 
@@ -119,7 +103,6 @@ function ApplicationStatus() {
 					setHelpResults({
 						...helpResults,
 						status: result.status,
-						rejected: isRejected,
 						reasonRejected: result.reasonRejected,
 						dateCreated: formattedDate,
 						timeCreated: result.timeCreated,
@@ -134,11 +117,35 @@ function ApplicationStatus() {
 		}
 	};
 
+
+	function statusInformation(status, reasonRejected) {
+		if (status == "Unevaluated") {
+			return "An EPIC representative will review your request as soon as they can. You will recieve an email once it has been reviewed."
+		}
+		else if (status == "Accepted") {
+			return "An EPIC representative will be in contact with you as soon as they can regarding your request!"
+		}
+		else if (status == "Active") {
+			return "Volunteers have been assigned to your help request! A representative will be in contact with you as soon as they can"
+		}
+		else if (status == "Rejected") {
+			return `Your request was denied with the following statement: ${reasonRejected}`
+		}
+		else if (status == "Resolved") {
+			return "This request has been completed. IF you need any more services, please submit a new request"
+		}
+		else {
+			return "We're sorry - Status information not found. If you would like more information, please contact an EPIC representative."
+		}
+	}
+
 	return (
 		<>
-			<div className="container text-center mt-4">
-				<div className="text-decoration-underline">
-					<h2 className="fw-bold">Check Status</h2>
+			<div className="container text-center mt-5">
+				<div className="text-center mt-4">
+					<h1 className="display-5 text-primary">
+						Check Request Status
+					</h1>
 				</div>
 				<div>
 					<form
@@ -159,14 +166,13 @@ function ApplicationStatus() {
 											<input
 												placeholder="First Name"
 												type="text"
-												className={`form-control ${
-													formValidity.first_name ===
+												className={`form-control ${formValidity.first_name ===
 													null
-														? ""
-														: formValidity.first_name
+													? ""
+													: formValidity.first_name
 														? "is-valid"
 														: "is-invalid"
-												}`}
+													}`}
 												name="first_name"
 												id="first_name"
 												value={formData.first_name}
@@ -181,14 +187,13 @@ function ApplicationStatus() {
 											<input
 												placeholder="Last Name"
 												type="text"
-												className={`form-control ${
-													formValidity.last_name ===
+												className={`form-control ${formValidity.last_name ===
 													null
-														? ""
-														: formValidity.last_name
+													? ""
+													: formValidity.last_name
 														? "is-valid"
 														: "is-invalid"
-												}`}
+													}`}
 												name="last_name"
 												id="last_name"
 												value={formData.last_name}
@@ -216,14 +221,13 @@ function ApplicationStatus() {
 											</label>
 											<input
 												type="text"
-												className={`form-control ${
-													formValidity.street_address_1 ===
+												className={`form-control ${formValidity.street_address_1 ===
 													null
-														? ""
-														: formValidity.street_address_1
+													? ""
+													: formValidity.street_address_1
 														? "is-valid"
 														: "is-invalid"
-												}`}
+													}`}
 												name="street_address_1"
 												id="street_address_1"
 												placeholder="1234 Main St"
@@ -290,26 +294,9 @@ function ApplicationStatus() {
 													</td>
 												</tr>
 												<tr>
-													<th
-														className="px-1 align-top text-end fw-bold"
-														name="rejectedTitle"
-														id="rejectedTitle"
-														style={{
-															display: "none",
-														}}
-													>
-														Reason Rejected:
-													</th>
-													<td
-														className="px-1 align-bottom text-start"
-														name="rejectedText"
-														id="rejectedText"
-														style={{
-															display: "none",
-														}}
-													>
-														{helpResults.reasonRejected ??
-															"N/A"}
+													<th className="px-1 align-top text-end fw-bold"></th>
+													<td colSpan="2" className="px-1 align-top text-start">
+														{statusInformation(helpResults.status, helpResults.reasonRejected)}
 													</td>
 												</tr>
 												<tr>
@@ -337,9 +324,7 @@ function ApplicationStatus() {
 														Help Types:
 													</th>
 													<td className="px-1 align-bottom text-start">
-														{helpResults.helpType.join(
-															", "
-														)}
+														{helpResults.helpType.join(", ")}
 													</td>
 												</tr>
 												<tr>

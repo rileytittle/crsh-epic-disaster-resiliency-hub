@@ -46,8 +46,12 @@ function Volunteers() {
 	}, []);
 
 	return (
-		<div>
-			<h1>Volunteers</h1>
+		<div className="m-5">
+				<div className="mt-4">
+				<h1 className="display-6 text-primary">
+					Volunteers
+				</h1>
+			</div>
 			<div className="card">
 				<div className="card-body">
 					<table className="table" id="myTable">

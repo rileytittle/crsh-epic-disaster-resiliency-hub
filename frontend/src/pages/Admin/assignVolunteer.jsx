@@ -191,8 +191,13 @@ const AssignVolunteer = () => {
 	);
 
 	return (
+		
 		<div className="container mt-5 assign-volunteer-page">
-			<h1>Current Homeowner Requests</h1>
+			<div className="mt-4">
+				<h1 className="display-6 text-primary">
+					Current Homeowner Requests
+				</h1>
+			</div>
 
 			<div className="mb-3">
 				<input
