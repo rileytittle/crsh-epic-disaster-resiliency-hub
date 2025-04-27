@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function ConfirmVolunteer() {
 	const location = useLocation();
-	const { id, firstName, lastName, email, areasOfHelp } = location.state;
+	const {
+		id,
+		firstName,
+		lastName,
+		phoneNumber,
+		streetAddress1,
+		streetAddress2,
+		zipCode,
+		state,
+		email,
+		areasOfHelp,
+	} = location.state;
 	const [teamLeader, setTeamLeader] = useState(false);
 	const navigate = useNavigate();
 
 	function handleCheckBox() {
 		setTeamLeader(!teamLeader);
 	}
+
 	async function createVolunteer() {
 		let token = sessionStorage.getItem("userToken");
 		let headers = {
@@ -31,9 +43,25 @@ function ConfirmVolunteer() {
 				navigate("/create-volunteer");
 			})
 			.catch((error) => {
-				console.error("Error fetching applications:", error);
+				console.error("Error creating volunteer:", error);
 			});
 	}
+
+	useEffect(() => {
+		console.log(
+			id,
+			firstName,
+			lastName,
+			phoneNumber,
+			streetAddress1,
+			streetAddress2,
+			zipCode,
+			state,
+			email,
+			areasOfHelp
+		);
+	}, []);
+
 	return (
 		<div className="container mt-5">
 			<div className="row justify-content-center">
@@ -41,10 +69,31 @@ function ConfirmVolunteer() {
 					<div className="card p-4 shadow-lg">
 						<div className="card-body">
 							<h1 className="text-center mb-4">
-								{firstName + " " + lastName}
+								{firstName} {lastName}
 							</h1>
 							<h2 className="mb-3">Contact Information</h2>
-							<p>{email}</p>
+							<p>
+								<strong>Email:</strong> {email}
+							</p>
+							<p>
+								<strong>Phone:</strong> {phoneNumber}
+							</p>
+
+							<h2 className="mb-3">Address</h2>
+							<p>
+								<strong>Street 1:</strong> {streetAddress1}
+							</p>
+							{streetAddress2 && (
+								<p>
+									<strong>Street 2:</strong> {streetAddress2}
+								</p>
+							)}
+							<p>
+								<strong>State:</strong> {state}
+							</p>
+							<p>
+								<strong>ZIP Code:</strong> {zipCode}
+							</p>
 
 							<h2 className="mb-3">Areas of Help</h2>
 							{areasOfHelp && areasOfHelp.length > 0 ? (
