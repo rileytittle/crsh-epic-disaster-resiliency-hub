@@ -17,24 +17,24 @@ function VolunteerDashboard() {
 	const [offered, setOffered] = useState("");
 
 	useEffect(() => {
-			const isLoggedIn = sessionStorage.getItem("isLoggedIn");
-			const userType = sessionStorage.getItem("userType");
-			const justLoggedIn = sessionStorage.getItem("justLoggedIn");
-			const hasReloaded = sessionStorage.getItem("hasReloaded");
-			console.log("test");
-			if (!isLoggedIn || userType !== "volunteer") {
-				// Redirect to login if not logged in or not an admin
-				navigate("/vol-login");
-			} else if (justLoggedIn === "true" && !hasReloaded) {
-				// Mark reload as completed and refresh the page
-				sessionStorage.setItem("justLoggedIn", "false");
-				sessionStorage.setItem("hasReloaded", "true");
-				navigate(0); // Programmatic page reload
-			} else if (hasReloaded) {
-				// Clear reload flag after it has been used
-				sessionStorage.removeItem("hasReloaded");
-			}
-		}, [navigate]);
+		const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+		const userType = sessionStorage.getItem("userType");
+		const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+		const hasReloaded = sessionStorage.getItem("hasReloaded");
+		console.log("test");
+		if (!isLoggedIn || userType !== "volunteer") {
+			// Redirect to login if not logged in or not an admin
+			navigate("/vol-login");
+		} else if (justLoggedIn === "true" && !hasReloaded) {
+			// Mark reload as completed and refresh the page
+			sessionStorage.setItem("justLoggedIn", "false");
+			sessionStorage.setItem("hasReloaded", "true");
+			navigate(0); // Programmatic page reload
+		} else if (hasReloaded) {
+			// Clear reload flag after it has been used
+			sessionStorage.removeItem("hasReloaded");
+		}
+	}, [navigate]);
 
 	useEffect(() => {
 		if (!userToken) return;
@@ -49,8 +49,7 @@ function VolunteerDashboard() {
 
 				const [userRes, jobsRes] = await Promise.all([
 					axios.get(
-						`${
-							import.meta.env.VITE_API_URL
+						`${import.meta.env.VITE_API_URL
 						}/volunteer/user-details`,
 						{
 							params: { userToken },
@@ -122,13 +121,17 @@ function VolunteerDashboard() {
 
 	return (
 		<div className="container mt-4">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+					Volunteer Dashboard
+				</h1>
+			</div>
 			<div className="card shadow-sm">
 				<div className="card-body text-center">
-					<h1 className="text-dark fw-bold">Volunteer Dashboard</h1>
 					<h2 className="fw-semibold">
 						{user.firstName} {user.lastName}
 					</h2>
-	
+
 					{loading ? (
 						<p className="text-muted mt-3">Loading...</p>
 					) : error ? (
@@ -174,8 +177,8 @@ function VolunteerDashboard() {
 			</div>
 		</div>
 	);
-	
-	
+
+
 }
 
 export default VolunteerDashboard;

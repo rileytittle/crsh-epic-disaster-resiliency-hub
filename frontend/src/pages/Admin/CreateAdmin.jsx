@@ -62,11 +62,14 @@ function CreateAdmin() {
 				<></>
 			)}
 			<div className="container mt-5">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+				Create new Admin Account
+				</h1>
+			</div>
 				<div className="row justify-content-center">
 					<div className="col-md-4">
-						<h1 className="text-center mb-4">
-							Create new Admin Account
-						</h1>
+						
 						<div>
 							<div className="mb-3">
 								<input
