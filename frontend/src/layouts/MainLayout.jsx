@@ -71,17 +71,6 @@ const MainLayout = () => {
 										<li>
 											<hr className="dropdown-divider" />
 										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/applyVolunteer/status"
-											>
-												Check Status of Application
-											</a>
-										</li>
-										<li>
-											<hr className="dropdown-divider" />
-										</li>
 									</ul>
 								</li>
 							) : (
