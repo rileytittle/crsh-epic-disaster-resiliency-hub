@@ -1,6 +1,8 @@
 import { Router } from "express";
 
 import { VolunteerApplication } from "../models/volunteerApplication.model";
+
+import { VolunteerApplicationStatus } from "../models/volunteerApplicationStatus.model";
 import { Volunteer } from "../models/volunteer.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -272,6 +274,61 @@ app.post("/create", async (req: Request, res: Response): Promise<any> => {
 				error: "Unknown error",
 			});
 		}
+	}
+});
+app.get("/status", async (req, res) => {
+	let { first_name, last_name, street_address_1, street_address_2 } =
+		req.query;
+	if (street_address_2 == "NULL") {
+		street_address_2 = "";
+	}
+	try {
+		let applications = await pool.query(`
+			SELECT status, reason_rejected, admin_team, hospitality, logistic_tracking, community_outreach, community_helpers, date_created, time_created
+			FROM volunteerapplications
+			WHERE first_name ILIKE '${first_name}' AND last_name ILIKE '${last_name}' AND street_address_1 ILIKE '${street_address_1}' AND street_address_2 ILIKE '${street_address_2}'
+			ORDER BY date_created DESC, time_created DESC;
+		`);
+
+		if (applications.rows.length === 0) {
+			return res.status(404).json({ message: "No results found. Please double check your spelling" }); // Return 404 if no rows are found
+		}
+
+		let applicant = applications.rows[0];
+		//console.log(request);
+		let status = applicant.status;
+		let reasonRejected = applicant.reason_rejected;
+		let helpAreas: string[] = [];
+		if (applicant.admin_team) {
+			helpAreas.push("Administration Team");
+		}
+		if (applicant.hospitality) {
+			helpAreas.push("Hospitality");
+		}
+		if (applicant.logistic_tracking) {
+			helpAreas.push("Logistic Tracking");
+		}
+		if (applicant.community_outreach) {
+			helpAreas.push("Community Outreach");
+		}
+		if (applicant.community_helpers) {
+			helpAreas.push("Community Helpers");
+		}
+		let dateCreated = applicant.date_created;
+		let timeCreated = applicant.time_created;
+
+		let statusInformation = new VolunteerApplicationStatus(
+			status,
+			reasonRejected,
+			helpAreas,
+			dateCreated,
+			timeCreated
+		);
+
+		res.status(200).send(statusInformation);
+	} catch (e) {
+		res.status(500).send({ message: "Something went wrong" });
+		console.log(e);
 	}
 });
 

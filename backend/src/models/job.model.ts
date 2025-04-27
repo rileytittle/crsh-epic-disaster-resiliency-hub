@@ -1,6 +1,6 @@
 import { HomeownerRequest } from "./homeownerRequest.model";
 
-export class Job extends HomeownerRequest {
+export class Job extends HomeownerRequest { // potentially not in use?
 	assignedTeam: number[] = [];
 	other:string;
 	constructor(

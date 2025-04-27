@@ -1,4 +1,4 @@
-export class HomeownerApplication {
+export class HomeownerApplication { // hopefully delete this as well
     id: number;
     first_name: string;
     last_name: string;
@@ -19,7 +19,7 @@ export class HomeownerApplication {
     clean_water: boolean;
     emergency_food: boolean;
     other: string = "";
-    constructor(
+    constructor( // hopefully delete this as well
         id: number,
         first_name: string,
         last_name: string,
@@ -38,7 +38,7 @@ export class HomeownerApplication {
         clean_water: boolean,
         emergency_food: boolean,
         other: string,
-    ) {
+    ) { // hopefully delete this as well
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;

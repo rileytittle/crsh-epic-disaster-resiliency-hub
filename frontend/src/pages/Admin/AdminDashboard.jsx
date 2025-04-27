@@ -56,9 +56,11 @@ function AdminDashboard() {
 							sessionStorage.getItem("userType") === "admin" &&
 							notifications ? (
 								<>
-									<h1 className="text-center mb-4">
-										Admin Dashboard
-									</h1>
+									<div className="text-center">
+										<h1 className="display-6 text-primary">
+											Admin Dashboard
+										</h1>
+									</div>
 									<div className="row">
 										{/* Left Column: Notifications */}
 										<div className="col-6">

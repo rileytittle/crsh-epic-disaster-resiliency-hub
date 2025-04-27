@@ -11,7 +11,7 @@ function AdminLogin() {
 
 	async function login(e) {
 		e.preventDefault();
-		setMessage(""); 
+		setMessage("");
 		const userData = { email, password };
 		const basicAuthHeader = btoa(`${email}:${password}`);
 
@@ -40,9 +40,14 @@ function AdminLogin() {
 
 	return (
 		<div className="container mt-5">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+					Admin Login Portal
+				</h1>
+			</div>
 			<div className="row justify-content-center">
 				<div className="col-md-4">
-					<h1 className="text-center mb-4">Admin Login Portal</h1>
+
 
 					{/* Error Message */}
 					{message && (

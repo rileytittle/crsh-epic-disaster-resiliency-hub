@@ -2,8 +2,12 @@ import React from "react";
 
 function Resources() {
 	return (
-		<div className="container py-5">
-			<h1 className="mb-4 text-center">Resources</h1>
+		<div className="container mt-5">
+			<div className="text-center mt-4">
+				<h1 className="display-5 text-primary">
+					Request Help
+				</h1>
+			</div>
 			<div className="row">
 				<div className="col-md-6 mb-3">
 					<div className="card shadow-sm">

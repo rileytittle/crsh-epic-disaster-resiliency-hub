@@ -20,7 +20,6 @@ let vercelURL = "https://crsh-epic-disaster-resiliency-hub-client.vercel.app";
 let localURL = "http://localhost:5173";
 
 app.use(express.json());
-
 if (IN_DEVELOPMENT) {
 	app.use(
 		cors({
@@ -50,7 +49,7 @@ app.use("/volunteer", volunteerRouter);
 app.use("/mailgun", mailgunRouter);
 
 app.listen(port, () => {
-	console.log(`Server running on port ${port}`);
+	console.log(`Server running on port ${port} and is ${IN_DEVELOPMENT ? "in development" : "online"}`);
 });
 
 export default app;
