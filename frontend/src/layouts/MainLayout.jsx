@@ -67,18 +67,6 @@ const MainLayout = () => {
 												Change Password
 											</a>
 										</li>
-
-										<li>
-											<hr className="dropdown-divider" />
-										</li>
-										<li>
-											<a
-												className="dropdown-item"
-												href="/applyVolunteer/status"
-											>
-												Check Status of Application
-											</a>
-										</li>
 									</ul>
 								</li>
 							) : (
