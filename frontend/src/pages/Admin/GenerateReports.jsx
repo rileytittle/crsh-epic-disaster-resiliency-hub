@@ -52,16 +52,15 @@ function GenerateReports() {
 	}
 	return (
 		<div className="container mt-5">
-			<div className="text-center mt-4">
-				<h1 className="display-6 text-primary">
-					Generate Reports
-				</h1>
-			</div>
 			<div className="row justify-content-center">
 				<div className="col-md-8 col-lg-6">
 					<div className="card p-4">
 						<div className="card-body">
-
+							<div className="text-center">
+								<h1 className="display-6 text-primary">
+									Generate Reports
+								</h1>
+							</div>
 							<div className="form-check">
 								<input
 									className="form-check-input"

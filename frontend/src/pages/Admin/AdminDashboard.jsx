@@ -56,30 +56,95 @@ function AdminDashboard() {
 							sessionStorage.getItem("userType") === "admin" &&
 							notifications ? (
 								<>
+									
 									<div className="text-center">
 										<h1 className="display-6 text-primary">
 											Admin Dashboard
 										</h1>
 									</div>
-									<div className="mb-3">
-										<p>
-											<strong>
-												Unevaluated Requests:
-											</strong>{" "}
-											{notifications.unevaluated_count}
-										</p>
-									</div>
-									<div className="mb-3">
-										<p>
-											<strong>Accepted Requests:</strong>{" "}
-											{notifications.accepted_count}
-										</p>
-									</div>
-									<div className="mb-3">
-										<p>
-											<strong>Active Requests:</strong>{" "}
-											{notifications.active_count}
-										</p>
+									<div className="row">
+										{/* Left Column: Notifications */}
+										<div className="col-6">
+											<h4>Notifications</h4>
+											<div className="mb-3">
+												<p>
+													<strong>
+														Unevaluated Requests:
+													</strong>{" "}
+													{
+														notifications.unevaluated_count
+													}
+												</p>
+											</div>
+											<div className="mb-3">
+												<p>
+													<strong>
+														Accepted Requests:
+													</strong>{" "}
+													{
+														notifications.accepted_count
+													}
+												</p>
+											</div>
+											<div className="mb-3">
+												<p>
+													<strong>
+														Active Requests:
+													</strong>{" "}
+													{notifications.active_count}
+												</p>
+											</div>
+										</div>
+
+										{/* Right Column: Actions */}
+										<div className="col-6">
+											<h4>Actions</h4>
+											<div className="row">
+												{/* First Set of Actions */}
+												<div className="col-6">
+													<a
+														href="/homeowner-requests"
+														className="btn btn-primary w-100 mb-2"
+													>
+														Evaluate Requests
+													</a>
+													<a
+														href="/assignVolunteers"
+														className="btn btn-success w-100 mb-2"
+													>
+														Assign Volunteers to
+														request
+													</a>
+													<a
+														href="/requests-in-progress"
+														className="btn btn-warning w-100 mb-2"
+													>
+														Requests in Progress
+													</a>
+												</div>
+												{/* Second Set of Actions */}
+												<div className="col-6">
+													<a
+														href="/create-volunteer"
+														className="btn btn-danger w-100 mb-2"
+													>
+														Volunteer Applications
+													</a>
+													<a
+														href="/volunteers"
+														className="btn btn-info w-100 mb-2"
+													>
+														Volunteer Database
+													</a>
+													<a
+														href="/generate-reports"
+														className="btn btn-secondary w-100"
+													>
+														Download Reports
+													</a>
+												</div>
+											</div>
+										</div>
 									</div>
 								</>
 							) : (
