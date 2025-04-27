@@ -33,12 +33,6 @@ function JobCard({ job }) {
 					</span>
 				</p>
 
-				<p>
-					<strong>Team:</strong>{" "}
-					<span className="badge bg-info text-dark">
-						{job.assignedTeam}
-					</span>
-				</p>
 			</div>
 		</div>
 	);

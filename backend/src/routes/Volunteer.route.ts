@@ -332,7 +332,7 @@ app.get("/status", async (req, res) => {
 	}
 });
 
-app.post("/changePassword", async (req, res) => {
+app.post("/changePassword", VolunteerAuthChecker, async (req, res) => {
 	const { currentPassword, newPassword } = req.body;
 
 	const authHeader = req.headers.authorization;
@@ -380,7 +380,7 @@ app.post("/changePassword", async (req, res) => {
 	}
 });
 
-app.post("/resetPassword", (req, res) => {
+app.post("/resetPassword", VolunteerAuthChecker, (req, res) => {
 	const { username } = req.body;
 
 	// Create a new instance of VolunteerApplication

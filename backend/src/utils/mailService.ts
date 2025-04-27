@@ -1,4 +1,7 @@
 import mailgun from "mailgun-js";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export async function sendEmail(to: string, subject: string, text: string): Promise<any> {
   const mg = mailgun({
@@ -11,7 +14,7 @@ console.log("MAILGUN_DOMAIN:", process.env.MAILGUN_DOMAIN);
 
 
   const emailData = {
-    from: "EPIC <no-reply@mg.epic-disaster-relief.com>",
+    from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
     to,
     subject,
     text,

@@ -58,11 +58,59 @@ router.post(
 				expiresIn: "1h",
 			});
 
-			const resetLink = `https://crsh-epic-disaster-resiliency-hub-client.vercel.app/volunteer/reset-password?token=${resetToken}`;
+			const resetLink = `${process.env.FRONTEND_DOMAIN}/volunteer/reset-password?token=${resetToken}`;
+
 
 			//Send email
 			const emailData = {
-				from: "EPIC <no-reply@mg.epic-disaster-relief.com>",
+				from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
+				to: email,
+				subject: "Password Reset Request",
+				text: `Click the link to reset your password: ${resetLink}`,
+			};
+
+			mg.messages().send(emailData, (error, body) => {
+				if (error) {
+					console.error("Mailgun Error:", error);
+					return res
+						.status(500)
+						.json({ error: "Failed to send reset email" });
+				}
+				res.status(200).json({ message: "Password reset email sent" });
+			});
+		} catch (error) {
+			console.error(error);
+			res.status(500).send({ error: error });
+		}
+	}
+);
+
+router.post(
+	"/request-password-reset-admin",
+	async (req: Request, res: Response): Promise<any> => {
+		const { email } = req.body;
+
+		try {
+			const userQuery = await pool.query(
+				"SELECT email FROM AdminAccount WHERE email = $1",
+				[email]
+			);
+			if (userQuery.rowCount === 0) {
+				console.log("we are here");
+				return res.status(404).json({ error: "User not found" });
+			}
+
+			//Generate a JWT (valid for 1 hour)
+			const resetToken = jwt.sign({ email }, JWT_SECRET, {
+				expiresIn: "1h",
+			});
+
+			const resetLink = `${process.env.FRONTEND_DOMAIN}/admin/reset-password?token=${resetToken}`;
+
+
+			//Send email
+			const emailData = {
+				from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
 				to: email,
 				subject: "Password Reset Request",
 				text: `Click the link to reset your password: ${resetLink}`,
@@ -100,6 +148,32 @@ router.post(
 
 			await pool.query(
 				"UPDATE volunteer SET password = $1 WHERE email = $2",
+				[hashedPassword, decoded.email]
+			);
+
+			res.status(200).json({ message: "Password successfully reset" });
+		} catch (error) {
+			console.error(error);
+			res.status(400).json({ error: "Invalid or expired token" });
+		}
+	}
+);
+
+router.post(
+	"/reset-password-admin",
+	async (req: Request, res: Response): Promise<any> => {
+		const { token, newPassword } = req.body;
+
+		try {
+			const decoded = jwt.verify(token, JWT_SECRET) as { email: string };
+			if (!decoded.email) {
+				return res.status(400).json({ error: "Invalid token" });
+			}
+
+			const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+			await pool.query(
+				"UPDATE AdminAccount SET password = $1 WHERE email = $2",
 				[hashedPassword, decoded.email]
 			);
 
