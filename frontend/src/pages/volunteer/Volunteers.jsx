@@ -16,7 +16,9 @@ function Volunteers() {
 			Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
 		};
 		axios
-			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`, { headers })
+			.get(`${import.meta.env.VITE_API_URL}/admin/volunteers`, {
+				headers,
+			})
 			.then((res) => {
 				// Transform data to include areas of help
 				const transformedData = res.data.map((volunteer) => ({
@@ -47,10 +49,8 @@ function Volunteers() {
 
 	return (
 		<div className="m-5">
-				<div className="mt-4">
-				<h1 className="display-6 text-primary">
-					Volunteers
-				</h1>
+			<div className="mt-4">
+				<h1 className="display-6 text-primary">Volunteers</h1>
 			</div>
 			<div className="card">
 				<div className="card-body">
@@ -61,8 +61,10 @@ function Volunteers() {
 								<th scope="col">#</th>
 								<th scope="col">First Name</th>
 								<th scope="col">Last Name</th>
+								<th scope="col">Phone Number</th>
 								<th scope="col">Email</th>
 								<th scope="col">Areas of Help</th>
+								<th scope="col">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -79,10 +81,25 @@ function Volunteers() {
 									<th scope="row">{volunteer.id}</th>
 									<td>{volunteer.first_name}</td>
 									<td>{volunteer.last_name}</td>
+									<td>{volunteer.phone_number}</td>
 									<td>{volunteer.email}</td>
 									<td>
 										{volunteer.areasOfHelp.join(", ") ||
 											"None"}
+									</td>
+									<td>
+										<Link
+											to="/volunteer/confirm-deletion"
+											className="btn btn-danger"
+											state={{
+												first_name:
+													volunteer.first_name,
+												last_name: volunteer.last_name,
+												id: volunteer.id,
+											}}
+										>
+											Delete
+										</Link>
 									</td>
 								</tr>
 							))}

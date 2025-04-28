@@ -594,6 +594,26 @@ app.get(
 		}
 	}
 );
+app.delete("/delete-volunteer/:id", AdminAuthChecker, async (req, res) => {
+	try {
+		let result = await pool.query("DELETE FROM volunteer WHERE id = $1", [
+			parseInt(req.params.id),
+		]);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				res.status(204).send({ message: "Volunteer deleted" });
+			} else {
+				res.status(404).send({
+					message: "Could not find row to delete",
+				});
+			}
+		} else {
+			res.status(500).send({ message: "Internal server error" });
+		}
+	} catch (e) {
+		res.status(500).send({ message: "Internal server error" });
+	}
+});
 app.get("/homeowner-requests", AdminAuthChecker, async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
@@ -807,7 +827,7 @@ app.get("/notifications", AdminAuthChecker, async (req, res) => {
 	}
 });
 
-app.post("/changePassword",AdminAuthChecker, async (req, res) => {
+app.post("/changePassword", AdminAuthChecker, async (req, res) => {
 	const { currentPassword, newPassword } = req.body;
 
 	const authHeader = req.headers.authorization;
