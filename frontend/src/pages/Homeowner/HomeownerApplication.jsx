@@ -261,7 +261,7 @@ const HomeownerApply = () => {
 			<div className="container mt-4">
 				<div className="text-center my-3">
 					<a className="btn btn-primary" href="/request-help/status">
-						Check the Status of your Application
+						Check the Status of your Request
 					</a>
 				</div>
 				<div className="text-center mb-2">

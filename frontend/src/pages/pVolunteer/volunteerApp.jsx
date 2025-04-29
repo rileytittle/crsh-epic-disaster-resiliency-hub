@@ -642,16 +642,18 @@ const VolunteerForm = () => {
 							</div>
 							<div className="col text-start">
 								<label className="ms-2" htmlFor="checkDefault">
-									[DUMMY DATA] By clicking this checkbox, you
-									agree to EPIC's Terms of Service and
-									acknowledge that your personal information
-									will be processed as outlined in our Privacy
-									Policy. This includes using your data to
-									improve our services and communicate with
-									you about updates and offers. If you have
-									any concerns about how your data is handled,
-									please review our Privacy Policy for more
-									details.
+									As a volunteer of EPIC Community Resource
+									Center, I agree to abide by all policies and
+									procedures as spelled out in the volunteer
+									handout or on-line material. I understand
+									that I volunteer at my own risk and neither
+									the organization nor its employees assume
+									any liability for any accidental injury,
+									health problem, or death arising from
+									volunteer work I perform for the
+									organization. I agree that all work I do is
+									on a volunteer basis, and I am not eligible
+									to receive any monetary payment or reward.
 								</label>
 							</div>
 						</div>

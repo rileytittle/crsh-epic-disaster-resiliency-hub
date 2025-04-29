@@ -131,6 +131,8 @@ function ApplicationStatus() {
 			return "An EPIC representative will be in contact with you as soon as they can regarding your request!";
 		} else if (status == "Rejected") {
 			return `Your request was denied with the following statement: ${reasonRejected}`;
+		} else {
+			return "We're sorry - Status information not found. If you would like more information, please contact an EPIC representative.";
 		}
 	}
 
