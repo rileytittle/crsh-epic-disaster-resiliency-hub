@@ -43,6 +43,7 @@ import AdminChangePassowrd from "./pages/Admin/changePassword";
 import AdminRequestReset from "./pages/Admin/RequestReset";
 import AdminResetPassword from "./pages/Admin/resetPassword";
 import ConfirmDeleteVolunteer from "./pages/volunteer/ConfirmDeletion";
+import ConfirmRejection from "./pages/volunteer/ConfirmRejection";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -128,6 +129,10 @@ const router = createBrowserRouter(
 			<Route
 				path="/volunteer/confirm-deletion"
 				element={<ConfirmDeleteVolunteer />}
+			></Route>
+			<Route
+				path="/volunteer/confirm-rejection"
+				element={<ConfirmRejection />}
 			></Route>
 			<Route
 				path="/generate-reports"

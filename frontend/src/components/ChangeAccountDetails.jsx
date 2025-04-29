@@ -73,7 +73,8 @@ function ChangeAccountDetails(props) {
 			.catch((error) => {
 				console.error("Error updating user details:", error);
 				const errMsg =
-					error.response?.data?.message || "Failed to update user details.";
+					error.response?.data?.message ||
+					"Failed to update user details.";
 				setError(errMsg);
 				setSuccess("");
 			});
@@ -91,7 +92,9 @@ function ChangeAccountDetails(props) {
 					</p>
 
 					{error && <div className="alert alert-danger">{error}</div>}
-					{success && <div className="alert alert-success">{success}</div>}
+					{success && (
+						<div className="alert alert-success">{success}</div>
+					)}
 
 					<form>
 						<div className="mb-3">

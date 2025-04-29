@@ -28,8 +28,8 @@ const AssignVolunteer = () => {
 	const fetchRequests = async () => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/homeowner/viewRequests`, 
-        {
+				`${import.meta.env.VITE_API_URL}/homeowner/viewRequests`,
+				{
 					method: "GET",
 					headers: headers,
 				}
@@ -74,15 +74,15 @@ const AssignVolunteer = () => {
 		setShowAssignMenu(true);
 	};
 	const formatPhoneNumber = (phoneNumber) => {
-		const cleaned = ('' + phoneNumber).replace(/\D/g, ''); // Remove non-numeric characters
+		const cleaned = ("" + phoneNumber).replace(/\D/g, ""); // Remove non-numeric characters
 		const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/); // Match the pattern (xxx)(xxx)(xxxx)
-	  
+
 		if (match) {
-		  return `(${match[1]})-${match[2]}-${match[3]}`; // Format to (xxx)-xxx-xxxx
+			return `(${match[1]})-${match[2]}-${match[3]}`; // Format to (xxx)-xxx-xxxx
 		}
-	  
+
 		return phoneNumber; // Return the original phone number if it doesn't match the format
-	  };
+	};
 
 	const handleTeamButtonClick = async (team) => {
 		setSelectedTeam(team); // Set the selected team when a button is clicked
@@ -101,7 +101,7 @@ const AssignVolunteer = () => {
 			);
 
 			const data = await response.json();
-			console.log("Fetched Volunteers:", data); 
+			console.log("Fetched Volunteers:", data);
 
 			if (Array.isArray(data)) {
 				setVolunteers(data); // Directly assign the array to the state
@@ -143,7 +143,6 @@ const AssignVolunteer = () => {
 			const data = await response.json();
 			alert(data.message);
 			handleDeselectRequest();
-
 		} catch (error) {
 			console.error("Error assigning volunteers:", error);
 			alert("Failed to assign volunteers.");
@@ -173,7 +172,7 @@ const AssignVolunteer = () => {
 		return (
 			(fullName.includes(volunteerSearchTerm.toLowerCase()) ||
 				volunteer.id?.toString().includes(volunteerSearchTerm)) &&
-			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam): true)
+			(selectedTeam ? volunteer.areasOfHelp.includes(selectedTeam) : true)
 		);
 	});
 
@@ -191,7 +190,6 @@ const AssignVolunteer = () => {
 	);
 
 	return (
-		
 		<div className="container mt-5 assign-volunteer-page">
 			<div className="mt-4">
 				<h1 className="display-6 text-primary">
@@ -244,13 +242,18 @@ const AssignVolunteer = () => {
 								<td>
 									{request.firstName} {request.lastName}
 								</td>
-								<td>{request.email}
+								<td>
+									{request.email}
 									<br />
 									{formatPhoneNumber(request.phoneNumber)}
 								</td>
 								<td>
-									{request.streetAddress1}{request.streetAddress2 ? `, ${request.streetAddress2}` : ""}, {request.city},{" "}
-									{request.state} {request.zip}
+									{request.streetAddress1}
+									{request.streetAddress2
+										? `, ${request.streetAddress2}`
+										: ""}
+									, {request.city}, {request.state}{" "}
+									{request.zip}
 								</td>
 								<td>
 									<ul>
@@ -315,11 +318,16 @@ const AssignVolunteer = () => {
 						<strong>Email:</strong> {selectedRequest.email}
 					</p>
 					<p>
-						<strong>Phone:</strong> {formatPhoneNumber(selectedRequest.phoneNumber)}
+						<strong>Phone:</strong>{" "}
+						{formatPhoneNumber(selectedRequest.phoneNumber)}
 					</p>
 					<p>
-						<strong>Address:</strong> {selectedRequest.streetAddress1}{selectedRequest.streetAddress2 ? `, ${selectedRequest.streetAddress2}` : ""},{" "}
-						{selectedRequest.city}, {selectedRequest.state}{" "}
+						<strong>Address:</strong>{" "}
+						{selectedRequest.streetAddress1}
+						{selectedRequest.streetAddress2
+							? `, ${selectedRequest.streetAddress2}`
+							: ""}
+						, {selectedRequest.city}, {selectedRequest.state}{" "}
 						{selectedRequest.zip}
 					</p>
 					<p>
@@ -425,7 +433,11 @@ const AssignVolunteer = () => {
 												{volunteer.lastName}
 											</td>
 											<td>{volunteer.email}</td>
-											<td>{formatPhoneNumber(volunteer.phoneNumber)}</td>
+											<td>
+												{formatPhoneNumber(
+													volunteer.phoneNumber
+												)}
+											</td>
 											<td>
 												{volunteer.streetAddress1 ||
 													"N/A"}

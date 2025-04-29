@@ -22,7 +22,7 @@ function CreateVolunteer() {
 
 			.then((res) => {
 				setApplications(res.data);
-				console.log(res.data);
+				//console.log(res.data);
 			})
 			.catch((error) => {
 				console.error("Error fetching applications:", error);
@@ -47,21 +47,26 @@ function CreateVolunteer() {
 									firstName={application.first_name} // Updated for snake_case
 									lastName={application.last_name} // Updated for snake_case
 									phoneNumber={application.phone_number}
-									streetAddress1={application.street_address_1}
-									streetAddress2={application.street_address_2}
+									streetAddress1={
+										application.street_address_1
+									}
+									streetAddress2={
+										application.street_address_2
+									}
 									zipCode={application.zip_code}
 									state={application.state}
 									email={application.email}
 									areasOfHelp={[
 										application.admin_team &&
-										"Volunteer Management and Administration",
+											"Volunteer Management and Administration",
 										application.logistic_tracking &&
-										"Logistic Tracking",
+											"Logistic Tracking",
 										application.community_helpers &&
-										"EPIC Helpers",
-										application.hospitality && "Hospitality",
+											"EPIC Helpers",
+										application.hospitality &&
+											"Hospitality",
 										application.community_outreach &&
-										"Community Outreach",
+											"Community Outreach",
 									].filter(Boolean)} // Dynamically compute areas of help
 								/>
 							))}
@@ -74,7 +79,6 @@ function CreateVolunteer() {
 						No Volunteer Applications Found
 					</h1>
 				</div>
-
 			)}
 		</>
 	);
