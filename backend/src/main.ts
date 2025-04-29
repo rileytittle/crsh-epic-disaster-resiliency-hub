@@ -49,7 +49,11 @@ app.use("/volunteer", volunteerRouter);
 app.use("/mailgun", mailgunRouter);
 
 app.listen(port, () => {
-	console.log(`Server running on port ${port} and is ${IN_DEVELOPMENT ? "in development" : "online"}`);
+	console.log(
+		`Server running on port ${port} and is ${
+			IN_DEVELOPMENT ? "in development" : "online"
+		}`
+	);
 });
 
 export default app;
