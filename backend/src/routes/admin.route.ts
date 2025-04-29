@@ -208,7 +208,7 @@ app.get(
 	async (req, res) => {
 		try {
 			let result = await pool.query(
-				"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
+				"SELECT * FROM volunteerapplications WHERE status != 'Rejected'"
 			);
 			res.status(200).send(result.rows);
 		} catch (e) {
