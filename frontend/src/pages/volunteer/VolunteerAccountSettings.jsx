@@ -61,11 +61,8 @@ function VolunteerAccountSettings() {
 				← Back to Dashboard
 			</button>
 
-
 			<div className="text-center">
-				<h1 className="display-5 text-primary">
-					Account Details
-				</h1>
+				<h1 className="display-5 text-primary">Account Details</h1>
 			</div>
 			<AccountDetails
 				email={email}

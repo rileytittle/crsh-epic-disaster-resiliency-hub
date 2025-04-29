@@ -81,7 +81,15 @@ function ApplicationStatus() {
 		} else {
 			try {
 				const response = await fetch(
-					`${import.meta.env.VITE_API_URL}/homeowner/requestHelp/status?first_name=${encodeURIComponent(formData.first_name)}&last_name=${encodeURIComponent(formData.last_name)}&street_address_1=${encodeURIComponent(formData.street_address_1)}&street_address_2=${encodeURIComponent(null_address_2)}`,
+					`${
+						import.meta.env.VITE_API_URL
+					}/homeowner/requestHelp/status?first_name=${encodeURIComponent(
+						formData.first_name
+					)}&last_name=${encodeURIComponent(
+						formData.last_name
+					)}&street_address_1=${encodeURIComponent(
+						formData.street_address_1
+					)}&street_address_2=${encodeURIComponent(null_address_2)}`,
 					{
 						method: "GET",
 						headers: { "Content-Type": "application/json" },
@@ -117,25 +125,19 @@ function ApplicationStatus() {
 		}
 	};
 
-
 	function statusInformation(status, reasonRejected) {
 		if (status == "Unevaluated") {
-			return "An EPIC representative will review your request as soon as they can. You will recieve an email once it has been reviewed."
-		}
-		else if (status == "Accepted") {
-			return "An EPIC representative will be in contact with you as soon as they can regarding your request!"
-		}
-		else if (status == "Active") {
-			return "Volunteers have been assigned to your help request! A representative will be in contact with you as soon as they can"
-		}
-		else if (status == "Rejected") {
-			return `Your request was denied with the following statement: ${reasonRejected}`
-		}
-		else if (status == "Resolved") {
-			return "This request has been completed. IF you need any more services, please submit a new request"
-		}
-		else {
-			return "We're sorry - Status information not found. If you would like more information, please contact an EPIC representative."
+			return "An EPIC representative will review your request as soon as they can. You will recieve an email once it has been reviewed.";
+		} else if (status == "Accepted") {
+			return "An EPIC representative will be in contact with you as soon as they can regarding your request!";
+		} else if (status == "Active") {
+			return "Volunteers have been assigned to your help request! A representative will be in contact with you as soon as they can";
+		} else if (status == "Rejected") {
+			return `Your request was denied with the following statement: ${reasonRejected}`;
+		} else if (status == "Resolved") {
+			return "This request has been completed. IF you need any more services, please submit a new request";
+		} else {
+			return "We're sorry - Status information not found. If you would like more information, please contact an EPIC representative.";
 		}
 	}
 
@@ -166,13 +168,14 @@ function ApplicationStatus() {
 											<input
 												placeholder="First Name"
 												type="text"
-												className={`form-control ${formValidity.first_name ===
+												className={`form-control ${
+													formValidity.first_name ===
 													null
-													? ""
-													: formValidity.first_name
+														? ""
+														: formValidity.first_name
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="first_name"
 												id="first_name"
 												value={formData.first_name}
@@ -187,13 +190,14 @@ function ApplicationStatus() {
 											<input
 												placeholder="Last Name"
 												type="text"
-												className={`form-control ${formValidity.last_name ===
+												className={`form-control ${
+													formValidity.last_name ===
 													null
-													? ""
-													: formValidity.last_name
+														? ""
+														: formValidity.last_name
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="last_name"
 												id="last_name"
 												value={formData.last_name}
@@ -221,13 +225,14 @@ function ApplicationStatus() {
 											</label>
 											<input
 												type="text"
-												className={`form-control ${formValidity.street_address_1 ===
+												className={`form-control ${
+													formValidity.street_address_1 ===
 													null
-													? ""
-													: formValidity.street_address_1
+														? ""
+														: formValidity.street_address_1
 														? "is-valid"
 														: "is-invalid"
-													}`}
+												}`}
 												name="street_address_1"
 												id="street_address_1"
 												placeholder="1234 Main St"
@@ -295,8 +300,14 @@ function ApplicationStatus() {
 												</tr>
 												<tr>
 													<th className="px-1 align-top text-end fw-bold"></th>
-													<td colSpan="2" className="px-1 align-top text-start">
-														{statusInformation(helpResults.status, helpResults.reasonRejected)}
+													<td
+														colSpan="2"
+														className="px-1 align-top text-start"
+													>
+														{statusInformation(
+															helpResults.status,
+															helpResults.reasonRejected
+														)}
 													</td>
 												</tr>
 												<tr>
@@ -324,15 +335,29 @@ function ApplicationStatus() {
 														Help Types:
 													</th>
 													<td className="px-1 align-bottom text-start">
-														{helpResults.helpType.join(", ")}
+														{helpResults.helpType.join(
+															", "
+														)}
 													</td>
 												</tr>
 												<tr>
-													<th colSpan="2" className="px-1 align-top text-center fw-bold text-decoration-underline">Description</th>
+													<th
+														colSpan="2"
+														className="px-1 align-top text-center fw-bold text-decoration-underline"
+													>
+														Description
+													</th>
 													<th></th>
 												</tr>
 												<tr>
-													<td colSpan="2" className="px-1 align-bottom text-center">{helpResults.description}</td>
+													<td
+														colSpan="2"
+														className="px-1 align-bottom text-center"
+													>
+														{
+															helpResults.description
+														}
+													</td>
 												</tr>
 											</tbody>
 										</table>

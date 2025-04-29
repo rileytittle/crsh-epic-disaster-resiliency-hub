@@ -1,19 +1,22 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 const SECRET_KEY = process.env.SECRET_KEY || "unsecured";
-let VolunteerAuthChecker = (req: Request, res: Response, next: NextFunction) => {
+let VolunteerAuthChecker = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	if (req.headers["authorization"]) {
 		let header = req.headers["authorization"];
 		if (header.includes("Bearer")) {
 			let token = header.split(" ")[1];
 			try {
 				let payload = jwt.verify(token, SECRET_KEY) as any;
-				if(payload.userType == "volunteer"){
+				if (payload.userType == "volunteer") {
 					res.setHeader("loggedinuser", payload.email);
 					next();
-				}
-				else{
-					res.status(401).send({ message:"Unauthorized - 3" });
+				} else {
+					res.status(401).send({ message: "Unauthorized - 3" });
 				}
 			} catch (e) {
 				console.log(e);
