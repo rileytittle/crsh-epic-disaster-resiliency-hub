@@ -49,7 +49,8 @@ function VolunteerDashboard() {
 
 				const [userRes, jobsRes] = await Promise.all([
 					axios.get(
-						`${import.meta.env.VITE_API_URL
+						`${
+							import.meta.env.VITE_API_URL
 						}/volunteer/user-details`,
 						{
 							params: { userToken },
@@ -122,9 +123,7 @@ function VolunteerDashboard() {
 	return (
 		<div className="container mt-4">
 			<div className="text-center mt-4">
-				<h1 className="display-5 text-primary">
-					Volunteer Dashboard
-				</h1>
+				<h1 className="display-5 text-primary">Volunteer Dashboard</h1>
 			</div>
 			<div className="card shadow-sm">
 				<div className="card-body text-center">
@@ -145,13 +144,17 @@ function VolunteerDashboard() {
 									<div className="btn-group mt-3">
 										<button
 											className="btn btn-success px-4"
-											onClick={() => answerOffer("accept")}
+											onClick={() =>
+												answerOffer("accept")
+											}
 										>
 											Accept
 										</button>
 										<button
 											className="btn btn-danger px-4 ms-2"
-											onClick={() => answerOffer("reject")}
+											onClick={() =>
+												answerOffer("reject")
+											}
 										>
 											Reject
 										</button>
@@ -166,19 +169,18 @@ function VolunteerDashboard() {
 								<div className="mt-4">
 									<h4 className="fw-bold">No Jobs Yet</h4>
 									<p className="text-muted">
-										You haven’t been assigned a job yet. An admin will contact you when a role becomes available.
+										You haven’t been assigned a job yet. An
+										admin will contact you when a role
+										becomes available.
 									</p>
 								</div>
 							)}
-
 						</>
 					)}
 				</div>
 			</div>
 		</div>
 	);
-
-
 }
 
 export default VolunteerDashboard;

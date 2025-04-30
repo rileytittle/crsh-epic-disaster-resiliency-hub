@@ -112,7 +112,9 @@ const HomeownerApply = () => {
 						validation = emailRegEx.test(value.trim());
 						break;
 					case "phone_number":
-						validation = value.trim() >= 1000000000 && value.trim() <= 9999999999;
+						validation =
+							value.trim() >= 1000000000 &&
+							value.trim() <= 9999999999;
 						break;
 					case "zip_code":
 					case "county":
@@ -152,7 +154,9 @@ const HomeownerApply = () => {
 			first_name: formData.first_name.trim() !== "",
 			last_name: formData.last_name.trim() !== "",
 			email: emailRegEx.test(formData.email.trim()),
-			phone_number: formData.phone_number.trim() >= 1000000000 && formData.phone_number.trim() <= 9999999999,
+			phone_number:
+				formData.phone_number.trim() >= 1000000000 &&
+				formData.phone_number.trim() <= 9999999999,
 			street_address_1: formData.street_address_1.trim() != "",
 			city: formData.city.trim() != "",
 			zip_code:
@@ -245,7 +249,6 @@ const HomeownerApply = () => {
 				other: null,
 				description: null,
 			});
-
 		}
 		setValidated(true);
 	};
@@ -253,14 +256,12 @@ const HomeownerApply = () => {
 		// action=`${import.meta.env.VITE_BACKEND_URL}/homeowner/requestHelp` method="POST"
 		<div className="container mt-5">
 			<div className="text-center mt-4">
-				<h1 className="display-5 text-primary">
-					Request Help
-				</h1>
+				<h1 className="display-5 text-primary">Request Help</h1>
 			</div>
 			<div className="container mt-4">
 				<div className="text-center my-3">
 					<a className="btn btn-primary" href="/request-help/status">
-						Check the Status of your Application
+						Check the Status of your Request
 					</a>
 				</div>
 				<div className="text-center mb-2">
@@ -270,21 +271,31 @@ const HomeownerApply = () => {
 					</span>
 					34223, 34224, 33947, 33946, 33981
 				</div>
-				<form noValidate id="homeownerForm" onSubmit={formSubmitted} className="row g-3 needs-validation"				>
-					<div className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}					>
-						<div className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}						>
+				<form
+					noValidate
+					id="homeownerForm"
+					onSubmit={formSubmitted}
+					className="row g-3 needs-validation"
+				>
+					<div
+						className={`card rounded-3 shadow-lg ${styles.cardParent0} mb-4`}
+					>
+						<div
+							className={`${styles.cardParent1} card rounded-3 shadow-sm m-2`}
+						>
 							<div className="card-body">
 								<div className="row">
 									<div className="col-md-6 mt-2">
 										<input
 											placeholder="First Name"
 											type="text"
-											className={`form-control ${formValidity.first_name === null
-												? ""
-												: formValidity.first_name
+											className={`form-control ${
+												formValidity.first_name === null
+													? ""
+													: formValidity.first_name
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="first_name"
 											id="first_name"
 											value={formData.first_name}
@@ -299,12 +310,13 @@ const HomeownerApply = () => {
 										<input
 											placeholder="Last Name"
 											type="text"
-											className={`form-control ${formValidity.last_name === null
-												? ""
-												: formValidity.last_name
+											className={`form-control ${
+												formValidity.last_name === null
+													? ""
+													: formValidity.last_name
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="last_name"
 											id="last_name"
 											value={formData.last_name}
@@ -322,12 +334,13 @@ const HomeownerApply = () => {
 										<input
 											placeholder="E-Mail"
 											type="email"
-											className={`form-control ${formValidity.email === null
-												? ""
-												: formValidity.email
+											className={`form-control ${
+												formValidity.email === null
+													? ""
+													: formValidity.email
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="email"
 											id="email"
 											value={formData.email}
@@ -342,13 +355,14 @@ const HomeownerApply = () => {
 										<input
 											placeholder="Phone Number"
 											type="tel"
-											className={`form-control ${formValidity.phone_number ===
+											className={`form-control ${
+												formValidity.phone_number ===
 												null
-												? ""
-												: formValidity.phone_number
+													? ""
+													: formValidity.phone_number
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="phone_number"
 											id="phone_number"
 											value={formData.phone_number}
@@ -376,13 +390,14 @@ const HomeownerApply = () => {
 										</label>
 										<input
 											type="text"
-											className={`form-control ${formValidity.street_address_1 ===
+											className={`form-control ${
+												formValidity.street_address_1 ===
 												null
-												? ""
-												: formValidity.street_address_1
+													? ""
+													: formValidity.street_address_1
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="street_address_1"
 											id="street_address_1"
 											placeholder="1234 Main St"
@@ -420,12 +435,13 @@ const HomeownerApply = () => {
 										</label>
 										<input
 											type="text"
-											className={`form-control ${formValidity.city === null
-												? ""
-												: formValidity.city
+											className={`form-control ${
+												formValidity.city === null
+													? ""
+													: formValidity.city
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											name="city"
 											id="city"
 											value={formData.city}
@@ -461,7 +477,8 @@ const HomeownerApply = () => {
 											place="top"
 											effect="solid"
 										>
-											We apologize, but EPIC only services areas in Florida
+											We apologize, but EPIC only services
+											areas in Florida
 										</Tooltip>
 									</div>
 									<div className="col-md-2">
@@ -476,12 +493,13 @@ const HomeownerApply = () => {
 											required
 											id="zip_code"
 											name="zip_code"
-											className={`form-select ${formValidity.zip_code === null
-												? ""
-												: formValidity.zip_code
+											className={`form-select ${
+												formValidity.zip_code === null
+													? ""
+													: formValidity.zip_code
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											placeholder="Choose..."
 											value={formData.zip_code}
 											onChange={handleChange}
@@ -501,7 +519,9 @@ const HomeownerApply = () => {
 											place="top"
 											effect="solid"
 										>
-											EPIC currently only services a limited number of zip codes. We apologize for the inconvienence
+											EPIC currently only services a
+											limited number of zip codes. We
+											apologize for the inconvienence
 										</Tooltip>
 									</div>
 									<div className="col-md-3">
@@ -515,12 +535,13 @@ const HomeownerApply = () => {
 											required
 											id="county"
 											name="county"
-											className={`form-select ${formValidity.county === null
-												? ""
-												: formValidity.county
+											className={`form-select ${
+												formValidity.county === null
+													? ""
+													: formValidity.county
 													? "is-valid"
 													: "is-invalid"
-												}`}
+											}`}
 											placeholder="Choose..."
 											value={formData.county}
 											onChange={handleChange}
@@ -537,13 +558,15 @@ const HomeownerApply = () => {
 							</div>
 						</div>
 						<div
-							className={`${styles.cardParent1
-								} card rounded-3 shadow-sm m-2 ${formValidity.help === null
+							className={`${
+								styles.cardParent1
+							} card rounded-3 shadow-sm m-2 ${
+								formValidity.help === null
 									? ""
 									: formValidity.help
-										? "is-valid"
-										: "is-invalid"
-								}`}
+									? "is-valid"
+									: "is-invalid"
+							}`}
 						>
 							<div className="card-header">
 								I need help with...
@@ -664,12 +687,13 @@ const HomeownerApply = () => {
 										Other
 									</label>
 									<input
-										className={`${formValidity.other === null
-											? ""
-											: formValidity.other
+										className={`${
+											formValidity.other === null
+												? ""
+												: formValidity.other
 												? "is-valid"
 												: "is-invalid"
-											}`}
+										}`}
 										type="text"
 										name="other"
 										id="other"
@@ -716,12 +740,13 @@ const HomeownerApply = () => {
 									id="description"
 									value={formData.description}
 									onChange={handleChange}
-									className={`form-control ${formValidity.description === null
-										? ""
-										: formValidity.description
+									className={`form-control ${
+										formValidity.description === null
+											? ""
+											: formValidity.description
 											? "is-valid"
 											: "is-invalid"
-										}`}
+									}`}
 								></textarea>
 								<div className="invalid-feedback text-center">
 									Please enter a brief description of the help

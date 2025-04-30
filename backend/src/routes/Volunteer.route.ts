@@ -291,7 +291,10 @@ app.get("/status", async (req, res) => {
 		`);
 
 		if (applications.rows.length === 0) {
-			return res.status(404).json({ message: "No results found. Please double check your spelling" }); // Return 404 if no rows are found
+			return res.status(404).json({
+				message:
+					"No results found. Please check your spelling. Note: Accepted requests will not appear here.",
+			}); // Return 404 if no rows are found
 		}
 
 		let applicant = applications.rows[0];
@@ -680,11 +683,9 @@ app.post(
 			}
 
 			if (!/^\d+$/.test(phone)) {
-				return res
-					.status(400)
-					.json({
-						message: "Phone number must contain only digits.",
-					});
+				return res.status(400).json({
+					message: "Phone number must contain only digits.",
+				});
 			}
 
 			const query = `

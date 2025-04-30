@@ -187,19 +187,26 @@ app.post("/create-volunteer/accept", AdminAuthChecker, async (req, res) => {
 app.post("/create-volunteer/reject", AdminAuthChecker, async (req, res) => {
 	try {
 		let result = await pool.query(
-			"UPDATE volunteerapplications SET status = 'Rejected' WHERE email = $1",
-			[req.body.email]
+			"UPDATE volunteerapplications SET status = 'Rejected' WHERE id = $1",
+			[parseInt(req.body.id)]
 		);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				sendEmail(
+					req.body.email,
+					"Your Application Has Been Rejected",
+					"We regret to inform you that your request to volunteer at EPIC Disaster Resiliency has been rejected."
+				);
 
-		await sendEmail(
-			req.body.email,
-			"Your Application Has Been Rejected",
-			"We regret to inform you that your request to volunteer at EPIC Disaster Resiliency has been rejected."
-		);
-
-		res.status(200).send("Applicant rejected");
+				res.status(200).send("Applicant rejected");
+			} else {
+				res.status(404).send({ message: "Could not find applicant" });
+			}
+		} else {
+			res.status(500).send({ message: "Issue performing query" });
+		}
 	} catch (e) {
-		res.status(400).send("Problem rejected application");
+		res.status(500).send("Internal service error");
 	}
 });
 app.get(
@@ -208,7 +215,7 @@ app.get(
 	async (req, res) => {
 		try {
 			let result = await pool.query(
-				"SELECT * FROM volunteerapplications WHERE status != 'rejected'"
+				"SELECT * FROM volunteerapplications WHERE status != 'Rejected'"
 			);
 			res.status(200).send(result.rows);
 		} catch (e) {
@@ -594,6 +601,26 @@ app.get(
 		}
 	}
 );
+app.delete("/delete-volunteer/:id", AdminAuthChecker, async (req, res) => {
+	try {
+		let result = await pool.query("DELETE FROM volunteer WHERE id = $1", [
+			parseInt(req.params.id),
+		]);
+		if (result.rowCount) {
+			if (result.rowCount > 0) {
+				res.status(204).send({ message: "Volunteer deleted" });
+			} else {
+				res.status(404).send({
+					message: "Could not find row to delete",
+				});
+			}
+		} else {
+			res.status(500).send({ message: "Internal server error" });
+		}
+	} catch (e) {
+		res.status(500).send({ message: "Internal server error" });
+	}
+});
 app.get("/homeowner-requests", AdminAuthChecker, async (req, res) => {
 	try {
 		let requests = await pool.query("SELECT * FROM request;");
@@ -807,7 +834,7 @@ app.get("/notifications", AdminAuthChecker, async (req, res) => {
 	}
 });
 
-app.post("/changePassword",AdminAuthChecker, async (req, res) => {
+app.post("/changePassword", AdminAuthChecker, async (req, res) => {
 	const { currentPassword, newPassword } = req.body;
 
 	const authHeader = req.headers.authorization;

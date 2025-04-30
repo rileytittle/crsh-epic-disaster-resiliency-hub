@@ -58,7 +58,7 @@ function ActiveRequests() {
 		setSelectedVolunteer(null);
 	};
 
-	const handleMoreInfoButtonClick = () => { };
+	const handleMoreInfoButtonClick = () => {};
 
 	const filteredRequests = requests.filter((request) => {
 		const fullName =

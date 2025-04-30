@@ -13,43 +13,6 @@ const ApplicationCard = ({
 	email,
 	areasOfHelp,
 }) => {
-	function rejectVolunteer() {
-		console.log(email);
-		let token = sessionStorage.getItem("userToken");
-		let headers = {
-			Authorization: `Bearer ${token}`,
-		};
-		axios
-			.post(
-				`${import.meta.env.VITE_API_URL}/admin/create-volunteer/reject`,
-				{
-					email: email,
-				},
-				{
-					headers,
-				}
-			)
-			.then((res) => {
-				navigate("/create-volunteer");
-			})
-			.catch((error) => {
-				console.error("Error fetching applications:", error);
-			});
-	}
-	useEffect(() => {
-		console.log(
-			id,
-			firstName,
-			lastName,
-			phoneNumber,
-			streetAddress1,
-			streetAddress2,
-			zipCode,
-			state,
-			email,
-			areasOfHelp
-		);
-	}, []);
 	return (
 		<div className="card" style={{ width: 20 + "rem" }}>
 			<div className="card-body">
@@ -66,9 +29,12 @@ const ApplicationCard = ({
 					))}
 				</p>
 				<Link
-					onClick={(e) => {
-						rejectVolunteer();
-						window.location.reload();
+					to="/volunteer/confirm-rejection"
+					state={{
+						firstName,
+						lastName,
+						id,
+						email,
 					}}
 					className="card-link"
 				>

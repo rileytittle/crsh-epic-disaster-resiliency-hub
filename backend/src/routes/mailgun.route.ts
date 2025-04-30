@@ -60,7 +60,6 @@ router.post(
 
 			const resetLink = `${process.env.FRONTEND_DOMAIN}/volunteer/reset-password?token=${resetToken}`;
 
-
 			//Send email
 			const emailData = {
 				from: `EPIC <no-reply@${process.env.MAILGUN_DOMAIN as string}>`,
@@ -106,7 +105,6 @@ router.post(
 			});
 
 			const resetLink = `${process.env.FRONTEND_DOMAIN}/admin/reset-password?token=${resetToken}`;
-
 
 			//Send email
 			const emailData = {

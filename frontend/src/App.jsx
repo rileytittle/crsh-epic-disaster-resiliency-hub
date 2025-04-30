@@ -42,10 +42,12 @@ import CreateAdmin from "./pages/Admin/CreateAdmin";
 import AdminChangePassowrd from "./pages/Admin/changePassword";
 import AdminRequestReset from "./pages/Admin/RequestReset";
 import AdminResetPassword from "./pages/Admin/resetPassword";
+import ConfirmDeleteVolunteer from "./pages/volunteer/ConfirmDeletion";
+import ConfirmRejection from "./pages/volunteer/ConfirmRejection";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<MainLayout />}>			
+		<Route path="/" element={<MainLayout />}>
 			<Route index element={<Navigate to="/home" replace />} />
 			<Route path="/home" element={<Homepage />}></Route>
 			<Route path="/create-admin" element={<CreateAdmin />}></Route>
@@ -125,13 +127,30 @@ const router = createBrowserRouter(
 				element={<VolunteerAccountSettings />}
 			></Route>
 			<Route
+				path="/volunteer/confirm-deletion"
+				element={<ConfirmDeleteVolunteer />}
+			></Route>
+			<Route
+				path="/volunteer/confirm-rejection"
+				element={<ConfirmRejection />}
+			></Route>
+			<Route
 				path="/generate-reports"
 				element={<GenerateReports />}
 			></Route>
 			<Route path="/more-resources" element={<Resources />}></Route>
-			<Route path="/admin/changePassword" element={<AdminChangePassowrd />}></Route>
-			<Route path="/admin/request-reset" element={<AdminRequestReset />}></Route>
-			<Route path="/admin/reset-password" element={<AdminResetPassword />}></Route>
+			<Route
+				path="/admin/changePassword"
+				element={<AdminChangePassowrd />}
+			></Route>
+			<Route
+				path="/admin/request-reset"
+				element={<AdminRequestReset />}
+			></Route>
+			<Route
+				path="/admin/reset-password"
+				element={<AdminResetPassword />}
+			></Route>
 		</Route>
 	)
 );
