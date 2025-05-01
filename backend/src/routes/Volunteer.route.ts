@@ -291,7 +291,7 @@ app.get("/status", async (req, res) => {
 		`);
 
 		if (applications.rows.length === 0) {
-			return res.status(404).json({ message: "No results found. Please double check your spelling" }); // Return 404 if no rows are found
+			return res.status(404).json({ message: "No results found. Please double check your spelling. In addition, an accepted request will not display here." }); // Return 404 if no rows are found
 		}
 
 		let applicant = applications.rows[0];

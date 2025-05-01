@@ -127,6 +127,9 @@ function ApplicationStatus() {
 		else if (status == "Rejected") {
 			return `Your request was denied with the following statement: ${reasonRejected}`
 		}
+		else {
+			return "We're sorry - Status information not found. If you would like more information, please contact an EPIC representative."
+		}
 	}
 
 	return (
